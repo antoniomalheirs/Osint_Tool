@@ -172,6 +172,8 @@ async function checkSite(username, site, network) {
     let confidence = CONFIDENCE.MEDIUM;
     let body = null;
     let metadata = null;
+    let reason = null;
+    let blocked = false;
 
     switch (site.method || site.errorType) {
       // ═══ Método 1: Status Code ═══
@@ -273,6 +275,7 @@ async function checkSite(username, site, network) {
         if (!cleanFinalUrl.includes(lowerUser)) {
           found = false;
           confidence = CONFIDENCE.HIGH;
+          reason = 'REDIRECT_MISMATCH';
         }
       }
 
@@ -312,9 +315,12 @@ async function checkSite(username, site, network) {
         if (isSoft404) {
           found = false;
           confidence = CONFIDENCE.HIGH; // Temos certeza que não existe
+          reason = 'SOFT_404_SIGNATURE';
         } else if (isBlocked) {
           found = false;
-          confidence = null; // Falso negativo por bloqueio de WAF
+          confidence = null; // Resultado inconclusivo por bloqueio de WAF
+          blocked = true;
+          reason = 'WAF_BLOCKED';
           log.debug('Bloqueio de WAF/Cloudflare detectado em: ' + site.name);
         }
       }
@@ -336,10 +342,17 @@ async function checkSite(username, site, network) {
           if (!isValidProfile) {
             found = false;
             confidence = null; // Falso positivo descartado pelo validador estrito
+            reason = 'STRICT_VALIDATION_FAILED';
             log.debug(`Scraping Estrito: Username não encontrado no HTML de ${site.name}`);
           }
         }
       }
+
+    if (found && !reason) {
+      reason = 'PROFILE_CONFIRMED';
+    } else if (!found && !reason) {
+      reason = 'NOT_FOUND_OR_INCONCLUSIVE';
+    }
 
     return {
       site: site.name,
@@ -352,6 +365,8 @@ async function checkSite(username, site, network) {
       metadata,
       error: null,
       skipped: false,
+      blocked,
+      reason,
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };
@@ -369,6 +384,8 @@ async function checkSite(username, site, network) {
       metadata: null,
       error: error.message,
       skipped: false,
+      blocked: false,
+      reason: 'REQUEST_ERROR',
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };

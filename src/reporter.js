@@ -46,7 +46,8 @@ export function printBanner() {
  */
 export function printUsernameResults(username, results) {
   const found = results.filter(r => r.found && !r.error);
-  const notFound = results.filter(r => !r.found && !r.error);
+  const blocked = results.filter(r => !r.found && !r.error && r.blocked);
+  const notFound = results.filter(r => !r.found && !r.error && !r.blocked);
   const errors = results.filter(r => r.error);
 
   console.log('\n' + chalk.cyan.bold('━'.repeat(60)));
@@ -91,6 +92,7 @@ export function printUsernameResults(username, results) {
   console.log(chalk.white.bold('  📈 RESUMO'));
   console.log(chalk.green(`     ✅ Encontrados:   ${found.length}`));
   console.log(chalk.red(`     ❌ Não encontr.:  ${notFound.length}`));
+  console.log(chalk.yellow(`     🛡️  Bloqueados:    ${blocked.length}`));
   console.log(chalk.yellow(`     ⚠️  Erros/Timeout: ${errors.length}`));
   console.log(chalk.gray(`     📡 Total checado: ${results.length} plataformas`));
   console.log(chalk.cyan.bold('━'.repeat(60)) + '\n');
