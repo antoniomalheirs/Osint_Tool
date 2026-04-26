@@ -5,6 +5,7 @@
 
 import { CONFIDENCE } from './engine.js';
 import { getLogger } from './logger.js';
+import { getConfig } from './config.js';
 
 const log = getLogger('CORRELATOR');
 
@@ -81,27 +82,149 @@ export function analyzeMetadata(results) {
 }
 
 /**
+ * Sinais comportamentais e operacionais inferidos do footprint digital
+ */
+export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
+  const config = getConfig();
+  const suspiciousKeywords = config.intelligence?.suspiciousKeywords || [
+    'crypto wallet', 'telegram', 'signal', 'offshore', 'vpn',
+    'drops', 'leaks', 'breach', 'marketplace', 'arsenal', 'carding',
+    'fraud', 'hacker', 'hacktivist', 'stealer', 'ransomware', 'botnet'
+  ];
+
+  const found = results.filter(r => r.found && !r.error && !r.skipped);
+  const categoryCount = {};
+  const flags = [];
+  const recommendations = [];
+
+  for (const r of found) {
+    const key = r.category || 'Outros';
+    categoryCount[key] = (categoryCount[key] || 0) + 1;
+  }
+
+  const normalizedUser = (username || '').toLowerCase();
+  const opsecRegex = /(sec|opsec|anon|intel|osint|root|admin|ghost|shadow|xss|0day|malware|exploit|cyber)/i;
+  if (normalizedUser.length >= 4 && opsecRegex.test(normalizedUser)) {
+    flags.push({
+      type: 'HANDLE_OPSEC',
+      severity: 'MEDIUM',
+      message: 'Username com padrões semânticos ligados a segurança/opsec',
+    });
+  }
+
+  const bioText = (metadataAnalysis.bioSnippets || [])
+    .map(b => (b.text || '').toLowerCase())
+    .join(' || ');
+
+  const matchedKeywords = suspiciousKeywords.filter(k => bioText.includes(k));
+
+  if (matchedKeywords.length > 0) {
+    flags.push({
+      type: 'BIO_KEYWORDS',
+      severity: matchedKeywords.length >= 3 ? 'HIGH' : 'MEDIUM',
+      message: `Termos sensíveis detectados em bios: ${matchedKeywords.slice(0, 5).join(', ')}`,
+    });
+  }
+
+  if ((categoryCount.Security || 0) >= 2) {
+    flags.push({
+      type: 'SECURITY_PRESENCE',
+      severity: 'MEDIUM',
+      message: 'Presença recorrente em plataformas de segurança/pesquisa técnica',
+    });
+  }
+
+  if ((categoryCount.Financial || 0) >= 2) {
+    flags.push({
+      type: 'FINANCIAL_SURFACE',
+      severity: 'HIGH',
+      message: 'Exposição relevante em plataformas financeiras/fintech',
+    });
+  }
+
+  if (Object.keys(categoryCount).length >= 5) {
+    recommendations.push('Consolidar timeline com prioridade por categoria (Dev, Financeiro, Social, Security).');
+  }
+  if (flags.some(f => f.severity === 'HIGH')) {
+    recommendations.push('Executar validação manual dos achados HIGH antes de qualquer decisão operacional.');
+  }
+  if (metadataAnalysis.commonAvatars.length > 0) {
+    recommendations.push('Realizar busca reversa de imagem no avatar principal para pivoting de identidade.');
+  }
+
+  return {
+    categoryCount,
+    flags,
+    recommendations,
+  };
+}
+
+function calculateBehaviorScore(behaviorIntel) {
+  let score = 0;
+  for (const flag of behaviorIntel.flags) {
+    if (flag.severity === 'HIGH') score += 30;
+    else if (flag.severity === 'MEDIUM') score += 15;
+    else score += 5;
+  }
+
+  const categoryDiversity = Object.keys(behaviorIntel.categoryCount || {}).length;
+  score += Math.min(categoryDiversity * 4, 20);
+
+  if (behaviorIntel.recommendations.length >= 2) {
+    score += 10;
+  }
+
+  return Math.min(score, 100);
+}
+
+function buildEvidenceTrail(behaviorIntel, metadataAnalysis) {
+  const evidence = [];
+  for (const flag of behaviorIntel.flags) {
+    evidence.push(`${flag.type}: ${flag.message}`);
+  }
+  if (metadataAnalysis.inferredNames.length > 0) {
+    evidence.push(`Nomes inferidos consistentes: ${metadataAnalysis.inferredNames.slice(0, 3).join(', ')}`);
+  }
+  if (Object.keys(behaviorIntel.categoryCount || {}).length > 0) {
+    evidence.push(`Diversidade de categorias: ${Object.keys(behaviorIntel.categoryCount).length}`);
+  }
+  return evidence;
+}
+
+/**
  * Gera o relatório de correlação
  */
 export function correlateResults(username, usernameResults, emailResults = []) {
   log.info(`Iniciando correlação de dados para o alvo: ${username}`);
+  const config = getConfig();
+  const behaviorWeight = Math.max(0, Math.min(1, config.intelligence?.behaviorWeight ?? 0.4));
+  const criticalRiskThreshold = config.intelligence?.criticalRiskThreshold ?? 90;
+  const highRiskThreshold = config.intelligence?.highRiskThreshold ?? 75;
 
   const score = calculatePresenceScore(usernameResults);
   const metadataAnalysis = analyzeMetadata(usernameResults);
+  const behaviorIntel = analyzeBehavioralSignals(username, usernameResults, metadataAnalysis);
+  const behaviorScore = calculateBehaviorScore(behaviorIntel);
+  const finalScore = Math.round((score * (1 - behaviorWeight)) + (behaviorScore * behaviorWeight));
+  const evidenceTrail = buildEvidenceTrail(behaviorIntel, metadataAnalysis);
   
   // Avaliação de risco baseada no score e categorias
   let riskLevel = 'LOW';
   let profileType = 'Ghost / Inactive';
 
-  if (score > 80) {
+  if (finalScore >= criticalRiskThreshold) {
     riskLevel = 'CRITICAL';
     profileType = 'Highly Active Digital Footprint';
-  } else if (score > 50) {
+  } else if (finalScore >= highRiskThreshold) {
     riskLevel = 'HIGH';
     profileType = 'Active Internet User';
-  } else if (score > 20) {
+  } else if (finalScore > 35) {
     riskLevel = 'MEDIUM';
     profileType = 'Casual User';
+  }
+
+  if (behaviorIntel.flags.some(f => f.severity === 'HIGH') && riskLevel === 'LOW') {
+    riskLevel = 'MEDIUM';
   }
 
   // Cruzamento Email <-> Username
@@ -118,9 +241,13 @@ export function correlateResults(username, usernameResults, emailResults = []) {
   return {
     target: username,
     presenceScore: score,
+    finalRiskScore: finalScore,
+    behaviorScore,
     riskLevel,
     profileType,
     metadataIntel: metadataAnalysis,
+    behaviorIntel,
+    evidenceTrail,
     emailLinked,
   };
 }
