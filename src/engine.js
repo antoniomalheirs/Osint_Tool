@@ -7,6 +7,7 @@
 import pLimit from 'p-limit';
 import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
+import { sleep } from './utils.js';
 
 const log = getLogger('ENGINE');
 
@@ -468,4 +469,46 @@ export function groupByConfidence(results) {
     [CONFIDENCE.MEDIUM]: results.filter(r => r.found && r.confidence === CONFIDENCE.MEDIUM),
     [CONFIDENCE.LOW]: results.filter(r => r.found && r.confidence === CONFIDENCE.LOW),
   };
+}
+
+/**
+ * Reexecuta apenas plataformas bloqueadas por WAF/anti-bot
+ * e substitui resultados inconclusivos por novos resultados.
+ */
+export async function retryBlockedSites(username, allSites, previousResults, options = {}) {
+  const {
+    onResult = null,
+    concurrency = DEFAULT_CONCURRENCY,
+    delayMs = 1200,
+  } = options;
+
+  const blockedSiteNames = new Set(
+    previousResults
+      .filter(r => r.blocked && r.reason === 'WAF_BLOCKED')
+      .map(r => r.site)
+  );
+
+  if (blockedSiteNames.size === 0) {
+    return { retried: 0, mergedResults: previousResults };
+  }
+
+  const targetSites = allSites.filter(s => blockedSiteNames.has(s.name));
+  const network = getNetwork();
+  const limit = pLimit(concurrency);
+
+  log.info(`Retry operacional: ${targetSites.length} plataformas bloqueadas serão rechecadas.`);
+  if (delayMs > 0) await sleep(delayMs);
+
+  const retryResults = await Promise.all(
+    targetSites.map(site => limit(async () => {
+      const result = await checkSite(username, site, network);
+      if (onResult) onResult(result);
+      return result;
+    }))
+  );
+
+  const retriedBySite = new Map(retryResults.map(r => [r.site, r]));
+  const mergedResults = previousResults.map(r => retriedBySite.get(r.site) || r);
+
+  return { retried: retryResults.length, mergedResults };
 }

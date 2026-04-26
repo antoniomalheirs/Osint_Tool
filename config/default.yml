@@ -12,6 +12,8 @@ network:
 search:
   includeNSFW: false       # Incluir sites adultos na busca por padrão
   exportFormat: "none"     # "json", "csv", "txt", "html", "all" ou "none"
+  retryBlocked: true       # Reexecuta plataformas bloqueadas por WAF para reduzir falso negativo
+  retryDelayMs: 1200       # Delay antes do retry de bloqueados
 
 database:
   enabled: true            # Salvar histórico de investigações localmente

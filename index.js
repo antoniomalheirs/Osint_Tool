@@ -17,7 +17,7 @@ import { getConfig } from './src/config.js';
 import { initLogger } from './src/logger.js';
 import { initNetwork } from './src/network.js';
 import { correlateResults } from './src/correlator.js';
-import { searchUsername, getFoundResults } from './src/engine.js';
+import { searchUsername, getFoundResults, retryBlockedSites } from './src/engine.js';
 import { searchEmail } from './src/emailSearch.js';
 import { initDB, saveInvestigation, getHistory } from './src/database.js';
 import {
@@ -68,6 +68,10 @@ async function executeHunt(target, options) {
   if (options.proxy) log.info(`Utilizando proxy: ${options.proxy}`);
 
   const includeNSFW = options.nsfw || config.search.includeNSFW;
+  const retryBlocked = options.retryBlocked || config.search.retryBlocked;
+  const retryDelayMs = Number.isFinite(parseInt(options.retryDelay, 10))
+    ? parseInt(options.retryDelay, 10)
+    : (config.search.retryDelayMs || 1200);
   if (includeNSFW) log.info(`Modo NSFW: ATIVADO`);
 
   // ── Se o alvo é um e-mail ──
@@ -94,7 +98,7 @@ async function executeHunt(target, options) {
         const spinner = ora({ text: chalk.yellow(` Buscando username "${variant}" em ${sitesToSearch.length} plataformas...`), spinner: 'dots12', color: 'cyan' }).start();
 
         let completed = 0;
-        const results = await searchUsername(variant, sites, {
+        let results = await searchUsername(variant, sites, {
           includeNSFW,
           filterCategory: options.category,
           onResult: (result) => {
@@ -103,6 +107,16 @@ async function executeHunt(target, options) {
             spinner.text = chalk.yellow(` [${completed}/${sitesToSearch.length}] `) + icon + chalk.gray(` ${result.site}`);
           }
         });
+        if (retryBlocked) {
+          const retryOutcome = await retryBlockedSites(variant, sites, results, {
+            delayMs: retryDelayMs,
+            onResult: () => {},
+          });
+          results = retryOutcome.mergedResults;
+          if (retryOutcome.retried > 0) {
+            log.info(`Retry de bloqueados finalizado para "${variant}" (${retryOutcome.retried} plataformas).`);
+          }
+        }
 
         const found = getFoundResults(results);
         spinner.succeed(chalk.green(` "${variant}" — ${found.length} perfis encontrados`));
@@ -154,6 +168,16 @@ async function executeHunt(target, options) {
           spinner.text = chalk.yellow(` [${completed}/${sitesToSearch.length}] `) + icon + chalk.gray(` ${result.site}`);
         }
       });
+      if (retryBlocked) {
+        const retryOutcome = await retryBlockedSites(target, sites, usernameResults, {
+          delayMs: retryDelayMs,
+          onResult: () => {},
+        });
+        usernameResults = retryOutcome.mergedResults;
+        if (retryOutcome.retried > 0) {
+          log.info(`Retry de bloqueados finalizado para "${target}" (${retryOutcome.retried} plataformas).`);
+        }
+      }
 
       const found = getFoundResults(usernameResults);
       spinner.succeed(chalk.green(` Busca concluída — ${found.length} perfis encontrados em ${formatDuration(Date.now() - startTime)}`));
@@ -215,6 +239,8 @@ program
   .option('--nsfw', 'Incluir sites NSFW na busca (sobrescreve config)')
   .option('-c, --category <name>', 'Filtrar busca por categoria')
   .option('-p, --proxy <url>', 'Usar proxy (ex: socks5://127.0.0.1:9050)')
+  .option('--retry-blocked', 'Reexecuta plataformas inicialmente bloqueadas por WAF/anti-bot')
+  .option('--retry-delay <ms>', 'Delay antes do retry de bloqueados')
   .option('-v, --verbose', 'Modo verboso (exibe logs detalhados)')
   .action(executeHunt);
 
