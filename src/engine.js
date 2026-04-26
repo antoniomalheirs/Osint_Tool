@@ -7,6 +7,7 @@
 import pLimit from 'p-limit';
 import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
+import { sleep } from './utils.js';
 
 const log = getLogger('ENGINE');
 
@@ -172,6 +173,8 @@ async function checkSite(username, site, network) {
     let confidence = CONFIDENCE.MEDIUM;
     let body = null;
     let metadata = null;
+    let reason = null;
+    let blocked = false;
 
     switch (site.method || site.errorType) {
       // ═══ Método 1: Status Code ═══
@@ -273,6 +276,7 @@ async function checkSite(username, site, network) {
         if (!cleanFinalUrl.includes(lowerUser)) {
           found = false;
           confidence = CONFIDENCE.HIGH;
+          reason = 'REDIRECT_MISMATCH';
         }
       }
 
@@ -312,9 +316,12 @@ async function checkSite(username, site, network) {
         if (isSoft404) {
           found = false;
           confidence = CONFIDENCE.HIGH; // Temos certeza que não existe
+          reason = 'SOFT_404_SIGNATURE';
         } else if (isBlocked) {
           found = false;
-          confidence = null; // Falso negativo por bloqueio de WAF
+          confidence = null; // Resultado inconclusivo por bloqueio de WAF
+          blocked = true;
+          reason = 'WAF_BLOCKED';
           log.debug('Bloqueio de WAF/Cloudflare detectado em: ' + site.name);
         }
       }
@@ -336,10 +343,17 @@ async function checkSite(username, site, network) {
           if (!isValidProfile) {
             found = false;
             confidence = null; // Falso positivo descartado pelo validador estrito
+            reason = 'STRICT_VALIDATION_FAILED';
             log.debug(`Scraping Estrito: Username não encontrado no HTML de ${site.name}`);
           }
         }
       }
+
+    if (found && !reason) {
+      reason = 'PROFILE_CONFIRMED';
+    } else if (!found && !reason) {
+      reason = 'NOT_FOUND_OR_INCONCLUSIVE';
+    }
 
     return {
       site: site.name,
@@ -352,6 +366,8 @@ async function checkSite(username, site, network) {
       metadata,
       error: null,
       skipped: false,
+      blocked,
+      reason,
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };
@@ -369,6 +385,8 @@ async function checkSite(username, site, network) {
       metadata: null,
       error: error.message,
       skipped: false,
+      blocked: false,
+      reason: 'REQUEST_ERROR',
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };
@@ -451,4 +469,46 @@ export function groupByConfidence(results) {
     [CONFIDENCE.MEDIUM]: results.filter(r => r.found && r.confidence === CONFIDENCE.MEDIUM),
     [CONFIDENCE.LOW]: results.filter(r => r.found && r.confidence === CONFIDENCE.LOW),
   };
+}
+
+/**
+ * Reexecuta apenas plataformas bloqueadas por WAF/anti-bot
+ * e substitui resultados inconclusivos por novos resultados.
+ */
+export async function retryBlockedSites(username, allSites, previousResults, options = {}) {
+  const {
+    onResult = null,
+    concurrency = DEFAULT_CONCURRENCY,
+    delayMs = 1200,
+  } = options;
+
+  const blockedSiteNames = new Set(
+    previousResults
+      .filter(r => r.blocked && r.reason === 'WAF_BLOCKED')
+      .map(r => r.site)
+  );
+
+  if (blockedSiteNames.size === 0) {
+    return { retried: 0, mergedResults: previousResults };
+  }
+
+  const targetSites = allSites.filter(s => blockedSiteNames.has(s.name));
+  const network = getNetwork();
+  const limit = pLimit(concurrency);
+
+  log.info(`Retry operacional: ${targetSites.length} plataformas bloqueadas serão rechecadas.`);
+  if (delayMs > 0) await sleep(delayMs);
+
+  const retryResults = await Promise.all(
+    targetSites.map(site => limit(async () => {
+      const result = await checkSite(username, site, network);
+      if (onResult) onResult(result);
+      return result;
+    }))
+  );
+
+  const retriedBySite = new Map(retryResults.map(r => [r.site, r]));
+  const mergedResults = previousResults.map(r => retriedBySite.get(r.site) || r);
+
+  return { retried: retryResults.length, mergedResults };
 }

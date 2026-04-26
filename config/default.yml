@@ -12,6 +12,8 @@ network:
 search:
   includeNSFW: false       # Incluir sites adultos na busca por padrão
   exportFormat: "none"     # "json", "csv", "txt", "html", "all" ou "none"
+  retryBlocked: true       # Reexecuta plataformas bloqueadas por WAF para reduzir falso negativo
+  retryDelayMs: 1200       # Delay antes do retry de bloqueados
 
 database:
   enabled: true            # Salvar histórico de investigações localmente
@@ -20,3 +22,29 @@ database:
 logging:
   level: "INFO"            # Níveis: DEBUG, INFO, WARN, ERROR
   toFile: true             # Salvar logs na pasta /logs
+
+intelligence:
+  # Ajustes finos do correlator para análise de risco.
+  behaviorWeight: 0.4      # Peso da análise comportamental no score final (0.0 - 1.0)
+  highRiskThreshold: 75    # Faixa de score final para HIGH
+  criticalRiskThreshold: 90 # Faixa de score final para CRITICAL
+  minKeywordHits: 1        # Quantidade mínima de palavras sensíveis para abrir flag BIO_KEYWORDS
+  highConfidenceOnly: true # Considerar apenas achados HIGH/MEDIUM para análise comportamental
+  suspiciousKeywords:
+    - "crypto wallet"
+    - "telegram"
+    - "signal"
+    - "offshore"
+    - "vpn"
+    - "drops"
+    - "leaks"
+    - "breach"
+    - "marketplace"
+    - "arsenal"
+    - "carding"
+    - "fraud"
+    - "hacker"
+    - "hacktivist"
+    - "stealer"
+    - "ransomware"
+    - "botnet"
