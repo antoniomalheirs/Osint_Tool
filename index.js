@@ -111,6 +111,7 @@ async function executeHunt(target, options) {
         const intel = correlateResults(variant, results, emailResults || []);
         console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
         console.log(chalk.white(`     Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100');
+        console.log(chalk.white(`     Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100');
         console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(intel.riskLevel));
         console.log(chalk.white(`     Perfil:            `) + chalk.cyan(intel.profileType));
         if (intel.metadataIntel.inferredNames.length > 0) {
@@ -118,6 +119,9 @@ async function executeHunt(target, options) {
         }
         if (intel.behaviorIntel.flags.length > 0) {
           console.log(chalk.white(`     Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+        }
+        if (intel.evidenceTrail.length > 0) {
+          console.log(chalk.white(`     Evidências:        `) + chalk.gray(intel.evidenceTrail[0]));
         }
         console.log('');
 
@@ -157,6 +161,7 @@ async function executeHunt(target, options) {
       finalIntel = correlateResults(target, usernameResults, emailResults || []);
       console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
       console.log(chalk.white(`     Score de Presença: `) + (finalIntel.presenceScore > 50 ? chalk.red(finalIntel.presenceScore) : chalk.green(finalIntel.presenceScore)) + '/100');
+      console.log(chalk.white(`     Score de Risco:    `) + (finalIntel.finalRiskScore >= 75 ? chalk.red(finalIntel.finalRiskScore) : chalk.yellow(finalIntel.finalRiskScore)) + '/100');
       console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(finalIntel.riskLevel));
       console.log(chalk.white(`     Perfil:            `) + chalk.cyan(finalIntel.profileType));
       if (finalIntel.metadataIntel.inferredNames.length > 0) {
@@ -167,6 +172,9 @@ async function executeHunt(target, options) {
       }
       if (finalIntel.behaviorIntel.recommendations.length > 0) {
         console.log(chalk.white(`     Próx. passos:      `) + chalk.gray(finalIntel.behaviorIntel.recommendations[0]));
+      }
+      if (finalIntel.evidenceTrail.length > 0) {
+        console.log(chalk.white(`     Evidências:        `) + chalk.gray(finalIntel.evidenceTrail[0]));
       }
       console.log('');
     }

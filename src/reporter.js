@@ -260,11 +260,15 @@ export function exportHTML(target, usernameResults, emailResults, correlatorInte
           <p class="text-gray-400 text-sm">Presence Score</p>
           <p class="text-4xl font-bold ${correlatorIntel.presenceScore > 50 ? 'text-red-400' : 'text-green-400'}">${correlatorIntel.presenceScore}</p>
         </div>
+        <div class="bg-slate-800 p-4 rounded-lg text-center border ${correlatorIntel.finalRiskScore >= 75 ? 'border-red-500' : 'border-slate-600'}">
+          <p class="text-gray-400 text-sm">Risk Score (Final)</p>
+          <p class="text-3xl font-bold ${correlatorIntel.finalRiskScore >= 75 ? 'text-red-400' : 'text-yellow-300'} mt-2">${correlatorIntel.finalRiskScore || 0}</p>
+        </div>
         <div class="bg-slate-800 p-4 rounded-lg text-center border ${correlatorIntel.riskLevel === 'CRITICAL' ? 'border-red-500' : 'border-slate-600'}">
           <p class="text-gray-400 text-sm">Risk Level</p>
           <p class="text-2xl font-bold text-yellow-400 mt-2">${correlatorIntel.riskLevel}</p>
         </div>
-        <div class="bg-slate-800 p-4 rounded-lg text-center md:col-span-2 border border-slate-600">
+        <div class="bg-slate-800 p-4 rounded-lg text-center md:col-span-1 border border-slate-600">
           <p class="text-gray-400 text-sm">Perfil Detectado</p>
           <p class="text-xl font-bold text-cyan-400 mt-2">${correlatorIntel.profileType}</p>
           ${names}
@@ -274,6 +278,12 @@ export function exportHTML(target, usernameResults, emailResults, correlatorInte
       <div class="mt-4 border-t border-slate-700 pt-4">
         <p class="text-gray-400 text-sm">Próximos passos sugeridos</p>
         ${recHtml}
+      </div>
+      <div class="mt-4 border-t border-slate-700 pt-4">
+        <p class="text-gray-400 text-sm">Trilha de evidências</p>
+        <ul class="mt-3 space-y-2 text-sm text-gray-300">
+          ${(correlatorIntel.evidenceTrail || []).slice(0, 6).map(item => `<li>• ${item}</li>`).join('') || '<li>• Sem evidências textuais adicionais</li>'}
+        </ul>
       </div>
     </section>`;
   }

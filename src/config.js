@@ -27,7 +27,17 @@ export function loadConfig() {
       network: { timeout: 15000, maxRetries: 2, concurrency: 20, domainDelay: 200 },
       search: { includeNSFW: false, exportFormat: 'none' },
       database: { enabled: true, filename: 'osint_history.db' },
-      logging: { level: 'INFO', toFile: true }
+      logging: { level: 'INFO', toFile: true },
+      intelligence: {
+        behaviorWeight: 0.4,
+        highRiskThreshold: 75,
+        criticalRiskThreshold: 90,
+        suspiciousKeywords: [
+          'crypto wallet', 'telegram', 'signal', 'offshore', 'vpn',
+          'drops', 'leaks', 'breach', 'marketplace', 'arsenal', 'carding',
+          'fraud', 'hacker', 'hacktivist', 'stealer', 'ransomware', 'botnet'
+        ]
+      }
     };
     return _config;
   }
