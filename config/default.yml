@@ -1,0 +1,22 @@
+# OSINT Hunter v2.0 - Arquivo de Configuração Principal
+# Formato: YAML
+# Você pode alterar esses valores para personalizar a ferramenta sem editar o código.
+
+network:
+  timeout: 15000           # Timeout padrão por requisição (em ms)
+  maxRetries: 2            # Tentativas em caso de falha de conexão
+  concurrency: 20          # Conexões simultâneas máximas (cuidado com limiters do SO)
+  domainDelay: 200         # Atraso mínimo entre requisições para o mesmo domínio (ms)
+  # proxy: "socks5://127.0.0.1:9050"  # Descomente para rotear tudo via Tor (se instalado)
+
+search:
+  includeNSFW: false       # Incluir sites adultos na busca por padrão
+  exportFormat: "none"     # "json", "csv", "txt", "html", "all" ou "none"
+
+database:
+  enabled: true            # Salvar histórico de investigações localmente
+  filename: "osint_history.db"
+
+logging:
+  level: "INFO"            # Níveis: DEBUG, INFO, WARN, ERROR
+  toFile: true             # Salvar logs na pasta /logs
