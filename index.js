@@ -17,7 +17,7 @@ import { getConfig } from './src/config.js';
 import { initLogger } from './src/logger.js';
 import { initNetwork } from './src/network.js';
 import { correlateResults } from './src/correlator.js';
-import { searchUsername, getFoundResults, retryBlockedSites } from './src/engine.js';
+import { searchUsername, getFoundResults, retryBlockedSites, buildOperationalSummary } from './src/engine.js';
 import { searchEmail } from './src/emailSearch.js';
 import { initDB, saveInvestigation, getHistory } from './src/database.js';
 import {
@@ -69,9 +69,13 @@ async function executeHunt(target, options) {
 
   const includeNSFW = options.nsfw || config.search.includeNSFW;
   const retryBlocked = options.retryBlocked || config.search.retryBlocked;
+  const strictOperational = options.strictOperational || config.search.strictOperational;
   const retryDelayMs = Number.isFinite(parseInt(options.retryDelay, 10))
     ? parseInt(options.retryDelay, 10)
     : (config.search.retryDelayMs || 1200);
+  const retryAttempts = Number.isFinite(parseInt(options.retryAttempts, 10))
+    ? parseInt(options.retryAttempts, 10)
+    : (config.search.retryAttempts || 2);
   if (includeNSFW) log.info(`Modo NSFW: ATIVADO`);
 
   // ── Se o alvo é um e-mail ──
@@ -110,6 +114,7 @@ async function executeHunt(target, options) {
         if (retryBlocked) {
           const retryOutcome = await retryBlockedSites(variant, sites, results, {
             delayMs: retryDelayMs,
+            attempts: retryAttempts,
             onResult: () => {},
           });
           results = retryOutcome.mergedResults;
@@ -121,6 +126,12 @@ async function executeHunt(target, options) {
         const found = getFoundResults(results);
         spinner.succeed(chalk.green(` "${variant}" — ${found.length} perfis encontrados`));
         printUsernameResults(variant, results);
+        if (strictOperational) {
+          const opSummary = buildOperationalSummary(results);
+          if (opSummary.quarantined.length > 0) {
+            console.log(chalk.yellow(`  🧪 Quarentena SOC/IR: ${opSummary.quarantined.length} plataforma(s) inconclusiva(s)/bloqueada(s)`));
+          }
+        }
 
         const intel = correlateResults(variant, results, emailResults || []);
         console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
@@ -171,6 +182,7 @@ async function executeHunt(target, options) {
       if (retryBlocked) {
         const retryOutcome = await retryBlockedSites(target, sites, usernameResults, {
           delayMs: retryDelayMs,
+          attempts: retryAttempts,
           onResult: () => {},
         });
         usernameResults = retryOutcome.mergedResults;
@@ -182,6 +194,12 @@ async function executeHunt(target, options) {
       const found = getFoundResults(usernameResults);
       spinner.succeed(chalk.green(` Busca concluída — ${found.length} perfis encontrados em ${formatDuration(Date.now() - startTime)}`));
       printUsernameResults(target, usernameResults);
+      if (strictOperational) {
+        const opSummary = buildOperationalSummary(usernameResults);
+        if (opSummary.quarantined.length > 0) {
+          console.log(chalk.yellow(`  🧪 Quarentena SOC/IR: ${opSummary.quarantined.length} plataforma(s) inconclusiva(s)/bloqueada(s)`));
+        }
+      }
 
       finalIntel = correlateResults(target, usernameResults, emailResults || []);
       console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
@@ -241,6 +259,8 @@ program
   .option('-p, --proxy <url>', 'Usar proxy (ex: socks5://127.0.0.1:9050)')
   .option('--retry-blocked', 'Reexecuta plataformas inicialmente bloqueadas por WAF/anti-bot')
   .option('--retry-delay <ms>', 'Delay antes do retry de bloqueados')
+  .option('--retry-attempts <n>', 'Número de tentativas progressivas para bloqueados')
+  .option('--strict-operational', 'Habilita modo SOC/IR: CONFIRMED | INCONCLUSIVE | BLOCKED | ERROR')
   .option('-v, --verbose', 'Modo verboso (exibe logs detalhados)')
   .action(executeHunt);
 

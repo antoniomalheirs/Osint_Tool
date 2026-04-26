@@ -45,10 +45,10 @@ export function printBanner() {
  * Exibe a tabela de resultados de busca por username
  */
 export function printUsernameResults(username, results) {
-  const found = results.filter(r => r.found && !r.error);
-  const blocked = results.filter(r => !r.found && !r.error && r.blocked);
-  const notFound = results.filter(r => !r.found && !r.error && !r.blocked);
-  const errors = results.filter(r => r.error);
+  const found = results.filter(r => r.operationalStatus === 'CONFIRMED');
+  const blocked = results.filter(r => r.operationalStatus === 'BLOCKED');
+  const inconclusive = results.filter(r => r.operationalStatus === 'INCONCLUSIVE');
+  const errors = results.filter(r => r.operationalStatus === 'ERROR');
 
   console.log('\n' + chalk.cyan.bold('━'.repeat(60)));
   console.log(chalk.white.bold(`  📊 Resultados para: `) + chalk.yellow.bold(username));
@@ -91,9 +91,9 @@ export function printUsernameResults(username, results) {
   console.log('\n' + chalk.cyan.bold('━'.repeat(60)));
   console.log(chalk.white.bold('  📈 RESUMO'));
   console.log(chalk.green(`     ✅ Encontrados:   ${found.length}`));
-  console.log(chalk.red(`     ❌ Não encontr.:  ${notFound.length}`));
+  console.log(chalk.gray(`     ❓ Inconclusivos: ${inconclusive.length}`));
   console.log(chalk.yellow(`     🛡️  Bloqueados:    ${blocked.length}`));
-  console.log(chalk.yellow(`     ⚠️  Erros/Timeout: ${errors.length}`));
+  console.log(chalk.red(`     ⚠️  Erros/Timeout: ${errors.length}`));
   console.log(chalk.gray(`     📡 Total checado: ${results.length} plataformas`));
   console.log(chalk.cyan.bold('━'.repeat(60)) + '\n');
 }

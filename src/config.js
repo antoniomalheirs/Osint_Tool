@@ -25,7 +25,14 @@ export function loadConfig() {
     // Padrões hardcoded caso o arquivo falhe/seja apagado
     _config = {
       network: { timeout: 15000, maxRetries: 2, concurrency: 20, domainDelay: 200 },
-      search: { includeNSFW: false, exportFormat: 'none', retryBlocked: true, retryDelayMs: 1200 },
+      search: {
+        includeNSFW: false,
+        exportFormat: 'none',
+        retryBlocked: true,
+        retryDelayMs: 1200,
+        strictOperational: false,
+        retryAttempts: 2
+      },
       database: { enabled: true, filename: 'osint_history.db' },
       logging: { level: 'INFO', toFile: true },
       intelligence: {

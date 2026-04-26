@@ -14,6 +14,8 @@ search:
   exportFormat: "none"     # "json", "csv", "txt", "html", "all" ou "none"
   retryBlocked: true       # Reexecuta plataformas bloqueadas por WAF para reduzir falso negativo
   retryDelayMs: 1200       # Delay antes do retry de bloqueados
+  strictOperational: false # Só considera CONFIRMED como achado válido
+  retryAttempts: 2         # Tentativas para bloqueados (com backoff progressivo)
 
 database:
   enabled: true            # Salvar histórico de investigações localmente
