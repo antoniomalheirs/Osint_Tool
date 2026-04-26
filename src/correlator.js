@@ -9,6 +9,10 @@ import { getConfig } from './config.js';
 
 const log = getLogger('CORRELATOR');
 
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * Calcula o score de presença digital (0-100)
  */
@@ -86,13 +90,19 @@ export function analyzeMetadata(results) {
  */
 export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
   const config = getConfig();
+  const minKeywordHits = Math.max(1, config.intelligence?.minKeywordHits ?? 1);
+  const highConfidenceOnly = config.intelligence?.highConfidenceOnly ?? true;
   const suspiciousKeywords = config.intelligence?.suspiciousKeywords || [
     'crypto wallet', 'telegram', 'signal', 'offshore', 'vpn',
     'drops', 'leaks', 'breach', 'marketplace', 'arsenal', 'carding',
     'fraud', 'hacker', 'hacktivist', 'stealer', 'ransomware', 'botnet'
   ];
 
-  const found = results.filter(r => r.found && !r.error && !r.skipped);
+  const found = results.filter((r) => {
+    if (!r.found || r.error || r.skipped) return false;
+    if (!highConfidenceOnly) return true;
+    return r.confidence === CONFIDENCE.HIGH || r.confidence === CONFIDENCE.MEDIUM;
+  });
   const categoryCount = {};
   const flags = [];
   const recommendations = [];
@@ -116,13 +126,17 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
     .map(b => (b.text || '').toLowerCase())
     .join(' || ');
 
-  const matchedKeywords = suspiciousKeywords.filter(k => bioText.includes(k));
+  const matchedKeywords = suspiciousKeywords.filter((k) => {
+    const pattern = new RegExp(`(^|\\W)${escapeRegex(String(k).toLowerCase())}(\\W|$)`, 'i');
+    return pattern.test(bioText);
+  });
 
-  if (matchedKeywords.length > 0) {
+  if (matchedKeywords.length >= minKeywordHits) {
     flags.push({
       type: 'BIO_KEYWORDS',
       severity: matchedKeywords.length >= 3 ? 'HIGH' : 'MEDIUM',
       message: `Termos sensíveis detectados em bios: ${matchedKeywords.slice(0, 5).join(', ')}`,
+      evidence: `${matchedKeywords.length} termos detectados em metadados de perfil`,
     });
   }
 
@@ -131,6 +145,7 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
       type: 'SECURITY_PRESENCE',
       severity: 'MEDIUM',
       message: 'Presença recorrente em plataformas de segurança/pesquisa técnica',
+      evidence: `Ocorrências na categoria Security: ${categoryCount.Security}`,
     });
   }
 
@@ -139,6 +154,7 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
       type: 'FINANCIAL_SURFACE',
       severity: 'HIGH',
       message: 'Exposição relevante em plataformas financeiras/fintech',
+      evidence: `Ocorrências na categoria Financial: ${categoryCount.Financial}`,
     });
   }
 
@@ -150,6 +166,9 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
   }
   if (metadataAnalysis.commonAvatars.length > 0) {
     recommendations.push('Realizar busca reversa de imagem no avatar principal para pivoting de identidade.');
+  }
+  if (highConfidenceOnly) {
+    recommendations.push('Reexecutar scan com --verbose para validar bloqueios e aumentar cobertura de evidências.');
   }
 
   return {
@@ -180,7 +199,7 @@ function calculateBehaviorScore(behaviorIntel) {
 function buildEvidenceTrail(behaviorIntel, metadataAnalysis) {
   const evidence = [];
   for (const flag of behaviorIntel.flags) {
-    evidence.push(`${flag.type}: ${flag.message}`);
+    evidence.push(`${flag.type}: ${flag.message}${flag.evidence ? ` (${flag.evidence})` : ''}`);
   }
   if (metadataAnalysis.inferredNames.length > 0) {
     evidence.push(`Nomes inferidos consistentes: ${metadataAnalysis.inferredNames.slice(0, 3).join(', ')}`);
@@ -207,6 +226,12 @@ export function correlateResults(username, usernameResults, emailResults = []) {
   const behaviorScore = calculateBehaviorScore(behaviorIntel);
   const finalScore = Math.round((score * (1 - behaviorWeight)) + (behaviorScore * behaviorWeight));
   const evidenceTrail = buildEvidenceTrail(behaviorIntel, metadataAnalysis);
+  const intelligenceConfidence = Math.min(
+    100,
+    (behaviorIntel.flags.length * 20) +
+    (metadataAnalysis.inferredNames.length > 0 ? 15 : 0) +
+    (Object.keys(behaviorIntel.categoryCount).length * 5)
+  );
   
   // Avaliação de risco baseada no score e categorias
   let riskLevel = 'LOW';
@@ -248,6 +273,7 @@ export function correlateResults(username, usernameResults, emailResults = []) {
     metadataIntel: metadataAnalysis,
     behaviorIntel,
     evidenceTrail,
+    intelligenceConfidence,
     emailLinked,
   };
 }

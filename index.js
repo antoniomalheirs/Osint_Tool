@@ -112,6 +112,7 @@ async function executeHunt(target, options) {
         console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
         console.log(chalk.white(`     Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100');
         console.log(chalk.white(`     Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100');
+        console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${intel.intelligenceConfidence}/100`));
         console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(intel.riskLevel));
         console.log(chalk.white(`     Perfil:            `) + chalk.cyan(intel.profileType));
         if (intel.metadataIntel.inferredNames.length > 0) {
@@ -162,6 +163,7 @@ async function executeHunt(target, options) {
       console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
       console.log(chalk.white(`     Score de Presença: `) + (finalIntel.presenceScore > 50 ? chalk.red(finalIntel.presenceScore) : chalk.green(finalIntel.presenceScore)) + '/100');
       console.log(chalk.white(`     Score de Risco:    `) + (finalIntel.finalRiskScore >= 75 ? chalk.red(finalIntel.finalRiskScore) : chalk.yellow(finalIntel.finalRiskScore)) + '/100');
+      console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${finalIntel.intelligenceConfidence}/100`));
       console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(finalIntel.riskLevel));
       console.log(chalk.white(`     Perfil:            `) + chalk.cyan(finalIntel.profileType));
       if (finalIntel.metadataIntel.inferredNames.length > 0) {

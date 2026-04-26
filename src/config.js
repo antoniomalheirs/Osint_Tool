@@ -32,6 +32,8 @@ export function loadConfig() {
         behaviorWeight: 0.4,
         highRiskThreshold: 75,
         criticalRiskThreshold: 90,
+        minKeywordHits: 1,
+        highConfidenceOnly: true,
         suspiciousKeywords: [
           'crypto wallet', 'telegram', 'signal', 'offshore', 'vpn',
           'drops', 'leaks', 'breach', 'marketplace', 'arsenal', 'carding',

@@ -274,6 +274,13 @@ export function exportHTML(target, usernameResults, emailResults, correlatorInte
           ${names}
         </div>
       </div>
+      <div class="mt-4">
+        <p class="text-gray-400 text-sm">Confiança Analítica</p>
+        <div class="w-full bg-slate-800 rounded-full h-3 mt-2">
+          <div class="h-3 rounded-full ${correlatorIntel.intelligenceConfidence >= 70 ? 'bg-cyan-400' : 'bg-yellow-400'}" style="width:${correlatorIntel.intelligenceConfidence || 0}%"></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">${correlatorIntel.intelligenceConfidence || 0}/100</p>
+      </div>
       ${flagsHtml}
       <div class="mt-4 border-t border-slate-700 pt-4">
         <p class="text-gray-400 text-sm">Próximos passos sugeridos</p>
