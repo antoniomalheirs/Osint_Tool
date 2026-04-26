@@ -10,6 +10,30 @@ import { analyzeDomain } from './dnsIntel.js';
 
 const log = getLogger('EMAIL_INTEL');
 
+export const EMAIL_STATUS = {
+  CONFIRMED: 'CONFIRMED',
+  INCONCLUSIVE: 'INCONCLUSIVE',
+  LINK_ONLY: 'LINK_ONLY',
+  ERROR: 'ERROR',
+};
+
+function normalizeEmailResult(result) {
+  const normalized = { ...result };
+  if (normalized.error) normalized.status = EMAIL_STATUS.ERROR;
+  else if (normalized.found === true) normalized.status = EMAIL_STATUS.CONFIRMED;
+  else if (normalized.found === false) normalized.status = EMAIL_STATUS.INCONCLUSIVE;
+  else normalized.status = EMAIL_STATUS.LINK_ONLY;
+
+  if (!normalized.confidence) {
+    normalized.confidence = normalized.status === EMAIL_STATUS.CONFIRMED
+      ? 'HIGH'
+      : normalized.status === EMAIL_STATUS.ERROR
+        ? 'LOW'
+        : 'MEDIUM';
+  }
+  return normalized;
+}
+
 /**
  * Verifica se existe um Gravatar associado ao e-mail
  */
@@ -62,7 +86,7 @@ async function checkGitHubEmail(email) {
     
     if (response.status === 403) {
       log.warn('GitHub API rate limited');
-      return { service: 'GitHub', found: null, url: null, info: 'API Rate Limited' };
+      return normalizeEmailResult({ service: 'GitHub', found: null, url: null, info: 'API Rate Limited', reason: 'RATE_LIMIT' });
     }
 
     if (data && data.total_count > 0) {
@@ -73,12 +97,13 @@ async function checkGitHubEmail(email) {
         url: users[0].profile,
         info: `Contas encontradas: ${users.map(u => u.login).join(', ')}`,
         data: users,
+        reason: 'MATCH_FOUND',
       };
     }
-    return { service: 'GitHub', found: false, url: null, info: null };
+    return normalizeEmailResult({ service: 'GitHub', found: false, url: null, info: null, reason: 'NO_MATCH' });
   } catch (error) {
     log.debug('GitHub check failed', { error: error.message });
-    return { service: 'GitHub', found: false, url: null, info: null, error: error.message };
+    return normalizeEmailResult({ service: 'GitHub', found: false, url: null, info: null, error: error.message, reason: 'REQUEST_ERROR' });
   }
 }
 
@@ -86,12 +111,13 @@ async function checkGitHubEmail(email) {
  * Verifica Have I Been Pwned (Apenas gera link, v3 requer auth)
  */
 async function checkHIBP(email) {
-  return {
+  return normalizeEmailResult({
     service: 'Have I Been Pwned',
     found: null,
     url: `https://haveibeenpwned.com/account/${encodeURIComponent(email)}`,
     info: 'Verifique manualmente — Link gerado para consulta direta',
-  };
+    reason: 'MANUAL_LINK',
+  });
 }
 
 /**
@@ -124,7 +150,22 @@ async function generateDorks(email) {
       url: `https://web.skype.com/`,
       info: 'Você pode pesquisar este e-mail no Skype Web para revelar o nome real',
     }
-  ];
+  ].map(normalizeEmailResult);
+}
+
+async function withRetry(fn, retries = 2, delayMs = 800) {
+  let lastErr = null;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        await new Promise(resolve => setTimeout(resolve, delayMs * attempt));
+      }
+    }
+  }
+  throw lastErr;
 }
 
 /**
@@ -136,12 +177,13 @@ export async function searchEmail(email, onResult = null) {
 
   // 1. Buscas baseadas em API
   const checks = [
-    checkGravatar(email),
-    checkGitHubEmail(email),
-    checkHIBP(email),
+    () => checkGravatar(email),
+    () => withRetry(() => checkGitHubEmail(email), 2, 1000),
+    () => checkHIBP(email),
   ];
 
-  const results = await Promise.all(checks);
+  const rawResults = await Promise.all(checks.map(fn => fn()));
+  const results = rawResults.map(normalizeEmailResult);
 
   // 2. Inteligência de Domínio
   if (domain && !['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com'].includes(domain)) {
@@ -153,20 +195,22 @@ export async function searchEmail(email, onResult = null) {
       info += ` | Domínio registrado em: ${domainIntel.whois.creationDate.split('T')[0]}`;
     }
 
-    results.push({
+    results.push(normalizeEmailResult({
       service: 'Domain Intelligence',
       found: true,
       url: `https://whois.domaintools.com/${domain}`,
       info,
       data: domainIntel,
-    });
+      reason: 'DOMAIN_INTEL',
+    }));
   } else if (domain) {
-    results.push({
+    results.push(normalizeEmailResult({
       service: 'Domain Intelligence',
       found: true,
       url: null,
       info: `Provedor público: ${domain} (WHOIS/MX ignorados para provedores genéricos)`,
-    });
+      reason: 'PUBLIC_PROVIDER',
+    }));
   }
 
   // 3. Dorks

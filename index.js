@@ -17,7 +17,7 @@ import { getConfig } from './src/config.js';
 import { initLogger } from './src/logger.js';
 import { initNetwork } from './src/network.js';
 import { correlateResults } from './src/correlator.js';
-import { searchUsername, getFoundResults } from './src/engine.js';
+import { searchUsername, getFoundResults, retryBlockedSites, buildOperationalSummary } from './src/engine.js';
 import { searchEmail } from './src/emailSearch.js';
 import { initDB, saveInvestigation, getHistory } from './src/database.js';
 import {
@@ -68,6 +68,14 @@ async function executeHunt(target, options) {
   if (options.proxy) log.info(`Utilizando proxy: ${options.proxy}`);
 
   const includeNSFW = options.nsfw || config.search.includeNSFW;
+  const retryBlocked = options.retryBlocked || config.search.retryBlocked;
+  const strictOperational = options.strictOperational || config.search.strictOperational;
+  const retryDelayMs = Number.isFinite(parseInt(options.retryDelay, 10))
+    ? parseInt(options.retryDelay, 10)
+    : (config.search.retryDelayMs || 1200);
+  const retryAttempts = Number.isFinite(parseInt(options.retryAttempts, 10))
+    ? parseInt(options.retryAttempts, 10)
+    : (config.search.retryAttempts || 2);
   if (includeNSFW) log.info(`Modo NSFW: ATIVADO`);
 
   // ── Se o alvo é um e-mail ──
@@ -94,7 +102,7 @@ async function executeHunt(target, options) {
         const spinner = ora({ text: chalk.yellow(` Buscando username "${variant}" em ${sitesToSearch.length} plataformas...`), spinner: 'dots12', color: 'cyan' }).start();
 
         let completed = 0;
-        const results = await searchUsername(variant, sites, {
+        let results = await searchUsername(variant, sites, {
           includeNSFW,
           filterCategory: options.category,
           onResult: (result) => {
@@ -103,18 +111,43 @@ async function executeHunt(target, options) {
             spinner.text = chalk.yellow(` [${completed}/${sitesToSearch.length}] `) + icon + chalk.gray(` ${result.site}`);
           }
         });
+        if (retryBlocked) {
+          const retryOutcome = await retryBlockedSites(variant, sites, results, {
+            delayMs: retryDelayMs,
+            attempts: retryAttempts,
+            onResult: () => {},
+          });
+          results = retryOutcome.mergedResults;
+          if (retryOutcome.retried > 0) {
+            log.info(`Retry de bloqueados finalizado para "${variant}" (${retryOutcome.retried} plataformas).`);
+          }
+        }
 
         const found = getFoundResults(results);
         spinner.succeed(chalk.green(` "${variant}" — ${found.length} perfis encontrados`));
         printUsernameResults(variant, results);
+        if (strictOperational) {
+          const opSummary = buildOperationalSummary(results);
+          if (opSummary.quarantined.length > 0) {
+            console.log(chalk.yellow(`  🧪 Quarentena SOC/IR: ${opSummary.quarantined.length} plataforma(s) inconclusiva(s)/bloqueada(s)`));
+          }
+        }
 
         const intel = correlateResults(variant, results, emailResults || []);
         console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
         console.log(chalk.white(`     Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100');
+        console.log(chalk.white(`     Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100');
+        console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${intel.intelligenceConfidence}/100`));
         console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(intel.riskLevel));
         console.log(chalk.white(`     Perfil:            `) + chalk.cyan(intel.profileType));
         if (intel.metadataIntel.inferredNames.length > 0) {
           console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(intel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
+        }
+        if (intel.behaviorIntel.flags.length > 0) {
+          console.log(chalk.white(`     Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+        }
+        if (intel.evidenceTrail.length > 0) {
+          console.log(chalk.white(`     Evidências:        `) + chalk.gray(intel.evidenceTrail[0]));
         }
         console.log('');
 
@@ -146,18 +179,46 @@ async function executeHunt(target, options) {
           spinner.text = chalk.yellow(` [${completed}/${sitesToSearch.length}] `) + icon + chalk.gray(` ${result.site}`);
         }
       });
+      if (retryBlocked) {
+        const retryOutcome = await retryBlockedSites(target, sites, usernameResults, {
+          delayMs: retryDelayMs,
+          attempts: retryAttempts,
+          onResult: () => {},
+        });
+        usernameResults = retryOutcome.mergedResults;
+        if (retryOutcome.retried > 0) {
+          log.info(`Retry de bloqueados finalizado para "${target}" (${retryOutcome.retried} plataformas).`);
+        }
+      }
 
       const found = getFoundResults(usernameResults);
       spinner.succeed(chalk.green(` Busca concluída — ${found.length} perfis encontrados em ${formatDuration(Date.now() - startTime)}`));
       printUsernameResults(target, usernameResults);
+      if (strictOperational) {
+        const opSummary = buildOperationalSummary(usernameResults);
+        if (opSummary.quarantined.length > 0) {
+          console.log(chalk.yellow(`  🧪 Quarentena SOC/IR: ${opSummary.quarantined.length} plataforma(s) inconclusiva(s)/bloqueada(s)`));
+        }
+      }
 
       finalIntel = correlateResults(target, usernameResults, emailResults || []);
       console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
       console.log(chalk.white(`     Score de Presença: `) + (finalIntel.presenceScore > 50 ? chalk.red(finalIntel.presenceScore) : chalk.green(finalIntel.presenceScore)) + '/100');
+      console.log(chalk.white(`     Score de Risco:    `) + (finalIntel.finalRiskScore >= 75 ? chalk.red(finalIntel.finalRiskScore) : chalk.yellow(finalIntel.finalRiskScore)) + '/100');
+      console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${finalIntel.intelligenceConfidence}/100`));
       console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(finalIntel.riskLevel));
       console.log(chalk.white(`     Perfil:            `) + chalk.cyan(finalIntel.profileType));
       if (finalIntel.metadataIntel.inferredNames.length > 0) {
         console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(finalIntel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
+      }
+      if (finalIntel.behaviorIntel.flags.length > 0) {
+        console.log(chalk.white(`     Flags Intel:       `) + chalk.red(finalIntel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+      }
+      if (finalIntel.behaviorIntel.recommendations.length > 0) {
+        console.log(chalk.white(`     Próx. passos:      `) + chalk.gray(finalIntel.behaviorIntel.recommendations[0]));
+      }
+      if (finalIntel.evidenceTrail.length > 0) {
+        console.log(chalk.white(`     Evidências:        `) + chalk.gray(finalIntel.evidenceTrail[0]));
       }
       console.log('');
     }
@@ -196,6 +257,10 @@ program
   .option('--nsfw', 'Incluir sites NSFW na busca (sobrescreve config)')
   .option('-c, --category <name>', 'Filtrar busca por categoria')
   .option('-p, --proxy <url>', 'Usar proxy (ex: socks5://127.0.0.1:9050)')
+  .option('--retry-blocked', 'Reexecuta plataformas inicialmente bloqueadas por WAF/anti-bot')
+  .option('--retry-delay <ms>', 'Delay antes do retry de bloqueados')
+  .option('--retry-attempts <n>', 'Número de tentativas progressivas para bloqueados')
+  .option('--strict-operational', 'Habilita modo SOC/IR: CONFIRMED | INCONCLUSIVE | BLOCKED | ERROR')
   .option('-v, --verbose', 'Modo verboso (exibe logs detalhados)')
   .action(executeHunt);
 

@@ -7,6 +7,7 @@
 import pLimit from 'p-limit';
 import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
+import { sleep } from './utils.js';
 
 const log = getLogger('ENGINE');
 
@@ -21,6 +22,21 @@ export const CONFIDENCE = {
   MEDIUM: 'MEDIUM',   // Apenas status code
   LOW: 'LOW',         // Resultado incerto (redirect ambíguo, etc.)
 };
+
+export const OP_STATUS = {
+  CONFIRMED: 'CONFIRMED',
+  INCONCLUSIVE: 'INCONCLUSIVE',
+  BLOCKED: 'BLOCKED',
+  ERROR: 'ERROR',
+};
+
+function resolveOperationalStatus(result) {
+  if (result.error) return OP_STATUS.ERROR;
+  if (result.blocked || result.reason === 'WAF_BLOCKED') return OP_STATUS.BLOCKED;
+  if (result.found && !result.error) return OP_STATUS.CONFIRMED;
+  if (!result.found && !result.error && result.confidence === null) return OP_STATUS.INCONCLUSIVE;
+  return OP_STATUS.INCONCLUSIVE;
+}
 
 /**
  * Valida se o username é válido para uma plataforma específica
@@ -147,7 +163,7 @@ async function checkSite(username, site, network) {
 
   // Validação de regex antes de fazer a requisição
   if (!isValidUsername(username, site)) {
-    return {
+    const invalidResult = {
       site: site.name,
       category: site.category || 'Outros',
       url: profileUrl,
@@ -159,6 +175,8 @@ async function checkSite(username, site, network) {
       error: 'Username inválido para esta plataforma',
       skipped: true,
     };
+    invalidResult.operationalStatus = resolveOperationalStatus(invalidResult);
+    return invalidResult;
   }
 
   try {
@@ -172,6 +190,8 @@ async function checkSite(username, site, network) {
     let confidence = CONFIDENCE.MEDIUM;
     let body = null;
     let metadata = null;
+    let reason = null;
+    let blocked = false;
 
     switch (site.method || site.errorType) {
       // ═══ Método 1: Status Code ═══
@@ -273,6 +293,7 @@ async function checkSite(username, site, network) {
         if (!cleanFinalUrl.includes(lowerUser)) {
           found = false;
           confidence = CONFIDENCE.HIGH;
+          reason = 'REDIRECT_MISMATCH';
         }
       }
 
@@ -312,9 +333,12 @@ async function checkSite(username, site, network) {
         if (isSoft404) {
           found = false;
           confidence = CONFIDENCE.HIGH; // Temos certeza que não existe
+          reason = 'SOFT_404_SIGNATURE';
         } else if (isBlocked) {
           found = false;
-          confidence = null; // Falso negativo por bloqueio de WAF
+          confidence = null; // Resultado inconclusivo por bloqueio de WAF
+          blocked = true;
+          reason = 'WAF_BLOCKED';
           log.debug('Bloqueio de WAF/Cloudflare detectado em: ' + site.name);
         }
       }
@@ -336,12 +360,19 @@ async function checkSite(username, site, network) {
           if (!isValidProfile) {
             found = false;
             confidence = null; // Falso positivo descartado pelo validador estrito
+            reason = 'STRICT_VALIDATION_FAILED';
             log.debug(`Scraping Estrito: Username não encontrado no HTML de ${site.name}`);
           }
         }
       }
 
-    return {
+    if (found && !reason) {
+      reason = 'PROFILE_CONFIRMED';
+    } else if (!found && !reason) {
+      reason = 'NOT_FOUND_OR_INCONCLUSIVE';
+    }
+
+    const result = {
       site: site.name,
       category: site.category || 'Outros',
       url: profileUrl,
@@ -352,13 +383,17 @@ async function checkSite(username, site, network) {
       metadata,
       error: null,
       skipped: false,
+      blocked,
+      reason,
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };
+    result.operationalStatus = resolveOperationalStatus(result);
+    return result;
 
   } catch (error) {
     const elapsed = Date.now() - startTime;
-    return {
+    const result = {
       site: site.name,
       category: site.category || 'Outros',
       url: profileUrl,
@@ -369,9 +404,13 @@ async function checkSite(username, site, network) {
       metadata: null,
       error: error.message,
       skipped: false,
+      blocked: false,
+      reason: 'REQUEST_ERROR',
       isNSFW: site.isNSFW || false,
       tags: site.tags || [],
     };
+    result.operationalStatus = resolveOperationalStatus(result);
+    return result;
   }
 }
 
@@ -424,7 +463,7 @@ export async function searchUsername(username, sites, options = {}) {
  * Funções de filtragem de resultados
  */
 export function getFoundResults(results) {
-  return results.filter(r => r.found && !r.error);
+  return results.filter(r => r.found && !r.error && r.operationalStatus === OP_STATUS.CONFIRMED);
 }
 
 export function getErrorResults(results) {
@@ -450,5 +489,72 @@ export function groupByConfidence(results) {
     [CONFIDENCE.HIGH]: results.filter(r => r.found && r.confidence === CONFIDENCE.HIGH),
     [CONFIDENCE.MEDIUM]: results.filter(r => r.found && r.confidence === CONFIDENCE.MEDIUM),
     [CONFIDENCE.LOW]: results.filter(r => r.found && r.confidence === CONFIDENCE.LOW),
+  };
+}
+
+/**
+ * Reexecuta apenas plataformas bloqueadas por WAF/anti-bot
+ * e substitui resultados inconclusivos por novos resultados.
+ */
+export async function retryBlockedSites(username, allSites, previousResults, options = {}) {
+  const {
+    onResult = null,
+    concurrency = DEFAULT_CONCURRENCY,
+    delayMs = 1200,
+    attempts = 2,
+  } = options;
+
+  const blockedSiteNames = new Set(
+    previousResults
+      .filter(r => r.blocked && r.reason === 'WAF_BLOCKED')
+      .map(r => r.site)
+  );
+
+  if (blockedSiteNames.size === 0) {
+    return { retried: 0, mergedResults: previousResults };
+  }
+
+  let targetSites = allSites.filter(s => blockedSiteNames.has(s.name));
+  const network = getNetwork();
+  const limit = pLimit(concurrency);
+
+  log.info(`Retry operacional: ${targetSites.length} plataformas bloqueadas serão rechecadas (tentativas: ${attempts}).`);
+  const retriedBySite = new Map();
+  let totalRetried = 0;
+
+  for (let attempt = 1; attempt <= attempts && targetSites.length > 0; attempt++) {
+    const backoff = delayMs * attempt;
+    if (backoff > 0) await sleep(backoff);
+
+    const attemptResults = await Promise.all(
+      targetSites.map(site => limit(async () => {
+        const result = await checkSite(username, site, network);
+        if (onResult) onResult(result);
+        return result;
+      }))
+    );
+
+    totalRetried += attemptResults.length;
+    attemptResults.forEach(r => retriedBySite.set(r.site, r));
+    targetSites = targetSites.filter(site => {
+      const last = retriedBySite.get(site.name);
+      return last && last.operationalStatus === OP_STATUS.BLOCKED;
+    });
+  }
+
+  const mergedResults = previousResults.map(r => retriedBySite.get(r.site) || r);
+
+  return { retried: totalRetried, mergedResults };
+}
+
+export function buildOperationalSummary(results) {
+  return {
+    confirmed: results.filter(r => r.operationalStatus === OP_STATUS.CONFIRMED).length,
+    inconclusive: results.filter(r => r.operationalStatus === OP_STATUS.INCONCLUSIVE).length,
+    blocked: results.filter(r => r.operationalStatus === OP_STATUS.BLOCKED).length,
+    errors: results.filter(r => r.operationalStatus === OP_STATUS.ERROR).length,
+    quarantined: results
+      .filter(r => r.operationalStatus === OP_STATUS.INCONCLUSIVE || r.operationalStatus === OP_STATUS.BLOCKED)
+      .map(r => ({ site: r.site, reason: r.reason || 'UNKNOWN' })),
   };
 }
