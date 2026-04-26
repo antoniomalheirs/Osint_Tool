@@ -237,6 +237,20 @@ export function exportHTML(target, usernameResults, emailResults, correlatorInte
     const names = correlatorIntel.metadataIntel.inferredNames.length > 0 
       ? `<p class="text-sm text-gray-300 mt-2">Nomes: ${correlatorIntel.metadataIntel.inferredNames.join(', ')}</p>` 
       : '';
+    const behaviorFlags = correlatorIntel.behaviorIntel?.flags || [];
+    const behaviorRecommendations = correlatorIntel.behaviorIntel?.recommendations || [];
+    const flagsHtml = behaviorFlags.length > 0
+      ? `<div class="mt-4">
+          <p class="text-gray-400 text-sm mb-2">Flags de comportamento</p>
+          <div class="flex flex-wrap gap-2">
+            ${behaviorFlags.map(flag => `<span class="px-2 py-1 rounded-md text-xs ${flag.severity === 'HIGH' ? 'bg-red-900 text-red-200' : 'bg-yellow-900 text-yellow-200'}">${flag.type} · ${flag.severity}</span>`).join('')}
+          </div>
+        </div>`
+      : '<p class="text-sm text-green-400 mt-4">Nenhuma flag comportamental crítica detectada.</p>';
+
+    const recHtml = behaviorRecommendations.length > 0
+      ? `<ul class="mt-3 space-y-2 text-sm text-gray-300">${behaviorRecommendations.map(r => `<li>• ${r}</li>`).join('')}</ul>`
+      : '<p class="text-sm text-gray-400 mt-3">Sem recomendações adicionais.</p>';
       
     correlatorSection = `
     <section class="glass rounded-xl p-6">
@@ -255,6 +269,11 @@ export function exportHTML(target, usernameResults, emailResults, correlatorInte
           <p class="text-xl font-bold text-cyan-400 mt-2">${correlatorIntel.profileType}</p>
           ${names}
         </div>
+      </div>
+      ${flagsHtml}
+      <div class="mt-4 border-t border-slate-700 pt-4">
+        <p class="text-gray-400 text-sm">Próximos passos sugeridos</p>
+        ${recHtml}
       </div>
     </section>`;
   }
