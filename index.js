@@ -116,6 +116,9 @@ async function executeHunt(target, options) {
         if (intel.metadataIntel.inferredNames.length > 0) {
           console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(intel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
         }
+        if (intel.behaviorIntel.flags.length > 0) {
+          console.log(chalk.white(`     Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+        }
         console.log('');
 
         if (variant === variations[0]) {
@@ -158,6 +161,12 @@ async function executeHunt(target, options) {
       console.log(chalk.white(`     Perfil:            `) + chalk.cyan(finalIntel.profileType));
       if (finalIntel.metadataIntel.inferredNames.length > 0) {
         console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(finalIntel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
+      }
+      if (finalIntel.behaviorIntel.flags.length > 0) {
+        console.log(chalk.white(`     Flags Intel:       `) + chalk.red(finalIntel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+      }
+      if (finalIntel.behaviorIntel.recommendations.length > 0) {
+        console.log(chalk.white(`     Próx. passos:      `) + chalk.gray(finalIntel.behaviorIntel.recommendations[0]));
       }
       console.log('');
     }

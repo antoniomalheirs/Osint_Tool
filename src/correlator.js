@@ -81,6 +81,82 @@ export function analyzeMetadata(results) {
 }
 
 /**
+ * Sinais comportamentais e operacionais inferidos do footprint digital
+ */
+export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
+  const found = results.filter(r => r.found && !r.error && !r.skipped);
+  const categoryCount = {};
+  const flags = [];
+  const recommendations = [];
+
+  for (const r of found) {
+    const key = r.category || 'Outros';
+    categoryCount[key] = (categoryCount[key] || 0) + 1;
+  }
+
+  const normalizedUser = (username || '').toLowerCase();
+  const opsecRegex = /(sec|opsec|anon|intel|osint|root|admin|ghost|shadow|xss|0day|malware|exploit|cyber)/i;
+  if (normalizedUser.length >= 4 && opsecRegex.test(normalizedUser)) {
+    flags.push({
+      type: 'HANDLE_OPSEC',
+      severity: 'MEDIUM',
+      message: 'Username com padrões semânticos ligados a segurança/opsec',
+    });
+  }
+
+  const bioText = (metadataAnalysis.bioSnippets || [])
+    .map(b => (b.text || '').toLowerCase())
+    .join(' || ');
+
+  const suspiciousKeywords = [
+    'crypto wallet', 'telegram', 'signal', 'offshore', 'vpn',
+    'drops', 'leaks', 'breach', 'marketplace', 'arsenal', 'carding',
+    'fraud', 'hacker', 'hacktivist', 'stealer', 'ransomware', 'botnet'
+  ];
+  const matchedKeywords = suspiciousKeywords.filter(k => bioText.includes(k));
+
+  if (matchedKeywords.length > 0) {
+    flags.push({
+      type: 'BIO_KEYWORDS',
+      severity: matchedKeywords.length >= 3 ? 'HIGH' : 'MEDIUM',
+      message: `Termos sensíveis detectados em bios: ${matchedKeywords.slice(0, 5).join(', ')}`,
+    });
+  }
+
+  if ((categoryCount.Security || 0) >= 2) {
+    flags.push({
+      type: 'SECURITY_PRESENCE',
+      severity: 'MEDIUM',
+      message: 'Presença recorrente em plataformas de segurança/pesquisa técnica',
+    });
+  }
+
+  if ((categoryCount.Financial || 0) >= 2) {
+    flags.push({
+      type: 'FINANCIAL_SURFACE',
+      severity: 'HIGH',
+      message: 'Exposição relevante em plataformas financeiras/fintech',
+    });
+  }
+
+  if (Object.keys(categoryCount).length >= 5) {
+    recommendations.push('Consolidar timeline com prioridade por categoria (Dev, Financeiro, Social, Security).');
+  }
+  if (flags.some(f => f.severity === 'HIGH')) {
+    recommendations.push('Executar validação manual dos achados HIGH antes de qualquer decisão operacional.');
+  }
+  if (metadataAnalysis.commonAvatars.length > 0) {
+    recommendations.push('Realizar busca reversa de imagem no avatar principal para pivoting de identidade.');
+  }
+
+  return {
+    categoryCount,
+    flags,
+    recommendations,
+  };
+}
+
+/**
  * Gera o relatório de correlação
  */
 export function correlateResults(username, usernameResults, emailResults = []) {
@@ -88,6 +164,7 @@ export function correlateResults(username, usernameResults, emailResults = []) {
 
   const score = calculatePresenceScore(usernameResults);
   const metadataAnalysis = analyzeMetadata(usernameResults);
+  const behaviorIntel = analyzeBehavioralSignals(username, usernameResults, metadataAnalysis);
   
   // Avaliação de risco baseada no score e categorias
   let riskLevel = 'LOW';
@@ -102,6 +179,10 @@ export function correlateResults(username, usernameResults, emailResults = []) {
   } else if (score > 20) {
     riskLevel = 'MEDIUM';
     profileType = 'Casual User';
+  }
+
+  if (behaviorIntel.flags.some(f => f.severity === 'HIGH') && riskLevel !== 'CRITICAL') {
+    riskLevel = riskLevel === 'LOW' ? 'MEDIUM' : 'HIGH';
   }
 
   // Cruzamento Email <-> Username
@@ -121,6 +202,7 @@ export function correlateResults(username, usernameResults, emailResults = []) {
     riskLevel,
     profileType,
     metadataIntel: metadataAnalysis,
+    behaviorIntel,
     emailLinked,
   };
 }
