@@ -110,28 +110,41 @@ export function printEmailResults(email, results) {
     head: [
       chalk.white.bold('Serviço'),
       chalk.white.bold('Status'),
+      chalk.white.bold('Confiança'),
       chalk.white.bold('Info'),
     ],
-    colWidths: [25, 14, 55],
+    colWidths: [22, 14, 14, 44],
     style: { head: [], border: ['magenta'] },
     wordWrap: true,
   });
 
+  const summary = {
+    CONFIRMED: 0,
+    INCONCLUSIVE: 0,
+    LINK_ONLY: 0,
+    ERROR: 0,
+  };
+
   for (const r of results) {
-    const status = r.found === true
-      ? chalk.green.bold('ENCONTRADO')
-      : r.found === false
-        ? chalk.red('Não encontr.')
-        : chalk.yellow('Link →');
+    const status = r.status === 'CONFIRMED'
+      ? chalk.green.bold('CONFIRMED')
+      : r.status === 'INCONCLUSIVE'
+        ? chalk.gray('INCONCLUSIVE')
+        : r.status === 'ERROR'
+          ? chalk.red('ERROR')
+          : chalk.yellow('LINK_ONLY');
+    summary[r.status || 'INCONCLUSIVE'] = (summary[r.status || 'INCONCLUSIVE'] || 0) + 1;
 
     table.push([
       chalk.white(r.service),
       status,
+      chalk.cyan(r.confidence || 'MEDIUM'),
       r.info ? chalk.gray(r.info) : (r.url ? chalk.blue.underline(r.url) : chalk.gray('—')),
     ]);
   }
 
   console.log(table.toString());
+  console.log(chalk.gray(`  Resumo Email Intel → CONFIRMED: ${summary.CONFIRMED} | INCONCLUSIVE: ${summary.INCONCLUSIVE} | LINK_ONLY: ${summary.LINK_ONLY} | ERROR: ${summary.ERROR}`));
   console.log(chalk.magenta.bold('━'.repeat(60)) + '\n');
 }
 
