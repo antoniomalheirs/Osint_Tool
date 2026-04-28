@@ -233,6 +233,69 @@ async function generateDorks(email) {
   }));
 }
 
+function derivePivotTermsFromEmail(email, intelResults) {
+  const pivots = [];
+  const seen = new Set();
+  const addPivot = (term, source, type = 'username') => {
+    const clean = String(term || '').trim();
+    if (clean.length < 3) return;
+    const key = `${type}:${clean.toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    pivots.push({ term: clean, source, type });
+  };
+
+  // 1) Deriva username a partir do local-part do e-mail
+  const localPart = String(email).split('@')[0] || '';
+  addPivot(localPart, 'email_local_part', 'username');
+  localPart
+    .split(/[._\-+]/g)
+    .filter(Boolean)
+    .forEach(token => addPivot(token, 'email_token', 'username'));
+
+  // 2) Deriva termos de perfil GitHub enriquecido
+  const github = intelResults.find(r => r.service === 'GitHub' && Array.isArray(r.data));
+  if (github) {
+    for (const user of github.data.slice(0, 5)) {
+      addPivot(user.login, 'github_login', 'username');
+      if (user.name) addPivot(user.name, 'github_name', 'name');
+      if (user.company) addPivot(user.company, 'github_company', 'company');
+    }
+  }
+
+  // 3) Deriva nome do Gravatar se disponível
+  const gravatar = intelResults.find(r => r.service === 'Gravatar' && r.found && r.info);
+  if (gravatar && typeof gravatar.info === 'string') {
+    const m = gravatar.info.match(/Nome:\s*([^|]+)/i);
+    if (m && m[1]) {
+      addPivot(m[1], 'gravatar_name', 'name');
+    }
+  }
+
+  return pivots.slice(0, 4);
+}
+
+async function runAutomaticPivoting(pivotTerms) {
+  if (!pivotTerms.length) return [];
+  const aggregated = [];
+
+  for (const pivot of pivotTerms) {
+    const pivotResults = await executeAdvancedDorks(pivot.term, pivot.type);
+    if (!pivotResults.length) continue;
+    aggregated.push(...pivotResults.slice(0, 8).map(result => normalizeEmailResult({
+      service: `Auto Pivot (${pivot.type.toUpperCase()})`,
+      found: true,
+      url: result.url,
+      info: `Pivot: "${pivot.term}" (${pivot.source}) | Domínio: ${result.domain} | Confiança: ${result.confidence}`,
+      data: { ...result, pivotSource: pivot.source, pivotTerm: pivot.term },
+      confidence: result.confidence,
+      reason: 'AUTO_PIVOT_DORK_RESULT',
+    })));
+  }
+
+  return aggregated;
+}
+
 async function withRetry(fn, retries = 2, delayMs = 800) {
   let lastErr = null;
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -299,9 +362,27 @@ export async function searchEmail(email, onResult = null) {
     }));
   }
 
-  // 3. Dorks
+  // 3. Dorks diretas no e-mail
   const dorks = await generateDorks(email);
-  const allResults = [...results, ...dorks];
+
+  // 4. Pivoting automático: termos derivados de username/nome/empresa
+  const pivotTerms = derivePivotTermsFromEmail(email, results);
+  const autoPivotResults = await runAutomaticPivoting(pivotTerms);
+  if (pivotTerms.length > 0) {
+    results.push(normalizeEmailResult({
+      service: 'Automatic Pivoting',
+      found: autoPivotResults.length > 0,
+      url: null,
+      info: autoPivotResults.length > 0
+        ? `Pivoting automático executado com ${pivotTerms.length} termo(s).`
+        : `Pivoting automático sugerido com ${pivotTerms.length} termo(s), mas sem novos hits.`,
+      data: pivotTerms,
+      reason: autoPivotResults.length > 0 ? 'AUTO_PIVOT_EXECUTED' : 'AUTO_PIVOT_NO_HITS',
+      confidence: autoPivotResults.length > 0 ? 'HIGH' : 'MEDIUM',
+    }));
+  }
+
+  const allResults = [...results, ...dorks, ...autoPivotResults];
 
   if (onResult) {
     for (const r of allResults) {

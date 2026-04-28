@@ -87,7 +87,7 @@ async function executeDuckDuckGoQuery(query, term, dorkType) {
 
     const html = await response.text();
 
-    const urlRegex = /<a[^>]+class="result__a"[^>]+href="([^"]+)"/ig;
+    const urlRegex = /<a[^>]+class="(?:result__a|result__url)"[^>]+href="([^"]+)"/ig;
     let match;
     const links = [];
 
