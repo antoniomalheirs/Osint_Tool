@@ -19,6 +19,7 @@ import { initNetwork } from './src/network.js';
 import { correlateResults } from './src/correlator.js';
 import { searchUsername, getFoundResults, retryBlockedSites, buildOperationalSummary } from './src/engine.js';
 import { searchEmail } from './src/emailSearch.js';
+import { searchDorks } from './src/dorkEngine.js';
 import { initDB, saveInvestigation, getHistory } from './src/database.js';
 import {
   printBanner,
@@ -31,9 +32,12 @@ import {
 } from './src/reporter.js';
 import {
   isEmail,
+  isFullName,
   generateUsernameVariations,
+  generateNameVariations,
   formatDuration,
 } from './src/utils.js';
+import { createDossierPanel, showFatalError } from './src/cli/ui.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const sitesPath = path.join(__dirname, 'data', 'sites.json');
@@ -49,7 +53,7 @@ program
 // ═══════════════════════════════════════════
 // Helper para a ação de Hunt
 // ═══════════════════════════════════════════
-async function executeHunt(target, options) {
+export async function executeHunt(target, options) {
   const config = getConfig();
   const log = initLogger({ verbose: options.verbose, level: config.logging.level });
   
@@ -133,28 +137,132 @@ async function executeHunt(target, options) {
           }
         }
 
+        // --- DORK ENGINE (DYNAMIC SCRAPING) ---
+        const dorkSpinner = ora({ text: chalk.yellow(` Vasculhando motores de busca (Dorking) por "${variant}"...`), spinner: 'dots12', color: 'cyan' }).start();
+        const dorkResults = await searchDorks(variant);
+        if (dorkResults.length > 0) {
+          dorkSpinner.succeed(chalk.green(` Dorking concluído — ${dorkResults.length} menções dinâmicas encontradas!`));
+          console.log(chalk.cyan.bold('\n  🕸️  RESULTADOS DINÂMICOS (SEARCH ENGINES)'));
+          for (const dr of dorkResults) {
+            const confColor = dr.confidence === 'HIGH' ? chalk.green('HIGH') : chalk.yellow('MEDIUM');
+            console.log(`  ${chalk.gray('▸')} ${chalk.white(dr.domain.padEnd(20))} [${confColor}] ${chalk.blue(dr.url)}`);
+          }
+        } else {
+          dorkSpinner.info(chalk.gray(` Dorking concluído — Nenhuma menção dinâmica adicional encontrada.`));
+        }
+
         const intel = correlateResults(variant, results, emailResults || []);
-        console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
-        console.log(chalk.white(`     Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100');
-        console.log(chalk.white(`     Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100');
-        console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${intel.intelligenceConfidence}/100`));
-        console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(intel.riskLevel));
-        console.log(chalk.white(`     Perfil:            `) + chalk.cyan(intel.profileType));
+        
+        let intelStr = chalk.white(`Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100\n';
+        intelStr += chalk.white(`Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100\n';
+        intelStr += chalk.white(`Conf. Intel:       `) + chalk.cyan(`${intel.intelligenceConfidence}/100`) + '\n';
+        intelStr += chalk.white(`Nível de Risco:    `) + chalk.yellow(intel.riskLevel) + '\n';
+        intelStr += chalk.white(`Perfil:            `) + chalk.cyan(intel.profileType) + '\n';
         if (intel.metadataIntel.inferredNames.length > 0) {
-          console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(intel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
+          intelStr += chalk.white(`Nomes Inferidos:   `) + chalk.gray(intel.metadataIntel.inferredNames.slice(0, 3).join(', ')) + '\n';
         }
         if (intel.behaviorIntel.flags.length > 0) {
-          console.log(chalk.white(`     Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+          intelStr += chalk.white(`Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')) + '\n';
         }
         if (intel.evidenceTrail.length > 0) {
-          console.log(chalk.white(`     Evidências:        `) + chalk.gray(intel.evidenceTrail[0]));
+          intelStr += chalk.white(`Evidências:        `) + chalk.gray(intel.evidenceTrail[0]) + '\n';
         }
-        console.log('');
+        
+        console.log('\n' + createDossierPanel('🧠 DOSSIÊ DE INTELIGÊNCIA', intelStr, 'magenta') + '\n');
 
         if (variant === variations[0]) {
           usernameResults = results;
           finalIntel = intel;
         }
+      }
+    }
+  }
+  // ── Se o alvo é um Nome Completo ──
+  else if (isFullName(target)) {
+    console.log(chalk.white.bold('  🎯 Alvo detectado como: ') + chalk.cyan.bold('NOME COMPLETO'));
+    console.log(chalk.gray(`  👤 ${target}\n`));
+
+    // DORK ENGINE DIRETO NO NOME
+    const dorkSpinner = ora({ text: chalk.yellow(` Vasculhando motores de busca (Dorking) por "${target}"...`), spinner: 'dots12', color: 'cyan' }).start();
+    const dorkResults = await searchDorks(target);
+    if (dorkResults.length > 0) {
+      dorkSpinner.succeed(chalk.green(` Dorking concluído — ${dorkResults.length} menções dinâmicas encontradas para o nome!`));
+      console.log(chalk.cyan.bold('\n  🕸️  RESULTADOS DINÂMICOS (SEARCH ENGINES)'));
+      for (const dr of dorkResults) {
+        const confColor = dr.confidence === 'HIGH' ? chalk.green('HIGH') : chalk.yellow('MEDIUM');
+        console.log(`  ${chalk.gray('▸')} ${chalk.white(dr.domain.padEnd(20))} [${confColor}] ${chalk.blue(dr.url)}`);
+      }
+      console.log('');
+    } else {
+      dorkSpinner.info(chalk.gray(` Dorking concluído — Nenhuma menção dinâmica adicional encontrada para o nome.\n`));
+    }
+
+    const variations = generateNameVariations(target);
+    console.log(chalk.cyan.bold('  🔄 Variações de username geradas a partir do nome:'));
+    variations.forEach(v => console.log(chalk.gray(`     → ${v}`)));
+    console.log('');
+
+    for (const variant of variations) {
+      let sitesToSearch = sites;
+      if (!includeNSFW) sitesToSearch = sitesToSearch.filter(s => !s.isNSFW);
+      if (options.category) sitesToSearch = sitesToSearch.filter(s => (s.category||'').toLowerCase().includes(options.category.toLowerCase()));
+
+      const spinner = ora({ text: chalk.yellow(` Buscando username "${variant}" em ${sitesToSearch.length} plataformas...`), spinner: 'dots12', color: 'cyan' }).start();
+
+      let completed = 0;
+      let results = await searchUsername(variant, sites, {
+        includeNSFW,
+        filterCategory: options.category,
+        onResult: (result) => {
+          completed++;
+          const icon = result.skipped ? chalk.gray('~') : result.found ? chalk.green('✓') : result.error ? chalk.yellow('!') : chalk.red('✗');
+          spinner.text = chalk.yellow(` [${completed}/${sitesToSearch.length}] `) + icon + chalk.gray(` ${result.site}`);
+        }
+      });
+      
+      if (retryBlocked) {
+        const retryOutcome = await retryBlockedSites(variant, sites, results, {
+          delayMs: retryDelayMs,
+          attempts: retryAttempts,
+          onResult: () => {},
+        });
+        results = retryOutcome.mergedResults;
+        if (retryOutcome.retried > 0) {
+          log.info(`Retry de bloqueados finalizado para "${variant}" (${retryOutcome.retried} plataformas).`);
+        }
+      }
+
+      const found = getFoundResults(results);
+      spinner.succeed(chalk.green(` "${variant}" — ${found.length} perfis encontrados`));
+      printUsernameResults(variant, results);
+
+      if (strictOperational) {
+        const opSummary = buildOperationalSummary(results);
+        if (opSummary.quarantined.length > 0) {
+          console.log(chalk.yellow(`  🧪 Quarentena SOC/IR: ${opSummary.quarantined.length} plataforma(s) inconclusiva(s)/bloqueada(s)`));
+        }
+      }
+
+      const intel = correlateResults(variant, results, []);
+      let intelStr = chalk.white(`Score de Presença: `) + (intel.presenceScore > 50 ? chalk.red(intel.presenceScore) : chalk.green(intel.presenceScore)) + '/100\n';
+      intelStr += chalk.white(`Score de Risco:    `) + (intel.finalRiskScore >= 75 ? chalk.red(intel.finalRiskScore) : chalk.yellow(intel.finalRiskScore)) + '/100\n';
+      intelStr += chalk.white(`Conf. Intel:       `) + chalk.cyan(`${intel.intelligenceConfidence}/100`) + '\n';
+      intelStr += chalk.white(`Nível de Risco:    `) + chalk.yellow(intel.riskLevel) + '\n';
+      intelStr += chalk.white(`Perfil:            `) + chalk.cyan(intel.profileType) + '\n';
+      if (intel.metadataIntel.inferredNames.length > 0) {
+        intelStr += chalk.white(`Nomes Inferidos:   `) + chalk.gray(intel.metadataIntel.inferredNames.slice(0, 3).join(', ')) + '\n';
+      }
+      if (intel.behaviorIntel.flags.length > 0) {
+        intelStr += chalk.white(`Flags Intel:       `) + chalk.red(intel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')) + '\n';
+      }
+      if (intel.evidenceTrail.length > 0) {
+        intelStr += chalk.white(`Evidências:        `) + chalk.gray(intel.evidenceTrail[0]) + '\n';
+      }
+      console.log('\n' + createDossierPanel('🧠 DOSSIÊ DE INTELIGÊNCIA', intelStr, 'magenta') + '\n');
+      
+      if (variant === variations[0]) {
+        usernameResults = results;
+        finalIntel = intel;
       }
     }
   } else {
@@ -201,26 +309,39 @@ async function executeHunt(target, options) {
         }
       }
 
+      // --- DORK ENGINE (DYNAMIC SCRAPING) ---
+      const dorkSpinner = ora({ text: chalk.yellow(` Vasculhando motores de busca (Dorking) por "${target}"...`), spinner: 'dots12', color: 'cyan' }).start();
+      const dorkResults = await searchDorks(target);
+      if (dorkResults.length > 0) {
+        dorkSpinner.succeed(chalk.green(` Dorking concluído — ${dorkResults.length} menções dinâmicas encontradas!`));
+        console.log(chalk.cyan.bold('\n  🕸️  RESULTADOS DINÂMICOS (SEARCH ENGINES)'));
+        for (const dr of dorkResults) {
+          const confColor = dr.confidence === 'HIGH' ? chalk.green('HIGH') : chalk.yellow('MEDIUM');
+          console.log(`  ${chalk.gray('▸')} ${chalk.white(dr.domain.padEnd(20))} [${confColor}] ${chalk.blue(dr.url)}`);
+        }
+      } else {
+        dorkSpinner.info(chalk.gray(` Dorking concluído — Nenhuma menção dinâmica adicional encontrada.`));
+      }
+
       finalIntel = correlateResults(target, usernameResults, emailResults || []);
-      console.log(chalk.magenta.bold('\n  🧠 INTELIGÊNCIA E CORRELAÇÃO'));
-      console.log(chalk.white(`     Score de Presença: `) + (finalIntel.presenceScore > 50 ? chalk.red(finalIntel.presenceScore) : chalk.green(finalIntel.presenceScore)) + '/100');
-      console.log(chalk.white(`     Score de Risco:    `) + (finalIntel.finalRiskScore >= 75 ? chalk.red(finalIntel.finalRiskScore) : chalk.yellow(finalIntel.finalRiskScore)) + '/100');
-      console.log(chalk.white(`     Conf. Intel:       `) + chalk.cyan(`${finalIntel.intelligenceConfidence}/100`));
-      console.log(chalk.white(`     Nível de Risco:    `) + chalk.yellow(finalIntel.riskLevel));
-      console.log(chalk.white(`     Perfil:            `) + chalk.cyan(finalIntel.profileType));
+      let intelStr = chalk.white(`Score de Presença: `) + (finalIntel.presenceScore > 50 ? chalk.red(finalIntel.presenceScore) : chalk.green(finalIntel.presenceScore)) + '/100\n';
+      intelStr += chalk.white(`Score de Risco:    `) + (finalIntel.finalRiskScore >= 75 ? chalk.red(finalIntel.finalRiskScore) : chalk.yellow(finalIntel.finalRiskScore)) + '/100\n';
+      intelStr += chalk.white(`Conf. Intel:       `) + chalk.cyan(`${finalIntel.intelligenceConfidence}/100`) + '\n';
+      intelStr += chalk.white(`Nível de Risco:    `) + chalk.yellow(finalIntel.riskLevel) + '\n';
+      intelStr += chalk.white(`Perfil:            `) + chalk.cyan(finalIntel.profileType) + '\n';
       if (finalIntel.metadataIntel.inferredNames.length > 0) {
-        console.log(chalk.white(`     Nomes Inferidos:   `) + chalk.gray(finalIntel.metadataIntel.inferredNames.slice(0, 3).join(', ')));
+        intelStr += chalk.white(`Nomes Inferidos:   `) + chalk.gray(finalIntel.metadataIntel.inferredNames.slice(0, 3).join(', ')) + '\n';
       }
       if (finalIntel.behaviorIntel.flags.length > 0) {
-        console.log(chalk.white(`     Flags Intel:       `) + chalk.red(finalIntel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')));
+        intelStr += chalk.white(`Flags Intel:       `) + chalk.red(finalIntel.behaviorIntel.flags.map(f => `${f.type}(${f.severity})`).join(', ')) + '\n';
       }
       if (finalIntel.behaviorIntel.recommendations.length > 0) {
-        console.log(chalk.white(`     Próx. passos:      `) + chalk.gray(finalIntel.behaviorIntel.recommendations[0]));
+        intelStr += chalk.white(`Próx. passos:      `) + chalk.gray(finalIntel.behaviorIntel.recommendations[0]) + '\n';
       }
       if (finalIntel.evidenceTrail.length > 0) {
-        console.log(chalk.white(`     Evidências:        `) + chalk.gray(finalIntel.evidenceTrail[0]));
+        intelStr += chalk.white(`Evidências:        `) + chalk.gray(finalIntel.evidenceTrail[0]) + '\n';
       }
-      console.log('');
+      console.log('\n' + createDossierPanel('🧠 DOSSIÊ DE INTELIGÊNCIA', intelStr, 'magenta') + '\n');
     }
   }
 
@@ -325,59 +446,16 @@ program
     console.log(chalk.gray('\n  Para alterar, edite o arquivo config/default.yml\n'));
   });
 
-program
-  .command('interactive')
-  .description('Inicia o modo interativo (REPL) para múltiplas buscas')
-  .action(async () => {
-    printBanner();
-    console.log(chalk.yellow.bold('\n  🚀 MODO INTERATIVO (REPL) INICIADO'));
-    console.log(chalk.gray('  Digite "exit" ou "quit" para sair.\n'));
-
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-      prompt: chalk.cyan('osint> ')
-    });
-
-    rl.prompt();
-
-    rl.on('line', async (line) => {
-      const input = line.trim();
-      if (!input) {
-        rl.prompt();
-        return;
-      }
-      if (input.toLowerCase() === 'exit' || input.toLowerCase() === 'quit') {
-        console.log(chalk.gray('\nEncerrando sessão...'));
-        process.exit(0);
-      }
-
-      // Parsea comando simples: "target" ou "target --nsfw"
-      const args = input.split(' ');
-      const target = args[0];
-      const options = {
-        nsfw: args.includes('--nsfw'),
-        export: args.includes('--export') ? 'html' : '', // Atalho para exportar
-      };
-
-      try {
-        await executeHunt(target, options);
-      } catch (err) {
-        console.log(chalk.red(`\nErro durante a execução: ${err.message}`));
-      }
-
-      console.log('');
-      rl.prompt();
-    }).on('close', () => {
-      console.log(chalk.gray('\nEncerrando sessão...'));
-      process.exit(0);
-    });
-  });
+// REPL Mode replaced by Wizard UI
 
 // ═══════════════════════════════════════════
-program.parse();
+program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-  printBanner();
-  program.outputHelp();
+  import('./src/cli/wizard.js')
+    .then(({ startWizard }) => startWizard())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
 }

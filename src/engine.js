@@ -208,13 +208,17 @@ async function checkSite(username, site, network) {
       // ═══ Método 2: Message (busca string no body) ═══
       case 'message': {
         body = await response.text();
-        const errorMessages = Array.isArray(site.errorMsg || site.errorMessage)
-          ? (site.errorMsg || site.errorMessage)
-          : [site.errorMsg || site.errorMessage];
+        if (site.expectedMsg) {
+          found = body.includes(site.expectedMsg) && response.status < 400;
+        } else {
+          const errorMessages = Array.isArray(site.errorMsg || site.errorMessage)
+            ? (site.errorMsg || site.errorMessage)
+            : [site.errorMsg || site.errorMessage];
 
-        const hasError = errorMessages.some(msg => msg && body.includes(msg));
-        found = !hasError && response.status < 400;
-        confidence = found ? CONFIDENCE.HIGH : CONFIDENCE.HIGH; // Ambos são alta confiança
+          const hasError = errorMessages.some(msg => msg && body.includes(msg));
+          found = !hasError && response.status < 400;
+        }
+        confidence = CONFIDENCE.HIGH;
         break;
       }
 
@@ -328,7 +332,7 @@ async function checkSite(username, site, network) {
         const isSoft404 = soft404Signatures.some(sig => lowerBody.includes(sig));
         
         // Checa também se fomos bloqueados (Cloudflare/CAPTCHA)
-        const isBlocked = lowerBody.includes("enable javascript and cookies to continue") || lowerBody.includes("cloudflare") || lowerBody.includes("attention required!");
+        const isBlocked = lowerBody.includes("enable javascript and cookies to continue") || lowerBody.includes("<title>just a moment...</title>") || lowerBody.includes("attention required! | cloudflare");
 
         if (isSoft404) {
           found = false;

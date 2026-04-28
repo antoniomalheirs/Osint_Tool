@@ -17,28 +17,13 @@ if (!fs.existsSync(REPORTS_DIR)) {
   fs.mkdirSync(REPORTS_DIR, { recursive: true });
 }
 
+import { showBanner, createDossierPanel } from './cli/ui.js';
+
 /**
  * Exibe o banner ASCII da ferramenta
  */
 export function printBanner() {
-  const banner = chalk.cyan.bold(`
-  ╔═══════════════════════════════════════════════════════════╗
-  ║                                                           ║
-  ║   ▄██████▄    ▄████████  ▄█  ███▄▄▄▄       ███           ║
-  ║  ███    ███  ███    ███ ███  ███▀▀▀██▄ ▀█████████▄       ║
-  ║  ███    ███  ███    █▀  ███▌ ███   ███    ▀███▀▀██       ║
-  ║  ███    ███  ███        ███▌ ███   ███     ███   ▀       ║
-  ║  ███    ███ ▀███████████ ███▌ ███   ███     ███           ║
-  ║  ███    ███          ███ ███  ███   ███     ███           ║
-  ║  ███    ███    ▄█    ███ ███  ███   ███     ███           ║
-  ║   ▀██████▀   ▀████████▀  █▀   ▀█   █▀     ▄████▀        ║
-  ║                                                           ║
-  ║`) + chalk.yellow.bold(`       🔍  H U N T E R  —  OSINT Tool v2.0`) + chalk.cyan.bold(`            ║
-  ║`) + chalk.gray(`       Professional Cyber Intelligence Gatherer`) + chalk.cyan.bold(`      ║
-  ║                                                           ║
-  ╚═══════════════════════════════════════════════════════════╝
-  `);
-  console.log(banner);
+  showBanner();
 }
 
 /**

@@ -1,203 +1,6355 @@
 [
-  {"name":"GitHub","category":"Developer","url":"https://github.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"GitLab","category":"Developer","url":"https://gitlab.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Bitbucket","category":"Developer","url":"https://bitbucket.org/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Dev.to","category":"Developer","url":"https://dev.to/{username}","method":"status_code","expectedStatus":200},
-  {"name":"CodePen","category":"Developer","url":"https://codepen.io/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Replit","category":"Developer","url":"https://replit.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"npm","category":"Developer","url":"https://www.npmjs.com/~{username}","method":"status_code","expectedStatus":200},
-  {"name":"PyPI","category":"Developer","url":"https://pypi.org/user/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Dribbble","category":"Developer","url":"https://dribbble.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Behance","category":"Developer","url":"https://www.behance.net/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Figma","category":"Developer","url":"https://www.figma.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"HackerRank","category":"Developer","url":"https://www.hackerrank.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"LeetCode","category":"Developer","url":"https://leetcode.com/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Kaggle","category":"Developer","url":"https://www.kaggle.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"DockerHub","category":"Developer","url":"https://hub.docker.com/u/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Codewars","category":"Developer","url":"https://www.codewars.com/users/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Codeforces","category":"Developer","url":"https://codeforces.com/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Wakatime","category":"Developer","url":"https://wakatime.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Hashnode","category":"Developer","url":"https://hashnode.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Hackster.io","category":"Developer","url":"https://www.hackster.io/{username}","method":"status_code","expectedStatus":200},
-  {"name":"OpenHub","category":"Developer","url":"https://openhub.net/accounts/{username}","method":"status_code","expectedStatus":200},
-  {"name":"GrabCAD","category":"Developer","url":"https://grabcad.com/community/members/{username}","method":"status_code","expectedStatus":200},
-  {"name":"CoderWall","category":"Developer","url":"https://coderwall.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Glitch","category":"Developer","url":"https://glitch.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Observable","category":"Developer","url":"https://observablehq.com/@{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"Reddit","category":"Social Media","url":"https://www.reddit.com/user/{username}.json","method":"status_code","expectedStatus":200},
-  {"name":"Pinterest","category":"Social Media","url":"https://www.pinterest.com/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Tumblr","category":"Social Media","url":"https://{username}.tumblr.com","method":"status_code","expectedStatus":200},
-  {"name":"Medium","category":"Social Media","url":"https://medium.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Twitter / X","category":"Social Media","url":"https://x.com/{username}","method":"status_code","expectedStatus":200,"regexCheck":"^[a-zA-Z0-9_]{1,15}$"},
-  {"name":"Instagram","category":"Social Media","url":"https://www.instagram.com/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"TikTok","category":"Social Media","url":"https://www.tiktok.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Mastodon","category":"Social Media","url":"https://mastodon.social/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Quora","category":"Social Media","url":"https://www.quora.com/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Linktree","category":"Social Media","url":"https://linktr.ee/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Threads","category":"Social Media","url":"https://www.threads.net/@{username}","method":"message","errorMsg":"Threads • Log in"},
-  {"name":"Bluesky","category":"Social Media","url":"https://bsky.app/profile/{username}.bsky.social","method":"status_code","expectedStatus":200},
-  {"name":"VK","category":"Social Media","url":"https://vk.com/{username}","method":"redirect","errorUrl":"https://vk.com/"},
-  {"name":"VSCO","category":"Social Media","url":"https://vsco.co/{username}","method":"status_code","expectedStatus":200},
-  {"name":"About.me","category":"Social Media","url":"https://about.me/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Gravatar","category":"Social Media","url":"https://en.gravatar.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Substack","category":"Social Media","url":"https://{username}.substack.com","method":"status_code","expectedStatus":200},
-  {"name":"Minds","category":"Social Media","url":"https://www.minds.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Gab","category":"Social Media","url":"https://gab.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Rumble","category":"Social Media","url":"https://rumble.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"DeviantArt","category":"Social Media","url":"https://www.deviantart.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Snapchat","category":"Social Media","url":"https://www.snapchat.com/add/{username}","method":"status_code","expectedStatus":200},
-  {"name":"uid.me","category":"Social Media","url":"http://uid.me/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Coub","category":"Social Media","url":"https://coub.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Vero","category":"Social Media","url":"https://vero.co/{username}","method":"message","errorMsg":"Not Found"},
-  {"name":"Wattpad","category":"Social Media","url":"https://www.wattpad.com/user/{username}","urlProbe":"https://www.wattpad.com/api/v3/users/{username}/","method":"status_code","expectedStatus":200},
-
-  {"name":"Twitch","category":"Gaming / Streaming","url":"https://www.twitch.tv/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Steam","category":"Gaming / Streaming","url":"https://steamcommunity.com/id/{username}","method":"message","errorMsg":"The specified profile could not be found"},
-  {"name":"Xbox Gamertag","category":"Gaming / Streaming","url":"https://xboxgamertag.com/search/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Chess.com","category":"Gaming / Streaming","url":"https://www.chess.com/member/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Lichess","category":"Gaming / Streaming","url":"https://lichess.org/@/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Roblox","category":"Gaming / Streaming","url":"https://www.roblox.com/user.aspx?username={username}","method":"redirect","errorUrl":"/request-error"},
-  {"name":"Minecraft","category":"Gaming / Streaming","url":"https://namemc.com/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Epic Games","category":"Gaming / Streaming","url":"https://fortnitetracker.com/profile/all/{username}","method":"status_code","expectedStatus":200},
-  {"name":"osu!","category":"Gaming / Streaming","url":"https://osu.ppy.sh/users/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Speedrun.com","category":"Gaming / Streaming","url":"https://www.speedrun.com/users/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Valorant Forums","category":"Gaming / Streaming","url":"https://valorantforums.com/u/{username}","method":"message","errorMsg":"The page you requested could not be found."},
-  {"name":"VLR.gg","category":"Gaming / Streaming","url":"https://www.vlr.gg/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"CurseForge","category":"Gaming / Streaming","url":"https://www.curseforge.com/members/{username}/projects","method":"status_code","errorCode":404},
-  {"name":"Wowhead","category":"Gaming / Streaming","url":"https://wowhead.com/user={username}","method":"status_code","errorCode":404},
-  {"name":"Wago.io","category":"Gaming / Streaming","url":"https://addons.wago.io/user/{username}","method":"status_code","errorCode":404},
-  {"name":"RetroAchievements","category":"Gaming / Streaming","url":"https://retroachievements.org/user/{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"YouTube","category":"Media","url":"https://www.youtube.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Spotify","category":"Media","url":"https://open.spotify.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"SoundCloud","category":"Media","url":"https://soundcloud.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Vimeo","category":"Media","url":"https://vimeo.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Flickr","category":"Media","url":"https://www.flickr.com/people/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"MyAnimeList","category":"Media","url":"https://myanimelist.net/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Letterboxd","category":"Media","url":"https://letterboxd.com/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Imgur","category":"Media","url":"https://imgur.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Last.fm","category":"Media","url":"https://www.last.fm/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Unsplash","category":"Media","url":"https://unsplash.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"500px","category":"Media","url":"https://500px.com/p/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Mixcloud","category":"Media","url":"https://www.mixcloud.com/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Giphy","category":"Media","url":"https://giphy.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Pexels","category":"Media","url":"https://www.pexels.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"AniList","category":"Media","url":"https://anilist.co/user/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Trakt","category":"Media","url":"https://trakt.tv/users/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Bandcamp","category":"Media","url":"https://{username}.bandcamp.com","method":"status_code","expectedStatus":200},
-  {"name":"DailyMotion","category":"Media","url":"https://www.dailymotion.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Genius","category":"Media","url":"https://genius.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Deezer","category":"Media","url":"https://www.deezer.com/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Bitchute","category":"Media","url":"https://www.bitchute.com/channel/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"LBRY/Odysee","category":"Media","url":"https://odysee.com/@{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"eBay","category":"Marketplace","url":"https://www.ebay.com/usr/{username}","method":"message","errorMsg":"The User ID you entered was not found"},
-  {"name":"Etsy","category":"Marketplace","url":"https://www.etsy.com/shop/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Fiverr","category":"Marketplace","url":"https://www.fiverr.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Freelancer","category":"Marketplace","url":"https://www.freelancer.com/u/{username}","method":"message","errorMsg":"Page Not Found"},
-  {"name":"Redbubble","category":"Marketplace","url":"https://www.redbubble.com/people/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Gumroad","category":"Marketplace","url":"https://{username}.gumroad.com","method":"status_code","expectedStatus":200},
-  {"name":"Patreon","category":"Marketplace","url":"https://www.patreon.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Shopify","category":"Marketplace","url":"https://{username}.myshopify.com","method":"status_code","expectedStatus":200},
-  {"name":"Ko-fi","category":"Marketplace","url":"https://ko-fi.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"BuyMeACoffee","category":"Marketplace","url":"https://www.buymeacoffee.com/{username}","method":"message","errorMsg":"couldn't find that page"},
-  {"name":"Displate","category":"Marketplace","url":"https://displate.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"TeePublic","category":"Marketplace","url":"https://www.teepublic.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Envato","category":"Marketplace","url":"https://themeforest.net/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"CreativeMarket","category":"Marketplace","url":"https://creativemarket.com/users/{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"Telegram","category":"Messaging","url":"https://t.me/{username}","method":"message","errorMsg":"If you have <strong>Telegram</strong>, you can contact"},
-  {"name":"Keybase","category":"Messaging","url":"https://keybase.io/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Signal","category":"Messaging","url":"https://community.signalusers.org/u/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Matrix","category":"Messaging","url":"https://matrix.to/#/@{username}:matrix.org","method":"status_code","expectedStatus":200},
-  {"name":"Wire","category":"Messaging","url":"https://wire.com/en/{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"HackerOne","category":"Security","url":"https://hackerone.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"BugCrowd","category":"Security","url":"https://bugcrowd.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"VirusTotal","category":"Security","url":"https://www.virustotal.com/gui/user/{username}","urlProbe":"https://www.virustotal.com/ui/users/{username}/avatar","method":"status_code","expectedStatus":200},
-  {"name":"Exploit.in Forum","category":"Security","url":"https://exploit.in/member.php?username={username}","method":"status_code","expectedStatus":200},
-
-  {"name":"Wikipedia","category":"Forum","url":"https://en.wikipedia.org/wiki/Special:CentralAuth/{username}?uselang=qqx","method":"message","errorMsg":"centralauth-admin-nonexistent:"},
-  {"name":"Stack Overflow","category":"Forum","url":"https://stackoverflow.com/users/?tab=accounts&SearchByName={username}","method":"message","errorMsg":"No users found"},
-  {"name":"Pastebin","category":"Forum","url":"https://pastebin.com/u/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Hacker News","category":"Forum","url":"https://news.ycombinator.com/user?id={username}","method":"status_code","expectedStatus":200},
-  {"name":"Lobsters","category":"Forum","url":"https://lobste.rs/~{username}","method":"status_code","expectedStatus":200},
-  {"name":"Discourse (meta)","category":"Forum","url":"https://meta.discourse.org/u/{username}/summary","method":"status_code","expectedStatus":200},
-  {"name":"WICG Forum","category":"Forum","url":"https://discourse.wicg.io/u/{username}/summary","method":"status_code","expectedStatus":200,"regexCheck":"^(?![.-])[a-zA-Z0-9_.-]{3,20}$"},
-  {"name":"Wikidot","category":"Forum","url":"http://www.wikidot.com/user:info/{username}","method":"message","errorMsg":"User does not exist."},
-  {"name":"Warrior Forum","category":"Forum","url":"https://www.warriorforum.com/members/{username}.html","method":"status_code","expectedStatus":200},
-  {"name":"F3","category":"Forum","url":"https://f3.cool/{username}/","method":"status_code","expectedStatus":200},
-
-  {"name":"Duolingo","category":"Education","url":"https://www.duolingo.com/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Khan Academy","category":"Education","url":"https://www.khanacademy.org/profile/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Instructables","category":"Education","url":"https://www.instructables.com/member/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Coursera","category":"Education","url":"https://www.coursera.org/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Platzi","category":"Education","url":"https://platzi.com/p/{username}/","method":"status_code","errorCode":404},
-
-  {"name":"Trello","category":"Productivity","url":"https://trello.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"ProductHunt","category":"Productivity","url":"https://www.producthunt.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Slideshare","category":"Productivity","url":"https://www.slideshare.net/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Notion","category":"Productivity","url":"https://{username}.notion.site","method":"status_code","expectedStatus":200},
-  {"name":"Canva","category":"Productivity","url":"https://www.canva.com/p/{username}/","method":"status_code","expectedStatus":200},
-
-  {"name":"WordPress","category":"Blog","url":"https://{username}.wordpress.com/","method":"redirect","errorUrl":"wordpress.com/typo/?subdomain=","regexCheck":"^[a-zA-Z][a-zA-Z0-9_-]*$"},
-  {"name":"WordPress.org","category":"Blog","url":"https://profiles.wordpress.org/{username}/","method":"redirect","errorUrl":"https://wordpress.org"},
-  {"name":"Blogger","category":"Blog","url":"https://{username}.blogspot.com","method":"status_code","expectedStatus":200},
-  {"name":"write.as","category":"Blog","url":"https://write.as/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Telegraph","category":"Blog","url":"https://telegra.ph/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Velog","category":"Blog","url":"https://velog.io/@{username}/posts","method":"status_code","expectedStatus":200},
-  {"name":"Weebly","category":"Blog","url":"https://{username}.weebly.com/","method":"status_code","expectedStatus":200,"regexCheck":"^[a-zA-Z0-9-]{1,63}$"},
-  {"name":"Wix","category":"Blog","url":"https://{username}.wix.com","method":"status_code","expectedStatus":200},
-
-  {"name":"Spotify (Podcast)","category":"Podcast","url":"https://podcasters.spotify.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Anchor.fm","category":"Podcast","url":"https://anchor.fm/{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"Venmo","category":"Financial","url":"https://account.venmo.com/u/{username}","method":"message","errorMsg":"Venmo | Page Not Found","headers":{"Host":"account.venmo.com"}},
-  {"name":"CashApp","category":"Financial","url":"https://cash.app/${username}","method":"status_code","expectedStatus":200},
-  {"name":"OpenSea","category":"Financial","url":"https://opensea.io/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Rarible","category":"Financial","url":"https://rarible.com/{username}","method":"message","errorMsg":"Page not found"},
-  {"name":"Foundation","category":"Financial","url":"https://foundation.app/@{username}","method":"status_code","expectedStatus":200},
-
-  {"name":"Typeracer","category":"Outros","url":"https://data.typeracer.com/pit/profile?user={username}","method":"message","errorMsg":"Profile Not Found"},
-  {"name":"Ultimate-Guitar","category":"Outros","url":"https://ultimate-guitar.com/u/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Untappd","category":"Outros","url":"https://untappd.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Windy","category":"Outros","url":"https://community.windy.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Wolfram Community","category":"Outros","url":"https://community.wolfram.com/web/{username}/home","method":"status_code","expectedStatus":200},
-  {"name":"Wordnik","category":"Outros","url":"https://www.wordnik.com/users/{username}","method":"message","errorMsg":"Page Not Found","regexCheck":"^[a-zA-Z0-9_.+-]{1,40}$"},
-  {"name":"Wykop","category":"Outros","url":"https://www.wykop.pl/ludzie/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Thingiverse","category":"Outros","url":"https://www.thingiverse.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Itch.io","category":"Outros","url":"https://{username}.itch.io","method":"status_code","expectedStatus":200},
-  {"name":"Newgrounds","category":"Outros","url":"https://{username}.newgrounds.com","method":"status_code","expectedStatus":200},
-  {"name":"ContraPoints","category":"Outros","url":"https://www.contrapoints.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"NairaLand","category":"Outros","url":"https://www.nairaland.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Hubpages","category":"Outros","url":"https://hubpages.com/@{username}","method":"status_code","expectedStatus":200},
-  {"name":"Knowem","category":"Outros","url":"https://knowem.com/checkusernames.php?u={username}","method":"status_code","expectedStatus":200},
-  {"name":"AskFM","category":"Outros","url":"https://ask.fm/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Kik","category":"Outros","url":"https://ws2.kik.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Periscope","category":"Outros","url":"https://www.periscope.tv/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Zhihu","category":"Outros","url":"https://www.zhihu.com/people/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Pixiv","category":"Outros","url":"https://www.pixiv.net/users/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Furaffinity","category":"Outros","url":"https://www.furaffinity.net/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Taringa!","category":"Outros","url":"https://www.taringa.net/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Weibo","category":"Outros","url":"https://weibo.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Douyin","category":"Outros","url":"https://www.douyin.com/user/{username}","method":"status_code","expectedStatus":200},
-  {"name":"AllTrails","category":"Outros","url":"https://www.alltrails.com/members/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Strava","category":"Outros","url":"https://www.strava.com/athletes/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Goodreads","category":"Outros","url":"https://www.goodreads.com/{username}","method":"status_code","expectedStatus":200},
-  {"name":"Disqus","category":"Outros","url":"https://disqus.com/by/{username}/","method":"status_code","expectedStatus":200},
-  {"name":"Gravatar (profile)","category":"Outros","url":"https://en.gravatar.com/{username}.json","method":"status_code","expectedStatus":200},
-  {"name":"Launchpad","category":"Outros","url":"https://launchpad.net/~{username}","method":"status_code","expectedStatus":200},
-  {"name":"SourceForge","category":"Outros","url":"https://sourceforge.net/u/{username}/profile/","method":"status_code","expectedStatus":200},
-  {"name":"WebNode","category":"Outros","url":"https://{username}.webnode.cz/","method":"status_code","expectedStatus":200},
-  {"name":"Weblate","category":"Outros","url":"https://hosted.weblate.org/user/{username}/","method":"status_code","expectedStatus":200,"regexCheck":"^[a-zA-Z0-9@._-]{1,150}$"},
-
-  {"name":"Xvideos","category":"NSFW","url":"https://xvideos.com/profiles/{username}","method":"message","errorMsg":"Sorry, this profile does not exist","isNSFW":true},
-  {"name":"xHamster","category":"NSFW","url":"https://xhamster.com/users/{username}","urlProbe":"https://xhamster.com/users/{username}?old_browser=true","method":"status_code","expectedStatus":200,"isNSFW":true},
-  {"name":"Pornhub","category":"NSFW","url":"https://www.pornhub.com/users/{username}","method":"message","errorMsg":"Page Not Found","isNSFW":true},
-  {"name":"OnlyFans","category":"NSFW","url":"https://onlyfans.com/{username}","method":"message","errorMsg":"Sorry, this page is not available","isNSFW":true},
-  {"name":"Fansly","category":"NSFW","url":"https://fansly.com/{username}","method":"message","errorMsg":"This account may have been deleted","isNSFW":true},
-  {"name":"RedTube","category":"NSFW","url":"https://www.redtube.com/users/{username}","method":"status_code","expectedStatus":200,"isNSFW":true},
-  {"name":"XTube","category":"NSFW","url":"https://www.xtube.com/profile/{username}","method":"status_code","expectedStatus":200,"isNSFW":true},
-  {"name":"FetLife","category":"NSFW","url":"https://fetlife.com/{username}","method":"status_code","expectedStatus":200,"isNSFW":true}
+  {
+    "name": "21buttons",
+    "category": "social",
+    "url": "https://www.21buttons.com/buttoner/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This is not the page you're looking for"
+  },
+  {
+    "name": "247CTF",
+    "category": "tech",
+    "url": "https://247ctf.com/progress/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>Redirecting...</h1>"
+  },
+  {
+    "name": "247sports",
+    "category": "hobby",
+    "url": "https://247sports.com/User/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>247Sports</title>"
+  },
+  {
+    "name": "35photo",
+    "category": "social",
+    "url": "https://35photo.pro/@{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Catalogs of professional author"
+  },
+  {
+    "name": "3DNews",
+    "category": "social",
+    "url": "https://forum.3dnews.tech/member.php?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователь не зарегистрирован"
+  },
+  {
+    "name": "3dtoday",
+    "category": "hobby",
+    "url": "https://3dtoday.ru/blogs/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "500px",
+    "category": "Media",
+    "url": "https://500px.com/p/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "7cup",
+    "category": "social",
+    "url": "https://www.7cups.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops! The content you're attempting to access could not be found."
+  },
+  {
+    "name": "7dach",
+    "category": "social",
+    "url": "https://7dach.ru/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Ошибка / 7dach.ru"
+  },
+  {
+    "name": "About.me",
+    "category": "Social Media",
+    "url": "https://about.me/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "ACF",
+    "category": "coding",
+    "url": "https://support.advancedcustomfields.com/forums/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found"
+  },
+  {
+    "name": "AdmireMe.VIP",
+    "category": "xx NSFW xx",
+    "url": "https://admireme.vip/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page Not Found |"
+  },
+  {
+    "name": "Adult_Forum",
+    "category": "xx NSFW xx",
+    "url": "https://adultforum.gr/{username}-glamour-escorts/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found - Adult Forum Gr"
+  },
+  {
+    "name": "adultism",
+    "category": "xx NSFW xx",
+    "url": "https://www.adultism.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title> Not Found"
+  },
+  {
+    "name": "ADVFN",
+    "category": "finance",
+    "url": "https://uk.advfn.com/forum/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "ADVFN ERROR - Page Not Found"
+  },
+  {
+    "name": "Airline_Pilot_Life",
+    "category": "social",
+    "url": "https://airlinepilot.life/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "he requested URL or resource could not be found."
+  },
+  {
+    "name": "Airliners",
+    "category": "social",
+    "url": "https://www.airliners.net/user/{username}/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "An Error Occurred"
+  },
+  {
+    "name": "akniga",
+    "category": "hobby",
+    "url": "https://akniga.org/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "К сожалению, такой страницы не существует. Вероятно, она была удалена с сервера, либо ее здесь никогда не было."
+  },
+  {
+    "name": "Albicla",
+    "category": "social",
+    "url": "https://albicla.com/{username}/post/1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Nie znaleziono użytkownika"
+  },
+  {
+    "name": "alik",
+    "category": "social",
+    "url": "https://www.alik.cz/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Vizitka nenalezena"
+  },
+  {
+    "name": "AllMyLinks",
+    "category": "social",
+    "url": "https://allmylinks.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"site-error\""
+  },
+  {
+    "name": "AllTrails",
+    "category": "Outros",
+    "url": "https://www.alltrails.com/members/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Alura",
+    "category": "tech",
+    "url": "https://cursos.alura.com.br/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"Not Found\""
+  },
+  {
+    "name": "Ameblo",
+    "category": "blog",
+    "url": "https://ameblo.jp/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "削除された可能性がございます。"
+  },
+  {
+    "name": "AmericanThinker",
+    "category": "political",
+    "url": "https://www.americanthinker.com/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "American Thinker</title>"
+  },
+  {
+    "name": "Anchor.fm",
+    "category": "Podcast",
+    "url": "https://anchor.fm/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "AniList",
+    "category": "Media",
+    "url": "https://anilist.co/user/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Anime-Planet",
+    "category": "social",
+    "url": "https://www.anime-planet.com/api/validation/username",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":\"ok\""
+  },
+  {
+    "name": "anonup",
+    "category": "social",
+    "url": "https://anonup.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found!"
+  },
+  {
+    "name": "Apex Legends",
+    "category": "gaming",
+    "url": "https://api.tracker.gg/api/v2/apex/standard/profile/origin/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "CollectorResultStatus::NotFound"
+  },
+  {
+    "name": "Appian",
+    "category": "tech",
+    "url": "https://community.appian.com/members/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Go back to our"
+  },
+  {
+    "name": "Arch Linux GitLab",
+    "category": "social",
+    "url": "https://gitlab.archlinux.org/api/v4/users?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "[]"
+  },
+  {
+    "name": "Archive Of Our Own Account",
+    "category": "hobby",
+    "url": "https://archiveofourown.org/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"system errors error-404 region\""
+  },
+  {
+    "name": "ArchWiki",
+    "category": "social",
+    "url": "https://wiki.archlinux.org/api.php?action=query&format=json&list=users&ususers={username}&usprop=cancreate&formatversion=2&errorformat=html&errorsuselocal=true&uselang=en",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"missing\":true"
+  },
+  {
+    "name": "Arduino (Forum)",
+    "category": "tech",
+    "url": "https://forum.arduino.cc/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error_type\":\"not_found\""
+  },
+  {
+    "name": "Arduino (Project Hub)",
+    "category": "tech",
+    "url": "https://projecthub.arduino.cc/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"userInfo\":null"
+  },
+  {
+    "name": "ArmorGames",
+    "category": "gaming",
+    "url": "https://armorgames.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404: Oh Noes!"
+  },
+  {
+    "name": "Arsmate",
+    "category": "xx NSFW xx",
+    "url": "https://arsmate.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error-link mt-5"
+  },
+  {
+    "name": "ArtBreeder",
+    "category": "art",
+    "url": "https://www.artbreeder.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not found:"
+  },
+  {
+    "name": "Artists & Clients",
+    "category": "art",
+    "url": "https://artistsnclients.com/people/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you requested wasn't there when we tried to get it for you. What a bother!"
+  },
+  {
+    "name": "ArtStation",
+    "category": "art",
+    "url": "https://www.artstation.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "asciinema",
+    "category": "coding",
+    "url": "https://asciinema.org/~{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>404 Not Found</h1>"
+  },
+  {
+    "name": "AskFM",
+    "category": "Outros",
+    "url": "https://ask.fm/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "AtCoder",
+    "category": "coding",
+    "url": "https://atcoder.jp/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": ">404 Page Not Found</h1>"
+  },
+  {
+    "name": "au.ru",
+    "category": "misc",
+    "url": "https://au.ru/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователь не найден"
+  },
+  {
+    "name": "Audiojungle",
+    "category": "music",
+    "url": "https://audiojungle.net/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 - Nothing to see here"
+  },
+  {
+    "name": "Avid Community",
+    "category": "music",
+    "url": "https://community.avid.com/members/{username}/default.aspx",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The user you requested cannot be found."
+  },
+  {
+    "name": "babepedia",
+    "category": "xx NSFW xx",
+    "url": "https://www.babepedia.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Profile not found"
+  },
+  {
+    "name": "BabyPips",
+    "category": "social",
+    "url": "https://forums.babypips.com/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found"
+  },
+  {
+    "name": "Bandcamp",
+    "category": "Media",
+    "url": "https://{username}.bandcamp.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Bandlab",
+    "category": "music",
+    "url": "https://www.bandlab.com/api/v1.3/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Couldn't find any matching element, it might be deleted"
+  },
+  {
+    "name": "bblog_ru",
+    "category": "misc",
+    "url": "https://www.babyblog.ru/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "БэбиБлог - беременность, календарь беременности, дневники"
+  },
+  {
+    "name": "BDSMLR",
+    "category": "xx NSFW xx",
+    "url": "https://{username}.bdsmlr.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This blog doesn't exist."
+  },
+  {
+    "name": "bdsmsingles",
+    "category": "xx NSFW xx",
+    "url": "https://www.bdsmsingles.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "BDSM Singles"
+  },
+  {
+    "name": "Beacons",
+    "category": "social",
+    "url": "https://beacons.ai/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for does not seem to exist anymore"
+  },
+  {
+    "name": "Behance",
+    "category": "Developer",
+    "url": "https://www.behance.net/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Bentbox",
+    "category": "xx NSFW xx",
+    "url": "https://bentbox.co/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This user is currently not available"
+  },
+  {
+    "name": "Bento",
+    "category": "social",
+    "url": "https://bento.me/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": ">Available!</div>"
+  },
+  {
+    "name": "BiggerPockets",
+    "category": "finance",
+    "url": "https://www.biggerpockets.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "BIGO Live",
+    "category": "gaming",
+    "url": "https://www.bigo.tv/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "userInfo:{}"
+  },
+  {
+    "name": "Bikemap",
+    "category": "health",
+    "url": "https://www.bikemap.net/en/u/{username}/routes/created/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found - Error 404 "
+  },
+  {
+    "name": "Bimpos",
+    "category": "tech",
+    "url": "https://ask.bimpos.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Bio Sites",
+    "category": "social",
+    "url": "https://bio.site/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This site no longer exists"
+  },
+  {
+    "name": "biolink",
+    "category": "misc",
+    "url": "https://bio.link/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you’re looking for doesn’t exist"
+  },
+  {
+    "name": "Bitbucket",
+    "category": "Developer",
+    "url": "https://bitbucket.org/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Bitchute",
+    "category": "Media",
+    "url": "https://www.bitchute.com/channel/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Blogger",
+    "category": "Blog",
+    "url": "https://{username}.blogspot.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "blogi.pl",
+    "category": "blog",
+    "url": "https://www.blogi.pl/osoba,{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Niepoprawny adres."
+  },
+  {
+    "name": "Blogmarks",
+    "category": "misc",
+    "url": "http://blogmarks.net/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "class=\"mark\""
+  },
+  {
+    "name": "Blogspot",
+    "category": "blog",
+    "url": "http://{username}.blogspot.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Blog not found"
+  },
+  {
+    "name": "Bluesky",
+    "category": "Social Media",
+    "url": "https://bsky.app/profile/{username}.bsky.social",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Bluesky 1",
+    "category": "social",
+    "url": "https://bsky.app/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<p id=\"bsky_did\"></p>"
+  },
+  {
+    "name": "Bluesky 2",
+    "category": "social",
+    "url": "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={username}.bsky.social",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"Profile not found\""
+  },
+  {
+    "name": "BoardGameGeek",
+    "category": "gaming",
+    "url": "https://api.geekdo.com/api/accounts/validate/username?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"isValid\":true"
+  },
+  {
+    "name": "BodyBuilding.com",
+    "category": "health",
+    "url": "http://api.bodybuilding.com/api-proxy/bbc/get?slug={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "data\" :\"\""
+  },
+  {
+    "name": "bonga_cams",
+    "category": "xx NSFW xx",
+    "url": "https://pt.bongacams.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Câmaras de sexo free: chat pornô ao vivo"
+  },
+  {
+    "name": "Bookcrossing",
+    "category": "hobby",
+    "url": "https://www.bookcrossing.com/mybookshelf/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, we were unable to locate the content that you requested."
+  },
+  {
+    "name": "Booknode",
+    "category": "hobby",
+    "url": "https://booknode.com/profil/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page non trouvée"
+  },
+  {
+    "name": "Boosty",
+    "category": "social",
+    "url": "https://api.boosty.to/v1/blog/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"blog_not_found\""
+  },
+  {
+    "name": "Booth",
+    "category": "shopping",
+    "url": "https://{username}.booth.pm/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "BOOTH - The International Indie Art Marketplace"
+  },
+  {
+    "name": "Brickset",
+    "category": "hobby",
+    "url": "https://brickset.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{name}</h1>"
+  },
+  {
+    "name": "BugCrowd",
+    "category": "Security",
+    "url": "https://bugcrowd.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Bunpro",
+    "category": "social",
+    "url": "https://community.bunpro.jp/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found."
+  },
+  {
+    "name": "Buy Me a Coffee",
+    "category": "finance",
+    "url": "https://app.buymeacoffee.com/api/v1/check_availability",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"available\":true"
+  },
+  {
+    "name": "BuyMeACoffee",
+    "category": "Marketplace",
+    "url": "https://www.buymeacoffee.com/{username}",
+    "method": "message",
+    "errorMsg": "couldn't find that page"
+  },
+  {
+    "name": "BuzzFeed",
+    "category": "social",
+    "url": "https://www.buzzfeed.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We can't find the page you're looking for"
+  },
+  {
+    "name": "cafecito",
+    "category": "misc",
+    "url": "https://cafecito.app/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Es posible que el enlace que seleccionaste esté roto o que se haya eliminado la página"
+  },
+  {
+    "name": "Calendy",
+    "category": "misc",
+    "url": "https://calendly.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, but the page you were looking for could not be found."
+  },
+  {
+    "name": "Cameo",
+    "category": "shopping",
+    "url": "https://www.cameo.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "aggregateRating"
+  },
+  {
+    "name": "Canva",
+    "category": "Productivity",
+    "url": "https://www.canva.com/p/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Carbonmade",
+    "category": "hobby",
+    "url": "https://{username}.carbonmade.com/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "site not found"
+  },
+  {
+    "name": "Career.habr",
+    "category": "business",
+    "url": "https://career.habr.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Ошибка 404"
+  },
+  {
+    "name": "carrd.co",
+    "category": "business",
+    "url": "https://{username}.carrd.co",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, the requested page could not be found."
+  },
+  {
+    "name": "CashApp",
+    "category": "Financial",
+    "url": "https://cash.app/${username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "CastingCallClub",
+    "category": "hobby",
+    "url": "https://www.castingcall.club/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404: This is not the page you were looking for. In the future, our AI robot overlords will be able to better predict exactly what you were looking for."
+  },
+  {
+    "name": "CD-Action",
+    "category": "gaming",
+    "url": "https://cdaction.pl/uzytkownicy/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Coś się popsuło..."
+  },
+  {
+    "name": "cda.pl",
+    "category": "video",
+    "url": "https://www.cda.pl/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Strona na którą chcesz wejść nie istnieje"
+  },
+  {
+    "name": "Cent",
+    "category": "social",
+    "url": "https://beta.cent.co/data/user/profile?userHandles={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"results\":[]"
+  },
+  {
+    "name": "cfx.re",
+    "category": "gaming",
+    "url": "https://forum.cfx.re/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found."
+  },
+  {
+    "name": "championat",
+    "category": "news",
+    "url": "https://www.championat.com/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Извините, запрашиваемая страница не найдена"
+  },
+  {
+    "name": "Chamsko",
+    "category": "images",
+    "url": "https://www.chamsko.pl/profil/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Strona nie istnieje."
+  },
+  {
+    "name": "chatango.com",
+    "category": "social",
+    "url": "https://{username}.chatango.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Unknown User!"
+  },
+  {
+    "name": "chaturbate",
+    "category": "xx NSFW xx",
+    "url": "https://chaturbate.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "It's probably just a broken link"
+  },
+  {
+    "name": "cHEEZburger",
+    "category": "hobby",
+    "url": "https://profile.cheezburger.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Home - "
+  },
+  {
+    "name": "Chess.com",
+    "category": "Gaming / Streaming",
+    "url": "https://www.chess.com/member/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Choko.Link",
+    "category": "social",
+    "url": "https://choko.link/api/auth/check",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"result\":true"
+  },
+  {
+    "name": "Chomikuj.pl",
+    "category": "misc",
+    "url": "https://chomikuj.pl/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Chomik o takiej nazwie nie istnieje"
+  },
+  {
+    "name": "Chyoa",
+    "category": "xx NSFW xx",
+    "url": "https://chyoa.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, I got distracted..."
+  },
+  {
+    "name": "Cloudflare",
+    "category": "tech",
+    "url": "https://community.cloudflare.com/u/{username}/card.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found"
+  },
+  {
+    "name": "Clubhouse",
+    "category": "social",
+    "url": "https://www.clubhouse.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404"
+  },
+  {
+    "name": "cnet",
+    "category": "news",
+    "url": "https://www.cnet.com/profiles/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found (404) - CNET"
+  },
+  {
+    "name": "Coda",
+    "category": "hobby",
+    "url": "https://coda.io/@{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Coda | Page not found - Coda</title>"
+  },
+  {
+    "name": "Code Project",
+    "category": "coding",
+    "url": "https://www.codeproject.com/Members/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Unable to load the requested member's information"
+  },
+  {
+    "name": "Codeberg",
+    "category": "coding",
+    "url": "https://codeberg.org/api/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "user redirect does not exist"
+  },
+  {
+    "name": "Codecademy",
+    "category": "coding",
+    "url": "https://www.codecademy.com/profiles/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"type\":\"UserNotFound\""
+  },
+  {
+    "name": "CodeChef",
+    "category": "coding",
+    "url": "https://www.codechef.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "class=\"user-profile-container\""
+  },
+  {
+    "name": "Codeforces",
+    "category": "Developer",
+    "url": "https://codeforces.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "codementor",
+    "category": "coding",
+    "url": "https://www.codementor.io/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404/favicon.png"
+  },
+  {
+    "name": "CodePen",
+    "category": "Developer",
+    "url": "https://codepen.io/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "CoderWall",
+    "category": "Developer",
+    "url": "https://coderwall.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "CodeSandbox",
+    "category": "coding",
+    "url": "https://codesandbox.io/api/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Could not find user with username"
+  },
+  {
+    "name": "Codewars",
+    "category": "Developer",
+    "url": "https://www.codewars.com/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "COLOURlovers",
+    "category": "hobby",
+    "url": "https://www.colourlovers.com/ajax/check-username-availability",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"_status\":\"available\""
+  },
+  {
+    "name": "Community Adobe",
+    "category": "tech",
+    "url": "https://community.adobe.com/t5/forums/searchpage/tab/user?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No search results found."
+  },
+  {
+    "name": "ContraPoints",
+    "category": "Outros",
+    "url": "https://www.contrapoints.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "coroflot",
+    "category": "art",
+    "url": "https://www.coroflot.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Looking for something?"
+  },
+  {
+    "name": "Coub",
+    "category": "Social Media",
+    "url": "https://coub.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Coursera",
+    "category": "Education",
+    "url": "https://www.coursera.org/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "cowboys4angels",
+    "category": "xx NSFW xx",
+    "url": "https://cowboys4angels.com/cowboy/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Error Page not found"
+  },
+  {
+    "name": "Cracked",
+    "category": "social",
+    "url": "https://www.cracked.com/members/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "Member Since"
+  },
+  {
+    "name": "CreativeMarket",
+    "category": "Marketplace",
+    "url": "https://creativemarket.com/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "crevado",
+    "category": "images",
+    "url": "https://{username}.crevado.com/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Site not found :-("
+  },
+  {
+    "name": "Cropty",
+    "category": "finance",
+    "url": "https://api.cropty.io/v1/auth/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"errors\":"
+  },
+  {
+    "name": "Crowdin",
+    "category": "hobby",
+    "url": "https://crowdin.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error-page\""
+  },
+  {
+    "name": "Cults3D",
+    "category": "hobby",
+    "url": "https://cults3d.com/en/users/{username}/creations",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oh dear, this page is not working!"
+  },
+  {
+    "name": "CurseForge",
+    "category": "Gaming / Streaming",
+    "url": "https://www.curseforge.com/members/{username}/projects",
+    "method": "status_code",
+    "errorCode": 404
+  },
+  {
+    "name": "Cytoid",
+    "category": "gaming",
+    "url": "https://cytoid.io/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Profile not found"
+  },
+  {
+    "name": "Daily Kos",
+    "category": "news",
+    "url": "https://www.dailykos.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found! (404)"
+  },
+  {
+    "name": "DailyMotion",
+    "category": "Media",
+    "url": "https://www.dailymotion.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "darudar",
+    "category": "misc",
+    "url": "https://darudar.org/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404. Дару~дар: миру~мир!"
+  },
+  {
+    "name": "dateinasia",
+    "category": "dating",
+    "url": "https://www.dateinasia.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for does not exist"
+  },
+  {
+    "name": "datezone",
+    "category": "xx NSFW xx",
+    "url": "https://www.datezone.com/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404: page not found"
+  },
+  {
+    "name": "Dating.ru",
+    "category": "dating",
+    "url": "https://dating.ru/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Такой страницы не существует."
+  },
+  {
+    "name": "DDoSecrets",
+    "category": "archived",
+    "url": "https://search.ddosecrets.com/search?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<p>No results</p>"
+  },
+  {
+    "name": "Deezer",
+    "category": "Media",
+    "url": "https://www.deezer.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Demotywatory",
+    "category": "images",
+    "url": "https://demotywatory.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Użytkownik o podanym pseudonimie nie istnieje."
+  },
+  {
+    "name": "depop",
+    "category": "shopping",
+    "url": "https://www.depop.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, that page doesn't exist"
+  },
+  {
+    "name": "Designspriation",
+    "category": "art",
+    "url": "https://www.designspiration.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Content Not Found"
+  },
+  {
+    "name": "destream",
+    "category": "finance",
+    "url": "https://api.destream.net/siteapi/v2/live/details/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"errorMessage\":\"Error happened.\""
+  },
+  {
+    "name": "Destructoid",
+    "category": "social",
+    "url": "https://www.destructoid.com/?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Error in query"
+  },
+  {
+    "name": "Dev.to",
+    "category": "Developer",
+    "url": "https://dev.to/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "DeviantArt",
+    "category": "Social Media",
+    "url": "https://www.deviantart.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "devRant",
+    "category": "coding",
+    "url": "https://devrant.com/api/get-user-id?app=3&username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "dfgames",
+    "category": "gaming",
+    "url": "https://www.dfgames.com.br/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "Diablo",
+    "category": "gaming",
+    "url": "https://diablo2.io/member/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested user does not exist"
+  },
+  {
+    "name": "DIBIZ",
+    "category": "business",
+    "url": "https://www.dibiz.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "An Error Has Occurred"
+  },
+  {
+    "name": "Digitalspy",
+    "category": "social",
+    "url": "https://forums.digitalspy.com/profile/discussions/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User not found"
+  },
+  {
+    "name": "diigo",
+    "category": "images",
+    "url": "https://www.diigo.com/interact_api/load_profile_info?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{}"
+  },
+  {
+    "name": "Discogs",
+    "category": "music",
+    "url": "https://api.discogs.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\": \"User does not exist or may have been deleted.\""
+  },
+  {
+    "name": "Discord (Invite)",
+    "category": "social",
+    "url": "https://discord.com/api/v9/invites/{username}?with_counts=true&with_expiration=true",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\": \"Unknown Invite\""
+  },
+  {
+    "name": "Discord (User)",
+    "category": "social",
+    "url": "https://discord.com/api/v9/unique-username/username-attempt-unauthed",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"taken\":false"
+  },
+  {
+    "name": "Discourse",
+    "category": "misc",
+    "url": "https://meta.discourse.org/u/{username}/summary.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found."
+  },
+  {
+    "name": "Discourse (meta)",
+    "category": "Forum",
+    "url": "https://meta.discourse.org/u/{username}/summary",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "discuss.elastic.co",
+    "category": "tech",
+    "url": "https://discuss.elastic.co/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops!"
+  },
+  {
+    "name": "Displate",
+    "category": "Marketplace",
+    "url": "https://displate.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Disqus",
+    "category": "Outros",
+    "url": "https://disqus.com/by/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Dissenter",
+    "category": "political",
+    "url": "https://dissenter.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "That user is not registered here."
+  },
+  {
+    "name": "Docker Hub (Organization)",
+    "category": "coding",
+    "url": "https://hub.docker.com/v2/orgs/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"orgname\":[\""
+  },
+  {
+    "name": "Docker Hub (User)",
+    "category": "coding",
+    "url": "https://hub.docker.com/v2/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"User not found\""
+  },
+  {
+    "name": "DockerHub",
+    "category": "Developer",
+    "url": "https://hub.docker.com/u/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Dojoverse",
+    "category": "hobby",
+    "url": "https://dojoverse.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Looks like you got lost!."
+  },
+  {
+    "name": "donate.stream",
+    "category": "finance",
+    "url": "https://donate.stream/api/v1/streamer.get?path={username}&app=9f4e793cec820015d511dbc77b20c5c1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"Not found\""
+  },
+  {
+    "name": "Donatello",
+    "category": "finance",
+    "url": "https://donatello.to/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Сторінку не знайдено (404) - Donatello</title>"
+  },
+  {
+    "name": "Donatik",
+    "category": "finance",
+    "url": "https://{username}.donatik.io/en",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "id=\"__next_error__\""
+  },
+  {
+    "name": "Donation Alerts",
+    "category": "finance",
+    "url": "https://www.donationalerts.com/api/v1/user/{username}/donationpagesettings",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "Donatty",
+    "category": "business",
+    "url": "https://api.donatty.com/users/find/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"internal error\""
+  },
+  {
+    "name": "dot.cards",
+    "category": "business",
+    "url": "https://dot.cards/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "status\": \"username_not_found"
+  },
+  {
+    "name": "Dota2.ru",
+    "category": "gaming",
+    "url": "https://dota2.ru/forum/search/?type=user&keywords={username}&sort_by=username",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "id=\"no-activity-posts\""
+  },
+  {
+    "name": "DOTAFire",
+    "category": "gaming",
+    "url": "https://www.dotafire.com/ajax/searchSite?text={username}&search=members",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": ">No results found</span>"
+  },
+  {
+    "name": "DOU",
+    "category": "social",
+    "url": "https://dou.ua/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"page-error\""
+  },
+  {
+    "name": "Douyin",
+    "category": "Outros",
+    "url": "https://www.douyin.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Dribbble",
+    "category": "Developer",
+    "url": "https://dribbble.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "DRIVE2.RU",
+    "category": "social",
+    "url": "https://www.drive2.ru/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 — Страница не найдена</title>"
+  },
+  {
+    "name": "Droners",
+    "category": "hobby",
+    "url": "https://droners.io/accounts/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "(404)</title>"
+  },
+  {
+    "name": "Duolingo",
+    "category": "Education",
+    "url": "https://www.duolingo.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "easyen",
+    "category": "social",
+    "url": "https://easyen.ru/index/8-0-{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователь не найден"
+  },
+  {
+    "name": "eBay",
+    "category": "Marketplace",
+    "url": "https://www.ebay.com/usr/{username}",
+    "method": "message",
+    "errorMsg": "The User ID you entered was not found"
+  },
+  {
+    "name": "ebay_stores",
+    "category": "shopping",
+    "url": "https://www.ebay.com/str/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, this store was not found."
+  },
+  {
+    "name": "Electrobel",
+    "category": "social",
+    "url": "https://be.electrobel.org/register.ajax",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"html\":\"Name is available\""
+  },
+  {
+    "name": "Engadget",
+    "category": "tech",
+    "url": "https://www.engadget.com/about/editors/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>,  - Engadget</title>"
+  },
+  {
+    "name": "Envato",
+    "category": "Marketplace",
+    "url": "https://themeforest.net/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Epic Games",
+    "category": "Gaming / Streaming",
+    "url": "https://fortnitetracker.com/profile/all/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "EPORNER",
+    "category": "xx NSFW xx",
+    "url": "https://www.eporner.com/xhr/check/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"msg_body\":\"Available\""
+  },
+  {
+    "name": "Etoro",
+    "category": "finance",
+    "url": "https://www.etoro.com/api/logininfo/v1.1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"ErrorCode\":\"NotFound\""
+  },
+  {
+    "name": "Etsy",
+    "category": "Marketplace",
+    "url": "https://www.etsy.com/shop/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Evolution CMS",
+    "category": "tech",
+    "url": "https://community.evocms.ru/users/?search={username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "id=\"user-search\""
+  },
+  {
+    "name": "Exploit.in Forum",
+    "category": "Security",
+    "url": "https://exploit.in/member.php?username={username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Expressional.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://expressional.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Eyeem",
+    "category": "art",
+    "url": "https://www.eyeem.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found (404) | EyeEm"
+  },
+  {
+    "name": "F3",
+    "category": "Forum",
+    "url": "https://f3.cool/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Fabswingers",
+    "category": "dating",
+    "url": "https://www.fabswingers.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The user you tried to view doesn't seem to be on the site any more"
+  },
+  {
+    "name": "Facebook",
+    "category": "social",
+    "url": "https://www.facebook.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Facebook</title>"
+  },
+  {
+    "name": "FACEIT",
+    "category": "gaming",
+    "url": "https://www.faceit.com/api/users/v1/nicknames/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"user not found\""
+  },
+  {
+    "name": "Faktopedia",
+    "category": "images",
+    "url": "https://faktopedia.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "FanCentro",
+    "category": "xx NSFW xx",
+    "url": "https://fancentro.com/api/profile.get?profileAlias={username}&limit=1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":false"
+  },
+  {
+    "name": "Fandom",
+    "category": "gaming",
+    "url": "https://www.fandom.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found"
+  },
+  {
+    "name": "fanpop",
+    "category": "social",
+    "url": "https://www.fanpop.com/fans/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "Fanpopping since"
+  },
+  {
+    "name": "Fanslist (OnlyFans)",
+    "category": "xx NSFW xx",
+    "url": "https://fanslist.com/search?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No results found for query"
+  },
+  {
+    "name": "Fansly",
+    "category": "NSFW",
+    "url": "https://fansly.com/{username}",
+    "method": "message",
+    "errorMsg": "This account may have been deleted",
+    "isNSFW": true
+  },
+  {
+    "name": "Fark",
+    "category": "social",
+    "url": "https://www.fark.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Tastes like chicken."
+  },
+  {
+    "name": "FatSecret",
+    "category": "health",
+    "url": "https://www.fatsecret.com/member/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Your Key to Success"
+  },
+  {
+    "name": "Federated.press (Mastodon Instance)",
+    "category": "social",
+    "url": "https://federated.press/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "FetLife",
+    "category": "NSFW",
+    "url": "https://fetlife.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "isNSFW": true
+  },
+  {
+    "name": "Figma",
+    "category": "Developer",
+    "url": "https://www.figma.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Filmot Channel Search",
+    "category": "archived",
+    "url": "https://filmot.com/channelsearch/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No channels found"
+  },
+  {
+    "name": "Filmot Unlisted Videos",
+    "category": "archived",
+    "url": "https://filmot.com/unlistedSearch?channelQuery={username}&sortField=uploaddate&sortOrder=desc&",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No results"
+  },
+  {
+    "name": "Filmweb",
+    "category": "hobby",
+    "url": "https://www.filmweb.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Varnish 404"
+  },
+  {
+    "name": "fine_art_america",
+    "category": "shopping",
+    "url": "https://fineartamerica.com/profiles/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Browse through millions of independent artists in our extensive"
+  },
+  {
+    "name": "Fiverr",
+    "category": "Marketplace",
+    "url": "https://www.fiverr.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "FL.ru",
+    "category": "social",
+    "url": "https://www.fl.ru/users/{username}/portfolio/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "content=\"404 Not Found\""
+  },
+  {
+    "name": "Flickr",
+    "category": "Media",
+    "url": "https://www.flickr.com/people/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Flightradar24",
+    "category": "misc",
+    "url": "https://my.flightradar24.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"main page-not-found-main"
+  },
+  {
+    "name": "Flipboard",
+    "category": "tech",
+    "url": "https://flipboard.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title></title>"
+  },
+  {
+    "name": "flowcode",
+    "category": "social",
+    "url": "https://www.flowcode.com/page/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nobody's reserved this Flowpage yet."
+  },
+  {
+    "name": "Fodors Forum",
+    "category": "social",
+    "url": "https://www.fodors.com/community/profile/{username}/forum-activity",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Plan Your Trip Online</title>"
+  },
+  {
+    "name": "Folkd",
+    "category": "social",
+    "url": "https://www.folkd.com/?app=core&module=system&controller=ajax&do=usernameExists&input={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"result\":\"ok\""
+  },
+  {
+    "name": "Fortnite Tracker",
+    "category": "gaming",
+    "url": "https://fortnitetracker.com/profile/all/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Fortnite Player Stats -"
+  },
+  {
+    "name": "forumprawne.org",
+    "category": "misc",
+    "url": "https://forumprawne.org/members/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "Wiadomość"
+  },
+  {
+    "name": "Fosstodon.org (Mastodon Instance)",
+    "category": "social",
+    "url": "https://fosstodon.org/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "fotka",
+    "category": "social",
+    "url": "https://api.fotka.com/v2/user/dataStatic?login={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "ERROR"
+  },
+  {
+    "name": "Fotolog Archived Profile",
+    "category": "archived",
+    "url": "https://archive.org/wayback/available?url=https://www.fotolog.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "Foundation",
+    "category": "Financial",
+    "url": "https://foundation.app/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Foursquare",
+    "category": "social",
+    "url": "https://foursquare.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "class=\"userProfile2Page\""
+  },
+  {
+    "name": "freeCodeCamp",
+    "category": "coding",
+    "url": "https://api.freecodecamp.org/users/get-public-profile?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{}"
+  },
+  {
+    "name": "Freelance.RU",
+    "category": "business",
+    "url": "https://freelance.ru/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"msg_error alert alert-danger\""
+  },
+  {
+    "name": "Freelance.ua",
+    "category": "social",
+    "url": "https://freelance.ua/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Схоже, дана сторінка не знайдена"
+  },
+  {
+    "name": "Freelancehunt (Employer)",
+    "category": "social",
+    "url": "https://freelancehunt.com/en/employer/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User not found."
+  },
+  {
+    "name": "Freelancehunt (Freelancer)",
+    "category": "social",
+    "url": "https://freelancehunt.com/en/freelancer/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User not found."
+  },
+  {
+    "name": "Freelancer",
+    "category": "Marketplace",
+    "url": "https://www.freelancer.com/u/{username}",
+    "method": "message",
+    "errorMsg": "Page Not Found"
+  },
+  {
+    "name": "freesound",
+    "category": "music",
+    "url": "https://freesound.org/people/{username}/section/stats/?ajax=1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>Page not found</h1>"
+  },
+  {
+    "name": "FreeSteamKeys",
+    "category": "gaming",
+    "url": "https://www.freesteamkeys.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error404"
+  },
+  {
+    "name": "FriendFinder",
+    "category": "dating",
+    "url": "https://friendfinder.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "302 Found"
+  },
+  {
+    "name": "FriendFinder-X",
+    "category": "dating",
+    "url": "https://www.friendfinder-x.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The document has moved"
+  },
+  {
+    "name": "Fur Affinity",
+    "category": "images",
+    "url": "https://www.furaffinity.net/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h2>System Error</h2>"
+  },
+  {
+    "name": "Furaffinity",
+    "category": "Outros",
+    "url": "https://www.furaffinity.net/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Gab",
+    "category": "Social Media",
+    "url": "https://gab.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Game Jolt",
+    "category": "gaming",
+    "url": "https://gamejolt.com/site-api/web/profile/@{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "null,"
+  },
+  {
+    "name": "game_debate",
+    "category": "gaming",
+    "url": "https://www.game-debate.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found"
+  },
+  {
+    "name": "Gamer DVR",
+    "category": "gaming",
+    "url": "https://gamerdvr.com/gamer/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<body>You are being <"
+  },
+  {
+    "name": "Gamespot",
+    "category": "gaming",
+    "url": "https://www.gamespot.com/profile/{username}/summary/activity/?ajax",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "Garmin connect",
+    "category": "health",
+    "url": "https://connect.garmin.com/modern/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "resourceNotFoundRoute"
+  },
+  {
+    "name": "GDBrowser",
+    "category": "gaming",
+    "url": "https://gdbrowser.com/api/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "-1"
+  },
+  {
+    "name": "GeeksForGeeks",
+    "category": "coding",
+    "url": "https://authapi.geeksforgeeks.org/api-get/user-profile-info/?handle={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"User not found!\""
+  },
+  {
+    "name": "Genius",
+    "category": "Media",
+    "url": "https://genius.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Genius (Artist)",
+    "category": "music",
+    "url": "https://genius.com/artists/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"render_404\""
+  },
+  {
+    "name": "Genius (User)",
+    "category": "music",
+    "url": "https://genius.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"render_404\""
+  },
+  {
+    "name": "Geocaching",
+    "category": "social",
+    "url": "https://www.geocaching.com/p/?u={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"callout http-error\""
+  },
+  {
+    "name": "getmonero",
+    "category": "misc",
+    "url": "https://forum.getmonero.org/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Monero | Page not found. Error: 404"
+  },
+  {
+    "name": "Gettr",
+    "category": "social",
+    "url": "https://gettr.com/api/s/uinf/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"rc\":\"ERR\""
+  },
+  {
+    "name": "Gigapan",
+    "category": "hobby",
+    "url": "https://www.gigapan.com/profiles/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<a href=\"/gigapans\">View Gigapans</a>"
+  },
+  {
+    "name": "Giphy",
+    "category": "Media",
+    "url": "https://giphy.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Giphy (Channel)",
+    "category": "images",
+    "url": "https://giphy.com/channel/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "Gitea",
+    "category": "coding",
+    "url": "https://gitea.com/api/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"user redirect does not exist"
+  },
+  {
+    "name": "Gitee",
+    "category": "coding",
+    "url": "https://gitee.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"container error midCenter\""
+  },
+  {
+    "name": "GitHub",
+    "category": "Developer",
+    "url": "https://github.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "GitHub (Gists)",
+    "category": "coding",
+    "url": "https://api.github.com/users/{username}/gists",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\": \"404\""
+  },
+  {
+    "name": "GitHub (User)",
+    "category": "coding",
+    "url": "https://api.github.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\": \"404\""
+  },
+  {
+    "name": "GitLab",
+    "category": "Developer",
+    "url": "https://gitlab.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Glitch",
+    "category": "Developer",
+    "url": "https://glitch.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "gloria.tv",
+    "category": "social",
+    "url": "https://gloria.tv/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page unavailable"
+  },
+  {
+    "name": "GNOME (GitLab)",
+    "category": "coding",
+    "url": "https://gitlab.gnome.org/api/v4/users?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "[]"
+  },
+  {
+    "name": "GNOME (Shell Extensions)",
+    "category": "coding",
+    "url": "https://extensions.gnome.org/accounts/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h3>404 - Page not Found</h3>"
+  },
+  {
+    "name": "GOG",
+    "category": "gaming",
+    "url": "https://www.gog.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "href=\"http://www.gog.com/404\""
+  },
+  {
+    "name": "Goodgame_Russia",
+    "category": "gaming",
+    "url": "https://goodgame.ru/channel/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Такой страницы не существует"
+  },
+  {
+    "name": "Goodreads",
+    "category": "Outros",
+    "url": "https://www.goodreads.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "gpodder.net",
+    "category": "music",
+    "url": "https://gpodder.net/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 - Not found"
+  },
+  {
+    "name": "GrabCAD",
+    "category": "Developer",
+    "url": "https://grabcad.com/community/members/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "grandprof",
+    "category": "misc",
+    "url": "https://grandprof.org/communaute/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Mauvaise pioche"
+  },
+  {
+    "name": "Graphics.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://graphics.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Gravatar",
+    "category": "Social Media",
+    "url": "https://en.gravatar.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Gravatar (profile)",
+    "category": "Outros",
+    "url": "https://en.gravatar.com/{username}.json",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Greasy Fork",
+    "category": "tech",
+    "url": "https://greasyfork.org/en/users?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<p>No users!</p>"
+  },
+  {
+    "name": "GTAinside.com",
+    "category": "gaming",
+    "url": "https://www.gtainside.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>404 Not Found"
+  },
+  {
+    "name": "Gumroad",
+    "category": "Marketplace",
+    "url": "https://{username}.gumroad.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Habbo.com",
+    "category": "gaming",
+    "url": "https://www.habbo.com/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.com.br",
+    "category": "gaming",
+    "url": "https://www.habbo.com.br/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.com.tr",
+    "category": "gaming",
+    "url": "https://www.habbo.com.tr/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.de",
+    "category": "gaming",
+    "url": "https://www.habbo.de/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.es",
+    "category": "gaming",
+    "url": "https://www.habbo.es/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "not-found"
+  },
+  {
+    "name": "Habbo.fi",
+    "category": "gaming",
+    "url": "https://www.habbo.fi/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.fr",
+    "category": "gaming",
+    "url": "https://www.habbo.fr/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.it",
+    "category": "gaming",
+    "url": "https://www.habbo.it/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habbo.nl",
+    "category": "gaming",
+    "url": "https://www.habbo.nl/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error\": \"not-found"
+  },
+  {
+    "name": "Habr (Q&A)",
+    "category": "coding",
+    "url": "https://qna.habr.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "icon_error_404"
+  },
+  {
+    "name": "Habr (User)",
+    "category": "social",
+    "url": "https://habr.com/ru/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "tm-error-message"
+  },
+  {
+    "name": "Habtium",
+    "category": "gaming",
+    "url": "https://habtium.es/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1 class=\"section red\">Oops!"
+  },
+  {
+    "name": "Hackaday.io",
+    "category": "hobby",
+    "url": "https://hackaday.io/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error-nav\""
+  },
+  {
+    "name": "Hackadvisor",
+    "category": "tech",
+    "url": "https://hackadvisor.io/api/v2/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{\"detail\":\"Username not found\"}"
+  },
+  {
+    "name": "Hacker News",
+    "category": "Forum",
+    "url": "https://news.ycombinator.com/user?id={username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "hackerearth",
+    "category": "coding",
+    "url": "https://www.hackerearth.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 | HackerEarth"
+  },
+  {
+    "name": "Hackernoon",
+    "category": "tech",
+    "url": "https://hackernoon.com/_next/data/foL6JC7ro2FEEMD-gMKgQ/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "__N_REDIRECT"
+  },
+  {
+    "name": "HackerOne",
+    "category": "Security",
+    "url": "https://hackerone.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "HackerRank",
+    "category": "Developer",
+    "url": "https://www.hackerrank.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "hackrocks",
+    "category": "tech",
+    "url": "https://hackrocks.com/api/users/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error_data\":\"USER_NOT_FOUND\""
+  },
+  {
+    "name": "Hackster",
+    "category": "coding",
+    "url": "https://www.hackster.io/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "id=\"error\""
+  },
+  {
+    "name": "Hackster.io",
+    "category": "Developer",
+    "url": "https://www.hackster.io/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "hamaha",
+    "category": "finance",
+    "url": "https://hamaha.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "content=\"HAMAHA  Биткоин форум. Торговля на бирже - ➨ Обучение Криптовалютам, Биткоин и NYSE \""
+  },
+  {
+    "name": "Hanime",
+    "category": "xx NSFW xx",
+    "url": "https://hanime.tv/channels/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "DYNAMIC"
+  },
+  {
+    "name": "Hashnode",
+    "category": "Developer",
+    "url": "https://hashnode.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Hcommons.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://hcommons.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Heylink",
+    "category": "misc",
+    "url": "https://heylink.me/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We can't find the page that you're looking for :("
+  },
+  {
+    "name": "hiberworld",
+    "category": "gaming",
+    "url": "https://hiberworld.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Looks like you got lost "
+  },
+  {
+    "name": "HiHello",
+    "category": "business",
+    "url": "https://www.hihello.me/author/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Well, this is awkward"
+  },
+  {
+    "name": "Holopin",
+    "category": "hobby",
+    "url": "https://www.holopin.io/api/auth/username",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"available\":true"
+  },
+  {
+    "name": "HomeDesign3D",
+    "category": "hobby",
+    "url": "https://en.homedesign3d.net/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "An Error Occurred: Internal Server Error"
+  },
+  {
+    "name": "Hometech.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://hometech.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "hoo.be",
+    "category": "business",
+    "url": "https://hoo.be/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found</h3>"
+  },
+  {
+    "name": "Hostux.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://hostux.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Houzz",
+    "category": "hobby",
+    "url": "https://www.houzz.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found"
+  },
+  {
+    "name": "Hubpages",
+    "category": "Outros",
+    "url": "https://hubpages.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Hubski",
+    "category": "social",
+    "url": "https://hubski.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No such user."
+  },
+  {
+    "name": "HudsonRock",
+    "category": "tech",
+    "url": "https://cavalier.hudsonrock.com/api/json/v2/osint-tools/search-by-username?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This username is not associated with a computer infected by an info-stealer"
+  },
+  {
+    "name": "HuggingFace",
+    "category": "tech",
+    "url": "https://huggingface.co/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "content=\"404 – Hugging Face\""
+  },
+  {
+    "name": "HulkShare",
+    "category": "social",
+    "url": "https://www.hulkshare.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Invalid user."
+  },
+  {
+    "name": "Iconfinder",
+    "category": "images",
+    "url": "https://www.iconfinder.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We couldn't find the page you are looking for."
+  },
+  {
+    "name": "icq-chat",
+    "category": "social",
+    "url": "https://icq.icqchat.co/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops! We ran into some problems"
+  },
+  {
+    "name": "IFTTT",
+    "category": "misc",
+    "url": "https://ifttt.com/p/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested page or file does not exist"
+  },
+  {
+    "name": "ifunny",
+    "category": "misc",
+    "url": "https://ifunny.co/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 - page not found"
+  },
+  {
+    "name": "igromania",
+    "category": "social",
+    "url": "http://forum.igromania.ru/member.php?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователь не зарегистрирован и не имеет профиля для просмотра."
+  },
+  {
+    "name": "ilovegrowingmarijuana",
+    "category": "social",
+    "url": "https://support.ilovegrowingmarijuana.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops! That page doesn’t exist or is private"
+  },
+  {
+    "name": "imagefap",
+    "category": "xx NSFW xx",
+    "url": "https://www.imagefap.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Invalid uid"
+  },
+  {
+    "name": "ImageShack",
+    "category": "images",
+    "url": "https://imageshack.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "s Images</title>"
+  },
+  {
+    "name": "iMGSRC.RU",
+    "category": "images",
+    "url": "https://imgsrc.ru/main/user.php?lang=ru&user={username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "Присоединился"
+  },
+  {
+    "name": "Imgur",
+    "category": "Media",
+    "url": "https://imgur.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "inaturalist",
+    "category": "hobby",
+    "url": "https://api.inaturalist.org/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":404"
+  },
+  {
+    "name": "Independent academia",
+    "category": "hobby",
+    "url": "https://independent.academia.edu/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Academia.edu"
+  },
+  {
+    "name": "InkBunny",
+    "category": "xx NSFW xx",
+    "url": "https://inkbunny.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Members | Inkbunny, the Furry Art Community</title>"
+  },
+  {
+    "name": "InsaneJournal",
+    "category": "social",
+    "url": "https://{username}.insanejournal.com/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL /profile was not found on this server"
+  },
+  {
+    "name": "Instagram",
+    "category": "Social Media",
+    "url": "https://www.instagram.com/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Instagram (Imginn)",
+    "category": "social",
+    "url": "https://imginn.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"page-error notfound\""
+  },
+  {
+    "name": "Instagram_archives",
+    "category": "social",
+    "url": "https://archive.org/wayback/available?url=https://instagram.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}}"
+  },
+  {
+    "name": "Instructables",
+    "category": "Education",
+    "url": "https://www.instructables.com/member/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Internet Archive User Search",
+    "category": "misc",
+    "url": "https://archive.org/advancedsearch.php?q={username}&output=json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "numFound\":0"
+  },
+  {
+    "name": "interpals",
+    "category": "dating",
+    "url": "https://www.interpals.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User not found"
+  },
+  {
+    "name": "Intigriti",
+    "category": "tech",
+    "url": "https://app.intigriti.com/api/user/public/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error-page-container\""
+  },
+  {
+    "name": "Issuu",
+    "category": "social",
+    "url": "https://issuu.com/call/signup/v2/check-username/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":\"available\""
+  },
+  {
+    "name": "Itch.io",
+    "category": "Outros",
+    "url": "https://{username}.itch.io",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "iXBT Forum",
+    "category": "tech",
+    "url": "https://forum.ixbt.com/users.cgi?id=info:{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Проверьте регистр написания."
+  },
+  {
+    "name": "Japandict",
+    "category": "social",
+    "url": "https://forum.japandict.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you requested could not be found."
+  },
+  {
+    "name": "JBZD",
+    "category": "images",
+    "url": "https://jbzd.com.pl/uzytkownik/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Błąd 404"
+  },
+  {
+    "name": "jeja.pl",
+    "category": "misc",
+    "url": "https://www.jeja.pl/user,{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Niepoprawny login"
+  },
+  {
+    "name": "Jeuxvideo",
+    "category": "gaming",
+    "url": "https://www.jeuxvideo.com/profil/{username}?mode=infos",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "rence des gamers"
+  },
+  {
+    "name": "Joe Monster",
+    "category": "misc",
+    "url": "https://joemonster.org/bojownik/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie wiem jak ci to powiedzieć"
+  },
+  {
+    "name": "joinDOTA",
+    "category": "gaming",
+    "url": "https://www.joindota.com/ajax/search",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"count\":0"
+  },
+  {
+    "name": "JSFiddle",
+    "category": "coding",
+    "url": "https://jsfiddle.net/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "That page doesn't exist."
+  },
+  {
+    "name": "Justforfans",
+    "category": "xx NSFW xx",
+    "url": "https://justfor.fans/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": " @ JustFor.Fans"
+  },
+  {
+    "name": "Kaggle",
+    "category": "Developer",
+    "url": "https://www.kaggle.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "kashipara",
+    "category": "tech",
+    "url": "https://www.kashipara.com/ajax/checkNewUser.php",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"UserName avalible\""
+  },
+  {
+    "name": "Keybase",
+    "category": "Messaging",
+    "url": "https://keybase.io/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Khan Academy",
+    "category": "Education",
+    "url": "https://www.khanacademy.org/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Kick",
+    "category": "social",
+    "url": "https://kick.com/api/v2/channels/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Not Found</title>"
+  },
+  {
+    "name": "Kickstarter",
+    "category": "shopping",
+    "url": "https://www.kickstarter.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops, Something went missing"
+  },
+  {
+    "name": "Kik",
+    "category": "Outros",
+    "url": "https://ws2.kik.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "kipin",
+    "category": "business",
+    "url": "https://kipin.app/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found. Link expired, broken or wrong."
+  },
+  {
+    "name": "Knowem",
+    "category": "Outros",
+    "url": "https://knowem.com/checkusernames.php?u={username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "KnowYourMeme",
+    "category": "social",
+    "url": "https://knowyourmeme.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404, File Not Found!"
+  },
+  {
+    "name": "Ko-fi",
+    "category": "Marketplace",
+    "url": "https://ko-fi.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "komi",
+    "category": "social",
+    "url": "https://api.komi.io/api/talent/usernames/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The talent profile was not found"
+  },
+  {
+    "name": "Kongregate",
+    "category": "gaming",
+    "url": "https://www.kongregate.com/accounts/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, no account with that name was found"
+  },
+  {
+    "name": "Kotburger",
+    "category": "images",
+    "url": "https://kotburger.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "Kwai",
+    "category": "social",
+    "url": "https://www.kwai.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Kwai</title>"
+  },
+  {
+    "name": "kwejk.pl",
+    "category": "images",
+    "url": "https://kwejk.pl/uzytkownik/{username}#/tablica/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 - strona nie została znaleziona - KWEJK.pl"
+  },
+  {
+    "name": "Kwork",
+    "category": "social",
+    "url": "https://kwork.ru/user_kworks/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "Last.fm",
+    "category": "Media",
+    "url": "https://www.last.fm/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Launchpad",
+    "category": "Outros",
+    "url": "https://launchpad.net/~{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "LBRY/Odysee",
+    "category": "Media",
+    "url": "https://odysee.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "LeakIX",
+    "category": "tech",
+    "url": "https://leakix.net/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>LeakIX - Server error</title>"
+  },
+  {
+    "name": "Learn CW Online",
+    "category": "hobby",
+    "url": "https://lcwo.net/api/user_exists.php",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"user_exists\": 0"
+  },
+  {
+    "name": "LeetCode",
+    "category": "Developer",
+    "url": "https://leetcode.com/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Lemon8",
+    "category": "social",
+    "url": "https://www.lemon8-app.com/{username}?region=us",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "unavailableReason\": \"not_found"
+  },
+  {
+    "name": "Letterboxd",
+    "category": "Media",
+    "url": "https://letterboxd.com/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "LevelBlue",
+    "category": "social",
+    "url": "https://otx.alienvault.com/otxapi/auth/validate?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{}"
+  },
+  {
+    "name": "Liberapay",
+    "category": "finance",
+    "url": "https://liberapay.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Response code: 404"
+  },
+  {
+    "name": "LibraryThing",
+    "category": "hobby",
+    "url": "https://www.librarything.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Error: This user doesn't exist"
+  },
+  {
+    "name": "Libretooth.gr (Mastodon Instance)",
+    "category": "social",
+    "url": "https://libretooth.gr/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Lichess",
+    "category": "Gaming / Streaming",
+    "url": "https://lichess.org/@/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "lichess.org",
+    "category": "gaming",
+    "url": "https://lichess.org/api/player/autocomplete?term={username}&exists=1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "false"
+  },
+  {
+    "name": "LINE",
+    "category": "social",
+    "url": "https://line.me/R/ti/p/@{username}?from=page",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "Linktree",
+    "category": "Social Media",
+    "url": "https://linktr.ee/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "linux.org.ru",
+    "category": "tech",
+    "url": "https://www.linux.org.ru/people/{username}/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователя не существует"
+  },
+  {
+    "name": "Livejournal",
+    "category": "blog",
+    "url": "https://{username}.livejournal.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Unknown Journal"
+  },
+  {
+    "name": "livemaster.ru",
+    "category": "shopping",
+    "url": "https://www.livemaster.ru/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Вы попали на несуществующую страницу"
+  },
+  {
+    "name": "lobste.rs",
+    "category": "tech",
+    "url": "https://lobste.rs/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The resource you requested was not found, or the story has been deleted."
+  },
+  {
+    "name": "Lobsters",
+    "category": "Forum",
+    "url": "https://lobste.rs/~{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "LoLProfile",
+    "category": "gaming",
+    "url": "https://lolprofile.net/search/world/{username}-world",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We could not find any results, please try again later or check your input."
+  },
+  {
+    "name": "Lor.sh (Mastodon Instance)",
+    "category": "social",
+    "url": "https://lor.sh/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "lowcygier.pl",
+    "category": "gaming",
+    "url": "https://bazar.lowcygier.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Błąd 404 - Podana strona nie istnieje"
+  },
+  {
+    "name": "MAGABOOK",
+    "category": "social",
+    "url": "https://magabook.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "Timeline"
+  },
+  {
+    "name": "Magix",
+    "category": "music",
+    "url": "https://www.magix.info/us/users/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Malpedia Actors",
+    "category": "tech",
+    "url": "https://malpedia.caad.fkie.fraunhofer.de/actor/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not Found."
+  },
+  {
+    "name": "MapMyTracks",
+    "category": "health",
+    "url": "https://www.mapmytracks.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Outside together"
+  },
+  {
+    "name": "Mapstodon.space (Mastodon Instance)",
+    "category": "social",
+    "url": "https://mapstodon.space/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Maroc_nl",
+    "category": "social",
+    "url": "https://www.maroc.nl/forums/members/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Deze gebruiker is niet geregistreerd"
+  },
+  {
+    "name": "Marshmallow",
+    "category": "social",
+    "url": "https://marshmallow-qa.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "For compensation, here are cats for you."
+  },
+  {
+    "name": "Martech",
+    "category": "business",
+    "url": "https://martech.org/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Massage Anywhere",
+    "category": "health",
+    "url": "https://www.massageanywhere.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>MassageAnywhere.com: Search Results</title>"
+  },
+  {
+    "name": "masto.ai",
+    "category": "social",
+    "url": "https://masto.ai/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Masto.nyc (Mastodon Instance)",
+    "category": "social",
+    "url": "https://masto.nyc/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Mastodon",
+    "category": "Social Media",
+    "url": "https://mastodon.social/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Mastodon API",
+    "category": "social",
+    "url": "https://mastodon.social/api/v2/search?q={username}&limit=1&type=accounts",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"accounts\":[]"
+  },
+  {
+    "name": "Mastodon-101010.pl",
+    "category": "social",
+    "url": "https://101010.pl/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon-C.IM",
+    "category": "social",
+    "url": "https://c.im/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>The page you are looking for isn&#39;t here"
+  },
+  {
+    "name": "Mastodon-Chaos.social",
+    "category": "social",
+    "url": "https://chaos.social/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon-climatejustice.rocks",
+    "category": "social",
+    "url": "https://climatejustice.rocks/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Mastodon-Defcon",
+    "category": "social",
+    "url": "https://defcon.social/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon-mastodon",
+    "category": "social",
+    "url": "https://mastodon.social/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn't here."
+  },
+  {
+    "name": "Mastodon-meow.social",
+    "category": "social",
+    "url": "https://meow.social/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon-mstdn.io",
+    "category": "social",
+    "url": "https://mstdn.io/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon-rigcz.club",
+    "category": "social",
+    "url": "https://rigcz.club/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn't here."
+  },
+  {
+    "name": "Mastodon-social_tchncs",
+    "category": "social",
+    "url": "https://social.tchncs.de/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here"
+  },
+  {
+    "name": "Mastodon-Toot.Community",
+    "category": "social",
+    "url": "https://toot.community/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodon.online",
+    "category": "social",
+    "url": "https://mastodon.online/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Mastodonbooks.net (Mastodon Instance)",
+    "category": "social",
+    "url": "https://mastodonbooks.net/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Matrix",
+    "category": "Messaging",
+    "url": "https://matrix.to/#/@{username}:matrix.org",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "MCName (Minecraft)",
+    "category": "gaming",
+    "url": "https://mcname.info/en/search?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "alert alert-success px-0 py-1"
+  },
+  {
+    "name": "MCUUID (Minecraft)",
+    "category": "gaming",
+    "url": "https://playerdb.co/api/player/minecraft/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "minecraft.api_failure"
+  },
+  {
+    "name": "Medium",
+    "category": "Social Media",
+    "url": "https://medium.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "medyczka.pl",
+    "category": "health",
+    "url": "http://medyczka.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This user has not registered and therefore does not have a profile to view."
+  },
+  {
+    "name": "meet me",
+    "category": "dating",
+    "url": "https://www.meetme.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>MeetMe - Chat and Meet New People</title"
+  },
+  {
+    "name": "Meta-Wiki (Wikimedia)",
+    "category": "news",
+    "url": "https://meta.wikimedia.org/wiki/Special:CentralAuth?target={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "There is no global account for"
+  },
+  {
+    "name": "Metacritic",
+    "category": "hobby",
+    "url": "https://www.metacritic.com/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"c-error404\""
+  },
+  {
+    "name": "Minds",
+    "category": "Social Media",
+    "url": "https://www.minds.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Minecraft",
+    "category": "Gaming / Streaming",
+    "url": "https://namemc.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Minecraft List",
+    "category": "gaming",
+    "url": "https://minecraftlist.com/players/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "0 Minecraft servers recently"
+  },
+  {
+    "name": "mintme",
+    "category": "finance",
+    "url": "https://www.mintme.com/token/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Mistrzowie",
+    "category": "images",
+    "url": "https://mistrzowie.org/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "Mix",
+    "category": "social",
+    "url": "https://mix.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The best content from the open web, personalized."
+  },
+  {
+    "name": "Mixcloud",
+    "category": "Media",
+    "url": "https://www.mixcloud.com/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Mixi",
+    "category": "social",
+    "url": "https://mixi.jp/view_community.pl?id={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "データがありません"
+  },
+  {
+    "name": "Mixlr",
+    "category": "music",
+    "url": "https://api.mixlr.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"Resource not found\""
+  },
+  {
+    "name": "Mmorpg",
+    "category": "gaming",
+    "url": "https://forums.mmorpg.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Not_Found"
+  },
+  {
+    "name": "MobileGTA.net",
+    "category": "gaming",
+    "url": "https://www.mobilegta.net/en/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>404 Not Found"
+  },
+  {
+    "name": "Mod DB",
+    "category": "gaming",
+    "url": "https://www.moddb.com/html/scripts/autocomplete.php?a=username&q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"available\":true"
+  },
+  {
+    "name": "MODX.im",
+    "category": "tech",
+    "url": "https://modx.evo.im/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"content-error\""
+  },
+  {
+    "name": "Monkeytype",
+    "category": "coding",
+    "url": "https://api.monkeytype.com/users/{username}/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"User not found\""
+  },
+  {
+    "name": "Moto Trip",
+    "category": "hobby",
+    "url": "https://moto-trip.com/profil/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h1>Page introuvable</h1>"
+  },
+  {
+    "name": "Motokiller",
+    "category": "images",
+    "url": "https://mklr.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "Moxfield",
+    "category": "gaming",
+    "url": "https://api2.moxfield.com/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":404"
+  },
+  {
+    "name": "mssg.me",
+    "category": "social",
+    "url": "https://{username}.mssg.me/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "id=\"page_404\""
+  },
+  {
+    "name": "Muck Rack",
+    "category": "news",
+    "url": "https://muckrack.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oh no! Page not found."
+  },
+  {
+    "name": "Musician.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://musician.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "musictraveler",
+    "category": "music",
+    "url": "https://www.musictraveler.com/en/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page Not found</title>"
+  },
+  {
+    "name": "MUYZORRAS",
+    "category": "xx NSFW xx",
+    "url": "https://www.muyzorras.com/usuarios/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Error 404"
+  },
+  {
+    "name": "my_instants",
+    "category": "music",
+    "url": "https://www.myinstants.com/en/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "MyAnimeList",
+    "category": "Media",
+    "url": "https://myanimelist.net/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "MyBuilder.com",
+    "category": "social",
+    "url": "https://www.mybuilder.com/profile/view/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Whoops! You broke our site!"
+  },
+  {
+    "name": "MyFitnessPal Author",
+    "category": "health",
+    "url": "https://blog.myfitnesspal.com/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found "
+  },
+  {
+    "name": "MyFitnessPal Community",
+    "category": "health",
+    "url": "https://community.myfitnesspal.com/en/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User Not Found"
+  },
+  {
+    "name": "MyLot",
+    "category": "social",
+    "url": "https://www.mylot.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": " / Whoops!"
+  },
+  {
+    "name": "MYM",
+    "category": "social",
+    "url": "https://mym.fans/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"page page-404\""
+  },
+  {
+    "name": "MyNickname",
+    "category": "misc",
+    "url": "https://mynickname.com/en/search?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h2>Nickname not found. Try searching for similar nicknames.</h2>"
+  },
+  {
+    "name": "myportfolio",
+    "category": "misc",
+    "url": "https://{username}.myportfolio.com/work",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Adobe Portfolio | Build your own personalized website</title>"
+  },
+  {
+    "name": "MySpace",
+    "category": "social",
+    "url": "https://myspace.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<!-- 404 -->"
+  },
+  {
+    "name": "Myspreadshop",
+    "category": "business",
+    "url": "https://myspreadshop.de/{username}/shopData/list",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "not found"
+  },
+  {
+    "name": "myWishBoard",
+    "category": "shopping",
+    "url": "https://mywishboard.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"MwbError\""
+  },
+  {
+    "name": "naija_planet",
+    "category": "dating",
+    "url": "https://naijaplanet.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "- NaijaPlanet!"
+  },
+  {
+    "name": "NairaLand",
+    "category": "Outros",
+    "url": "https://www.nairaland.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "NaturalNews",
+    "category": "political",
+    "url": "https://naturalnews.com/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for cannot be found or is no longer available."
+  },
+  {
+    "name": "Naver",
+    "category": "social",
+    "url": "https://blog.naver.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "페이지를 찾을 수 없습니다"
+  },
+  {
+    "name": "Neocities",
+    "category": "social",
+    "url": "https://neocities.org/site/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "- Not Found</title>"
+  },
+  {
+    "name": "netvibes",
+    "category": "social",
+    "url": "https://www.netvibes.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Newgrounds",
+    "category": "Outros",
+    "url": "https://{username}.newgrounds.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "newmeet",
+    "category": "dating",
+    "url": "https://www.newmeet.com/en/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Chat with , , ,  - "
+  },
+  {
+    "name": "Nifty Gateway",
+    "category": "social",
+    "url": "https://api.niftygateway.com/user/profile-and-offchain-nifties-by-url/?profile_url={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "&quot;didSucceed&quot;: false"
+  },
+  {
+    "name": "Nightbot",
+    "category": "social",
+    "url": "https://api.nightbot.tv/1/channels/t/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":404"
+  },
+  {
+    "name": "nihbuatjajan",
+    "category": "social",
+    "url": "https://www.nihbuatjajan.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Nih Buat Jajan</title>"
+  },
+  {
+    "name": "Nitecrew (Mastodon Instance)",
+    "category": "social",
+    "url": "https://nitecrew.rip/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "nnru",
+    "category": "social",
+    "url": "https://{username}.www.nn.ru",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Ошибка 404 -"
+  },
+  {
+    "name": "NotABug",
+    "category": "coding",
+    "url": "https://notabug.org/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "alt=\"404\""
+  },
+  {
+    "name": "Note",
+    "category": "social",
+    "url": "https://note.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "お探しのページが見つかりません。"
+  },
+  {
+    "name": "Notion",
+    "category": "Productivity",
+    "url": "https://{username}.notion.site",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "npm",
+    "category": "Developer",
+    "url": "https://www.npmjs.com/~{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Observable",
+    "category": "Developer",
+    "url": "https://observablehq.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "oglaszamy24h.pl",
+    "category": "shopping",
+    "url": "https://oglaszamy24h.pl/profil,{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nieprawidłowy link, w bazie danych nie istnieje użytkownik o podanym loginie"
+  },
+  {
+    "name": "ok.ru",
+    "category": "social",
+    "url": "https://ok.ru/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"p404_t"
+  },
+  {
+    "name": "okidoki",
+    "category": "misc",
+    "url": "https://m.okidoki.ee/ru/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Страница не найдена"
+  },
+  {
+    "name": "omg.lol",
+    "category": "social",
+    "url": "https://api.omg.lol/address/{username}/info",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\": false"
+  },
+  {
+    "name": "OnlyFans",
+    "category": "NSFW",
+    "url": "https://onlyfans.com/{username}",
+    "method": "message",
+    "errorMsg": "Sorry, this page is not available",
+    "isNSFW": true
+  },
+  {
+    "name": "Opencollective",
+    "category": "finance",
+    "url": "https://opencollective.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found"
+  },
+  {
+    "name": "OpenHub",
+    "category": "Developer",
+    "url": "https://openhub.net/accounts/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "OpenSea",
+    "category": "Financial",
+    "url": "https://opensea.io/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "OpenSource",
+    "category": "tech",
+    "url": "https://opensource.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"errorCode\": \"404\""
+  },
+  {
+    "name": "OpenStreetMap",
+    "category": "social",
+    "url": "https://www.openstreetmap.org/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "does not exist"
+  },
+  {
+    "name": "OpenStreetMap Wiki",
+    "category": "social",
+    "url": "https://wiki.openstreetmap.org/w/api.php?action=query&format=json&list=users&ususers={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"missing\":\"\""
+  },
+  {
+    "name": "Oper.ru",
+    "category": "tech",
+    "url": "https://oper.ru/visitors/info.php?t={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Нет такого пользователя"
+  },
+  {
+    "name": "OPGG",
+    "category": "gaming",
+    "url": "https://eune.op.gg/summoners/eune/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Guide - OP.GG"
+  },
+  {
+    "name": "Orbys",
+    "category": "social",
+    "url": "https://orbys.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you are looking for cannot be found."
+  },
+  {
+    "name": "Origins.Habbo.com",
+    "category": "gaming",
+    "url": "https://origins.habbo.com/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "not-found"
+  },
+  {
+    "name": "Origins.Habbo.com.br",
+    "category": "gaming",
+    "url": "https://origins.habbo.com.br/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "not-found"
+  },
+  {
+    "name": "Origins.Habbo.es",
+    "category": "gaming",
+    "url": "https://origins.habbo.es/api/public/users?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "not-found"
+  },
+  {
+    "name": "osu!",
+    "category": "Gaming / Streaming",
+    "url": "https://osu.ppy.sh/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Our Freedom Book",
+    "category": "social",
+    "url": "https://www.ourfreedombook.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, page not found"
+  },
+  {
+    "name": "ow.ly",
+    "category": "social",
+    "url": "http://ow.ly/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 error"
+  },
+  {
+    "name": "palnet",
+    "category": "social",
+    "url": "https://www.palnet.io/@{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Unknown user account!"
+  },
+  {
+    "name": "Parler",
+    "category": "social",
+    "url": "https://parler.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "join Parler today"
+  },
+  {
+    "name": "Parler archived posts",
+    "category": "archived",
+    "url": "http://archive.org/wayback/available?url=https://parler.com/profile/{username}/posts",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "Parler archived profile",
+    "category": "archived",
+    "url": "http://archive.org/wayback/available?url=https://parler.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "Pastebin",
+    "category": "Forum",
+    "url": "https://pastebin.com/u/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "patch",
+    "category": "news",
+    "url": "https://patch.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found</title>"
+  },
+  {
+    "name": "PatientsLikeMe",
+    "category": "health",
+    "url": "https://www.patientslikeme.com/members/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "s profile | PatientsLikeMe</title>"
+  },
+  {
+    "name": "Patreon",
+    "category": "Marketplace",
+    "url": "https://www.patreon.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Patriots Win",
+    "category": "political",
+    "url": "https://patriots.win/u/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "An error occurred"
+  },
+  {
+    "name": "Patronite",
+    "category": "finance",
+    "url": "https://patronite.pl/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleźliśmy strony której szukasz."
+  },
+  {
+    "name": "Paypal",
+    "category": "finance",
+    "url": "https://www.paypal.com/paypalme/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>PayPal.Me</title><meta"
+  },
+  {
+    "name": "PCGamer",
+    "category": "gaming",
+    "url": "https://forums.pcgamer.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops! We ran into some problems"
+  },
+  {
+    "name": "PCPartPicker",
+    "category": "tech",
+    "url": "https://pcpartpicker.com/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you requested could not be found."
+  },
+  {
+    "name": "Peerlist",
+    "category": "coding",
+    "url": "https://peerlist.io/api/v1/users/profile/tldr?handle={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"User Not found\""
+  },
+  {
+    "name": "Periscope",
+    "category": "Outros",
+    "url": "https://www.periscope.tv/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Pewex",
+    "category": "misc",
+    "url": "https://retro.pewex.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "Pexels",
+    "category": "Media",
+    "url": "https://www.pexels.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Picsart",
+    "category": "art",
+    "url": "https://api.picsart.com/users/show/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":\"error\""
+  },
+  {
+    "name": "Piekielni",
+    "category": "misc",
+    "url": "https://piekielni.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono użytkownika o podanym loginie."
+  },
+  {
+    "name": "Pikabu",
+    "category": "social",
+    "url": "https://pikabu.ru/ajax.php",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"result\":true"
+  },
+  {
+    "name": "Pillowfort",
+    "category": "social",
+    "url": "https://www.pillowfort.social/{username}/json/?p=1",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>(404)</title>"
+  },
+  {
+    "name": "PinkBike",
+    "category": "hobby",
+    "url": "https://www.pinkbike.com/u/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "I couldn't find the page you were looking for"
+  },
+  {
+    "name": "Pinterest",
+    "category": "Social Media",
+    "url": "https://www.pinterest.com/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "pixelfed.social",
+    "category": "social",
+    "url": "https://pixelfed.social/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>pixelfed</title>"
+  },
+  {
+    "name": "Pixiv",
+    "category": "Outros",
+    "url": "https://www.pixiv.net/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Platzi",
+    "category": "Education",
+    "url": "https://platzi.com/p/{username}/",
+    "method": "status_code",
+    "errorCode": 404
+  },
+  {
+    "name": "Playstation Network",
+    "category": "gaming",
+    "url": "https://psnprofiles.com/xhr/search/users?q={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We couldn't find anything "
+  },
+  {
+    "name": "Plink",
+    "category": "gaming",
+    "url": "https://plink.gg/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>PLINK - 404 Page not found</title>"
+  },
+  {
+    "name": "Plurk",
+    "category": "social",
+    "url": "https://www.plurk.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Register your plurk account"
+  },
+  {
+    "name": "Poe.com",
+    "category": "tech",
+    "url": "https://poe.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"user\":null"
+  },
+  {
+    "name": "Pokec",
+    "category": "social",
+    "url": "https://pokec.azet.sk/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Neexistujúci používateľ"
+  },
+  {
+    "name": "pokemonshowdown",
+    "category": "gaming",
+    "url": "https://pokemonshowdown.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": " (Unregistered)"
+  },
+  {
+    "name": "Polarsteps",
+    "category": "hobby",
+    "url": "https://api.polarsteps.com/users/byusername/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 Not Found</title>"
+  },
+  {
+    "name": "Polchat.pl",
+    "category": "social",
+    "url": "https://polczat.pl/forum/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Wybrany użytkownik nie istnieje."
+  },
+  {
+    "name": "policja2009",
+    "category": "misc",
+    "url": "http://www.policja2009.fora.pl/search.php?search_author={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono tematów ani postów pasujących do Twoich kryteriów"
+  },
+  {
+    "name": "Poll Everywhere",
+    "category": "tech",
+    "url": "https://pollev.com/proxy/api/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "ResourceNotFound"
+  },
+  {
+    "name": "polygon",
+    "category": "gaming",
+    "url": "https://www.polygon.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not found"
+  },
+  {
+    "name": "popl",
+    "category": "business",
+    "url": "https://poplme.co/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Profile not found"
+  },
+  {
+    "name": "Pornhub",
+    "category": "NSFW",
+    "url": "https://www.pornhub.com/users/{username}",
+    "method": "message",
+    "errorMsg": "Page Not Found",
+    "isNSFW": true
+  },
+  {
+    "name": "Pornhub (Model)",
+    "category": "xx NSFW xx",
+    "url": "https://www.pornhub.com/model/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "class=\"topProfileHeader\""
+  },
+  {
+    "name": "Pornhub (Pornstar)",
+    "category": "xx NSFW xx",
+    "url": "https://www.pornhub.com/pornstar/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "class=\"topProfileHeader\""
+  },
+  {
+    "name": "Pornhub (User)",
+    "category": "xx NSFW xx",
+    "url": "https://www.pornhub.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page Not Found</title>"
+  },
+  {
+    "name": "Poshmark",
+    "category": "shopping",
+    "url": "https://poshmark.com/closet/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found - Poshmark"
+  },
+  {
+    "name": "postcrossing",
+    "category": "social",
+    "url": "https://www.postcrossing.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "- Postcrossing"
+  },
+  {
+    "name": "Poweredbygay.social (Mastodon Instance)",
+    "category": "social",
+    "url": "https://poweredbygay.social/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Pr0gramm",
+    "category": "social",
+    "url": "https://pr0gramm.com/api/profile/info?name={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"code\":404"
+  },
+  {
+    "name": "Pravda.me",
+    "category": "social",
+    "url": "https://pravda.me/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "Privacy Guides",
+    "category": "tech",
+    "url": "https://discuss.privacyguides.net/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found."
+  },
+  {
+    "name": "ProductHunt",
+    "category": "Productivity",
+    "url": "https://www.producthunt.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "PromoDJ",
+    "category": "music",
+    "url": "https://promodj.com/ajax/register.html?lang=en",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The address is free, it's great;)"
+  },
+  {
+    "name": "Pronouns.Page",
+    "category": "social",
+    "url": "https://pronouns.page/api/profile/get/{username}?version=2",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"profiles\": {}"
+  },
+  {
+    "name": "Pronouny",
+    "category": "social",
+    "url": "https://pronouny.xyz/api/users/profile/username/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "That user doesn't exist"
+  },
+  {
+    "name": "Prose",
+    "category": "blog",
+    "url": "https://prose.astral.camp/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Are you sure it was ever here?"
+  },
+  {
+    "name": "prv.pl",
+    "category": "tech",
+    "url": "https://www.prv.pl/osoba/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Użytkownik nie istnieje."
+  },
+  {
+    "name": "Public.com",
+    "category": "finance",
+    "url": "https://public.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 - Page Not Found</title>"
+  },
+  {
+    "name": "PyPI",
+    "category": "Developer",
+    "url": "https://pypi.org/user/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "QUEER PL",
+    "category": "social",
+    "url": "https://queer.pl/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Strona nie została znaleziona"
+  },
+  {
+    "name": "quitter.pl",
+    "category": "social",
+    "url": "https://quitter.pl/api/v1/accounts/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":"
+  },
+  {
+    "name": "Quizlet",
+    "category": "hobby",
+    "url": "https://quizlet.com/webapi/3.2/users/check-username?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":true"
+  },
+  {
+    "name": "Quora",
+    "category": "Social Media",
+    "url": "https://www.quora.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Raddle.me",
+    "category": "social",
+    "url": "https://raddle.me/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "Rant.li",
+    "category": "blog",
+    "url": "https://rant.li/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Are you sure it was ever here?"
+  },
+  {
+    "name": "Rarible",
+    "category": "Financial",
+    "url": "https://rarible.com/{username}",
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Redbubble",
+    "category": "Marketplace",
+    "url": "https://www.redbubble.com/people/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Reddit",
+    "category": "Social Media",
+    "url": "https://www.reddit.com/user/{username}.json",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "RedGIFs",
+    "category": "xx NSFW xx",
+    "url": "https://api.redgifs.com/v1/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":404"
+  },
+  {
+    "name": "RedTube",
+    "category": "NSFW",
+    "url": "https://www.redtube.com/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "isNSFW": true
+  },
+  {
+    "name": "Refsheet",
+    "category": "hobby",
+    "url": "https://refsheet.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "That's unfortunate. Where did it go?"
+  },
+  {
+    "name": "Replit",
+    "category": "Developer",
+    "url": "https://replit.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Researchgate",
+    "category": "hobby",
+    "url": "https://www.researchgate.net/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "20+ million researchers on ResearchGate"
+  },
+  {
+    "name": "resumes_actorsaccess",
+    "category": "social",
+    "url": "https://resumes.actorsaccess.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "File was not found on this SERVER"
+  },
+  {
+    "name": "RetroAchievements",
+    "category": "Gaming / Streaming",
+    "url": "https://retroachievements.org/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Revolut",
+    "category": "finance",
+    "url": "https://revolut.me/api/web-profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"User not found\""
+  },
+  {
+    "name": "risk.ru",
+    "category": "hobby",
+    "url": "https://risk.ru/people/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 — Risk.ru"
+  },
+  {
+    "name": "Roblox",
+    "category": "Gaming / Streaming",
+    "url": "https://www.roblox.com/user.aspx?username={username}",
+    "method": "redirect",
+    "errorUrl": "/request-error"
+  },
+  {
+    "name": "RoutineHub",
+    "category": "social",
+    "url": "https://routinehub.co/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "A community for Apple Shortcuts</title>"
+  },
+  {
+    "name": "rsi",
+    "category": "gaming",
+    "url": "https://robertsspaceindustries.com/citizens/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 NAVIGATING UNCHARTED TERRITORY"
+  },
+  {
+    "name": "ru_123rf",
+    "category": "hobby",
+    "url": "https://ru.123rf.com/profile_{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Фотобанк 123RF - Стоковые Фото, Векторы, Видеоролики. Подписка на Фото. Royalty Free контент<"
+  },
+  {
+    "name": "RubyGems.org",
+    "category": "coding",
+    "url": "https://rubygems.org/api/v1/profiles/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"Not Found\""
+  },
+  {
+    "name": "Rumble",
+    "category": "Social Media",
+    "url": "https://rumble.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "RumbleChannel",
+    "category": "political",
+    "url": "https://rumble.com/c/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 error, this page does not exist"
+  },
+  {
+    "name": "RumbleUser",
+    "category": "political",
+    "url": "https://rumble.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 error, this page does not exist"
+  },
+  {
+    "name": "RuneScape",
+    "category": "hobby",
+    "url": "https://apps.runescape.com/runemetrics/profile/profile?user={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"NO_PROFILE\""
+  },
+  {
+    "name": "RuTracker.org",
+    "category": "misc",
+    "url": "https://rutracker.org/forum/profile.php?mode=viewprofile&u={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Пользователь не найден"
+  },
+  {
+    "name": "ruVoIP.net",
+    "category": "tech",
+    "url": "https://ruvoip.net/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Error 404 - Not Found"
+  },
+  {
+    "name": "Salon24",
+    "category": "blog",
+    "url": "https://www.salon24.pl/u/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Salon24 - Blogi, wiadomości, opinie i komentarze"
+  },
+  {
+    "name": "Scammer.info",
+    "category": "misc",
+    "url": "https://scammer.info/u/{username}.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The requested URL or resource could not be found"
+  },
+  {
+    "name": "Scored",
+    "category": "social",
+    "url": "https://scored.co/api/v2/user/about.json?user={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"status\":false"
+  },
+  {
+    "name": "ScoutWiki",
+    "category": "social",
+    "url": "https://en.scoutwiki.org/User:{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "is not registered"
+  },
+  {
+    "name": "Scratch",
+    "category": "coding",
+    "url": "https://api.scratch.mit.edu/accounts/checkusername/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"msg\":\"valid username\""
+  },
+  {
+    "name": "Scribd (Document)",
+    "category": "hobby",
+    "url": "https://www.scribd.com/search/query?query={username}&verbatim=true",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"compilationId\":null"
+  },
+  {
+    "name": "Searchengines",
+    "category": "hobby",
+    "url": "https://searchengines.guru/ru/search?keyword=&author={username}&sortByDate=true",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"nothing-found\""
+  },
+  {
+    "name": "secure_donation",
+    "category": "finance",
+    "url": "https://secure.donationpay.org/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>secure.donationpay.org</title>"
+  },
+  {
+    "name": "sedisp@ce",
+    "category": "social",
+    "url": "https://sedispace.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "- Page non trouvée!"
+  },
+  {
+    "name": "Seneporno",
+    "category": "xx NSFW xx",
+    "url": "https://seneporno.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Unexpected error! Please contact us and tell us more how you got to this page!"
+  },
+  {
+    "name": "sentimente",
+    "category": "dating",
+    "url": "https://www.sentimente.com/amp/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "HTTP Error code: 404. Resource not found"
+  },
+  {
+    "name": "SEOClerks",
+    "category": "social",
+    "url": "https://www.seoclerks.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>SEO Marketplace"
+  },
+  {
+    "name": "setlist.fm",
+    "category": "music",
+    "url": "https://www.setlist.fm/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, the page you requested doesn't exist"
+  },
+  {
+    "name": "SFD",
+    "category": "health",
+    "url": "https://www.sfd.pl/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Brak aktywnego profilu na forum"
+  },
+  {
+    "name": "Shesfreaky",
+    "category": "xx NSFW xx",
+    "url": "https://www.shesfreaky.com/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "s Profile - ShesFreaky</title>"
+  },
+  {
+    "name": "Shopify",
+    "category": "Marketplace",
+    "url": "https://{username}.myshopify.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Showup.tv",
+    "category": "xx NSFW xx",
+    "url": "https://showup.tv/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Darmowe"
+  },
+  {
+    "name": "shutterstock",
+    "category": "images",
+    "url": "https://www.shutterstock.com/g/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Well, this is unexpected..."
+  },
+  {
+    "name": "Signal",
+    "category": "Messaging",
+    "url": "https://community.signalusers.org/u/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "SimplePlanes",
+    "category": "gaming",
+    "url": "https://www.simpleplanes.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>SimplePlanes Airplanes</title>"
+  },
+  {
+    "name": "skeb",
+    "category": "art",
+    "url": "https://skeb.jp/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Skeb - Request Box"
+  },
+  {
+    "name": "SlackHoles",
+    "category": "xx NSFW xx",
+    "url": "https://slackholes.com/actor/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "It looks like nothing was found at this location"
+  },
+  {
+    "name": "slant",
+    "category": "shopping",
+    "url": "https://www.slant.co/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 - Page Not Found - Slant"
+  },
+  {
+    "name": "slides",
+    "category": "social",
+    "url": "https://slides.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "You may have mistyped the address"
+  },
+  {
+    "name": "Slideshare",
+    "category": "Productivity",
+    "url": "https://www.slideshare.net/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "SmashRun",
+    "category": "health",
+    "url": "https://smashrun.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "no Smashrunner with the username"
+  },
+  {
+    "name": "smelsy",
+    "category": "misc",
+    "url": "https://www.smelsy.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Server Error"
+  },
+  {
+    "name": "SmugMug",
+    "category": "images",
+    "url": "https://{username}.smugmug.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "schema.org/Thing"
+  },
+  {
+    "name": "smule",
+    "category": "music",
+    "url": "https://www.smule.com/api/profile/?handle={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "code\": 65"
+  },
+  {
+    "name": "Snapchat",
+    "category": "Social Media",
+    "url": "https://www.snapchat.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Snipfeed",
+    "category": "misc",
+    "url": "https://snipfeed.co/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops, you hit a dead end!"
+  },
+  {
+    "name": "soc.citizen4.eu",
+    "category": "social",
+    "url": "https://soc.citizen4.eu/profile/{username}/profile",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie znaleziono"
+  },
+  {
+    "name": "social_msdn",
+    "category": "social",
+    "url": "https://social.msdn.microsoft.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The resource you are looking for has been removed, had its name changed, or is temporarily unavailable."
+  },
+  {
+    "name": "social.bund.de",
+    "category": "social",
+    "url": "https://social.bund.de/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>The page you are looking for isn&#39;t here."
+  },
+  {
+    "name": "sofurry",
+    "category": "art",
+    "url": "https://{username}.sofurry.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "SoFurry - Error | SoFurry"
+  },
+  {
+    "name": "solo.to",
+    "category": "social",
+    "url": "https://solo.to/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The page you're looking for isn't here."
+  },
+  {
+    "name": "SoundCloud",
+    "category": "Media",
+    "url": "https://soundcloud.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Soup",
+    "category": "blog",
+    "url": "https://www.soup.io/author/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Soup.io - News, Sports, Entertainment, TV, Tech, Gaming"
+  },
+  {
+    "name": "SourceForge",
+    "category": "Outros",
+    "url": "https://sourceforge.net/u/{username}/profile/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Speaker Deck",
+    "category": "social",
+    "url": "https://speakerdeck.com/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "User Not Found - Speaker Deck"
+  },
+  {
+    "name": "speedrun",
+    "category": "gaming",
+    "url": "https://www.speedrun.com/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>speedrun.com"
+  },
+  {
+    "name": "Speedrun.com",
+    "category": "Gaming / Streaming",
+    "url": "https://www.speedrun.com/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "SpiceWorks",
+    "category": "tech",
+    "url": "https://community.spiceworks.com/people/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found"
+  },
+  {
+    "name": "SPOJ",
+    "category": "coding",
+    "url": "https://www.spoj.com/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<strong>Innopolis Open 2018</strong>"
+  },
+  {
+    "name": "sporcle",
+    "category": "gaming",
+    "url": "https://www.sporcle.com/user/{username}/people/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This Sporcle user cannot be found."
+  },
+  {
+    "name": "Sports Tracker",
+    "category": "health",
+    "url": "https://api.sports-tracker.com/apiserver/v1/user/name/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"code\":\"404\""
+  },
+  {
+    "name": "Spotify",
+    "category": "Media",
+    "url": "https://open.spotify.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Spotify (Podcast)",
+    "category": "Podcast",
+    "url": "https://podcasters.spotify.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Stack Overflow",
+    "category": "Forum",
+    "url": "https://stackoverflow.com/users/?tab=accounts&SearchByName={username}",
+    "method": "message",
+    "errorMsg": "No users found"
+  },
+  {
+    "name": "StackOverflow",
+    "category": "coding",
+    "url": "https://api.stackexchange.com/2.3/users?order=desc&sort=name&inname={username}&site=stackoverflow",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"items\":[]"
+  },
+  {
+    "name": "StackShare",
+    "category": "tech",
+    "url": "https://stackshare.io/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, we couldn't find that page :("
+  },
+  {
+    "name": "Statuspage",
+    "category": "tech",
+    "url": "https://{username}.statuspage.io/api/v2/status.json",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<html><body>You are being <a href=\"https://www.statuspage.io\">redirected</a>.</body></html>"
+  },
+  {
+    "name": "Steam",
+    "category": "Gaming / Streaming",
+    "url": "https://steamcommunity.com/id/{username}",
+    "method": "message",
+    "errorMsg": "The specified profile could not be found"
+  },
+  {
+    "name": "SteamGifts",
+    "category": "gaming",
+    "url": "https://www.steamgifts.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "\"identifier\":"
+  },
+  {
+    "name": "Steemit",
+    "category": "social",
+    "url": "https://signup.steemit.com/api/check_username",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":true"
+  },
+  {
+    "name": "steller",
+    "category": "shopping",
+    "url": "https://steller.co/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title></title>"
+  },
+  {
+    "name": "StoryCorps",
+    "category": "blog",
+    "url": "https://archive.storycorps.org/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We're sorry, but the page"
+  },
+  {
+    "name": "Strava",
+    "category": "Outros",
+    "url": "https://www.strava.com/athletes/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "StreamElements",
+    "category": "finance",
+    "url": "https://api.streamelements.com/kappa/v2/channels/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "error"
+  },
+  {
+    "name": "StreamLabs",
+    "category": "finance",
+    "url": "https://streamlabs.com/api/v6/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Unauthorized</title>"
+  },
+  {
+    "name": "Stripchat",
+    "category": "xx NSFW xx",
+    "url": "https://stripchat.com/api/front/users/checkUsername?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "[]"
+  },
+  {
+    "name": "Subscribestar",
+    "category": "xx NSFW xx",
+    "url": "https://subscribestar.adult/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "WE ARE SORRY, THE PAGE YOU REQUESTED CANNOT BE FOUND"
+  },
+  {
+    "name": "Substack",
+    "category": "Social Media",
+    "url": "https://{username}.substack.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "sukebei.nyaa.si",
+    "category": "xx NSFW xx",
+    "url": "https://sukebei.nyaa.si/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found"
+  },
+  {
+    "name": "Suzuri",
+    "category": "business",
+    "url": "https://suzuri.jp/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Push Space-key"
+  },
+  {
+    "name": "szmer.info",
+    "category": "social",
+    "url": "https://szmer.info/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Code: Couldn't find that username or email."
+  },
+  {
+    "name": "tabletoptournament",
+    "category": "misc",
+    "url": "https://www.tabletoptournaments.net/eu/player/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "No player with the nickname"
+  },
+  {
+    "name": "Tagged",
+    "category": "social",
+    "url": "https://secure.tagged.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Tagged - The social network for meeting new people"
+  },
+  {
+    "name": "TamTam",
+    "category": "social",
+    "url": "https://tamtam.chat/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "ТамТам</title>"
+  },
+  {
+    "name": "Tanuki.pl",
+    "category": "hobby",
+    "url": "https://tanuki.pl/profil/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Nie ma takiego użytkownika"
+  },
+  {
+    "name": "TAPiTAG",
+    "category": "business",
+    "url": "https://account.tapitag.co/tapitag/api/v1/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The rf number is not valid"
+  },
+  {
+    "name": "Tappy",
+    "category": "business",
+    "url": "https://api.tappy.tech/api/profile/username/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Profile of username Not Found"
+  },
+  {
+    "name": "Taringa",
+    "category": "social",
+    "url": "https://www.taringa.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Colectiva en Taringa!</title>"
+  },
+  {
+    "name": "Taringa Archived Profile",
+    "category": "archived",
+    "url": "https://archive.org/wayback/available?url=https://www.taringa.net/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "Taringa!",
+    "category": "Outros",
+    "url": "https://www.taringa.net/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "taskrabbit",
+    "category": "business",
+    "url": "https://www.taskrabbit.com/profile/{username}/about",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "’s Profile"
+  },
+  {
+    "name": "Teamtreehouse",
+    "category": "coding",
+    "url": "https://teamtreehouse.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops, Something went missing"
+  },
+  {
+    "name": "TeePublic",
+    "category": "Marketplace",
+    "url": "https://www.teepublic.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Teespring",
+    "category": "business",
+    "url": "https://commerce.teespring.com/v1/stores?slug={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "{\"errors\":{\"store\":[\"not found\"]}}"
+  },
+  {
+    "name": "Teknik",
+    "category": "tech",
+    "url": "https://user.teknik.io/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "The user does not exist"
+  },
+  {
+    "name": "Telegram",
+    "category": "Messaging",
+    "url": "https://t.me/{username}",
+    "method": "message",
+    "errorMsg": "If you have <strong>Telegram</strong>, you can contact"
+  },
+  {
+    "name": "Telegraph",
+    "category": "Blog",
+    "url": "https://telegra.ph/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Teletype",
+    "category": "blog",
+    "url": "https://teletype.in/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error\""
+  },
+  {
+    "name": "Tellonym",
+    "category": "social",
+    "url": "https://api.tellonym.me/profiles/name/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"code\":\"NOT_FOUND\""
+  },
+  {
+    "name": "Tenor",
+    "category": "images",
+    "url": "https://tenor.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error-page container page\""
+  },
+  {
+    "name": "TETR.IO",
+    "category": "gaming",
+    "url": "https://ch.tetr.io/api/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "TF2 Backpack Examiner",
+    "category": "gaming",
+    "url": "http://www.tf2items.com/id/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "<title>TF2 Backpack -"
+  },
+  {
+    "name": "thegatewaypundit",
+    "category": "political",
+    "url": "https://www.thegatewaypundit.com/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not found, error 404"
+  },
+  {
+    "name": "theguardian",
+    "category": "news",
+    "url": "https://www.theguardian.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page Not Found | The Guardian</title>"
+  },
+  {
+    "name": "themeforest",
+    "category": "art",
+    "url": "https://themeforest.net/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page Not Found | ThemeForest"
+  },
+  {
+    "name": "Thetattooforum",
+    "category": "art",
+    "url": "https://www.thetattooforum.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We’re sorry"
+  },
+  {
+    "name": "Thingiverse",
+    "category": "Outros",
+    "url": "https://www.thingiverse.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "thoughts",
+    "category": "hobby",
+    "url": "https://thoughts.com/members/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found"
+  },
+  {
+    "name": "Threads",
+    "category": "Social Media",
+    "url": "https://www.threads.net/@{username}",
+    "method": "message",
+    "errorMsg": "Threads • Log in"
+  },
+  {
+    "name": "TikTok",
+    "category": "Social Media",
+    "url": "https://www.tiktok.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Tilde.zone (Mastodon Instance)",
+    "category": "social",
+    "url": "https://tilde.zone/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Tinder",
+    "category": "dating",
+    "url": "https://tinder.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Tinder | Dating, Make Friends &amp; Meet New People"
+  },
+  {
+    "name": "Tindie",
+    "category": "shopping",
+    "url": "https://www.tindie.com/accounts/check_username/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"valid\": true"
+  },
+  {
+    "name": "TipeeeStream",
+    "category": "finance",
+    "url": "https://www.tipeeestream.com/v3.0/pages/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"Not found\""
+  },
+  {
+    "name": "Tooting.ch (Mastodon Instance)",
+    "category": "social",
+    "url": "https://tooting.ch/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Topcoder",
+    "category": "coding",
+    "url": "https://api.topcoder.com/v5/members/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"Member with handle:"
+  },
+  {
+    "name": "toyhou.se",
+    "category": "hobby",
+    "url": "https://toyhou.se/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "We can't find that page!"
+  },
+  {
+    "name": "tradingview",
+    "category": "finance",
+    "url": "https://www.tradingview.com/u/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found — TradingView"
+  },
+  {
+    "name": "Trakt",
+    "category": "Media",
+    "url": "https://trakt.tv/users/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "TRAKTRAIN",
+    "category": "music",
+    "url": "https://traktrain.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"title-404\""
+  },
+  {
+    "name": "Trello",
+    "category": "Productivity",
+    "url": "https://trello.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "tripadvisor",
+    "category": "social",
+    "url": "https://www.tripadvisor.com/Profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This page is on vacation"
+  },
+  {
+    "name": "TruckersMP",
+    "category": "gaming",
+    "url": "https://truckersmp.com/user/search?search={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h4>Could not find any member using these credentials</h4>"
+  },
+  {
+    "name": "TruckersMP.Ru",
+    "category": "gaming",
+    "url": "https://truckersmp.ru/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"b-handler-error-404\""
+  },
+  {
+    "name": "Truth Social",
+    "category": "social",
+    "url": "https://truthsocial.com/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"Record not found\""
+  },
+  {
+    "name": "TryHackMe",
+    "category": "tech",
+    "url": "https://tryhackme.com/api/user/exist/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"success\":false"
+  },
+  {
+    "name": "Tryst",
+    "category": "xx NSFW xx",
+    "url": "https://tryst.link/escort/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found"
+  },
+  {
+    "name": "Tumblr",
+    "category": "Social Media",
+    "url": "https://{username}.tumblr.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "tunefind",
+    "category": "music",
+    "url": "https://www.tunefind.com/api-request/account/profile?userName={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"code\":\"not_found\""
+  },
+  {
+    "name": "Twitcasting",
+    "category": "social",
+    "url": "https://twitcasting.tv/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found"
+  },
+  {
+    "name": "Twitch",
+    "category": "Gaming / Streaming",
+    "url": "https://www.twitch.tv/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Twitter / X",
+    "category": "Social Media",
+    "url": "https://x.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "regexCheck": "^[a-zA-Z0-9_]{1,15}$"
+  },
+  {
+    "name": "Twitter archived profile",
+    "category": "archived",
+    "url": "http://archive.org/wayback/available?url=https://twitter.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "Twitter archived tweets",
+    "category": "archived",
+    "url": "http://archive.org/wayback/available?url=https://twitter.com/{username}/status/*",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"archived_snapshots\": {}"
+  },
+  {
+    "name": "twoplustwo",
+    "category": "hobby",
+    "url": "https://forumserver.twoplustwo.com/ajax.php?do=usersearch",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "userid="
+  },
+  {
+    "name": "twpro",
+    "category": "social",
+    "url": "https://twpro.jp/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "をご確認ください。"
+  },
+  {
+    "name": "Typeracer",
+    "category": "Outros",
+    "url": "https://data.typeracer.com/pit/profile?user={username}",
+    "method": "message",
+    "errorMsg": "Profile Not Found"
+  },
+  {
+    "name": "Ubisoft",
+    "category": "gaming",
+    "url": "https://discussions.ubisoft.com/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "You seem to have stumbled upon a page that does not exist."
+  },
+  {
+    "name": "Udemy",
+    "category": "tech",
+    "url": "https://www.udemy.com/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Online Courses - Learn Anything, On Your Schedule | Udemy</title>"
+  },
+  {
+    "name": "UEF CONNECT",
+    "category": "business",
+    "url": "https://uefconnect.uef.fi/en/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Page not found - UEFConnect</title>"
+  },
+  {
+    "name": "uid.me",
+    "category": "Social Media",
+    "url": "http://uid.me/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Ultimate Guitar",
+    "category": "hobby",
+    "url": "https://www.ultimate-guitar.com/u/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops! We couldn't find that page."
+  },
+  {
+    "name": "Ultimate-Guitar",
+    "category": "Outros",
+    "url": "https://ultimate-guitar.com/u/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Ultras Diary",
+    "category": "hobby",
+    "url": "http://ultrasdiary.pl/u/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Ile masz wyjazdów?"
+  },
+  {
+    "name": "Unlisted Videos",
+    "category": "archived",
+    "url": "https://unlistedvideos.com/search.php?user={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "content=\"\"/>"
+  },
+  {
+    "name": "Unsplash",
+    "category": "Media",
+    "url": "https://unsplash.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Untappd",
+    "category": "Outros",
+    "url": "https://untappd.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "USA Life",
+    "category": "social",
+    "url": "https://usa.life/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, page not found"
+  },
+  {
+    "name": "utip.io",
+    "category": "finance",
+    "url": "https://utip.io/creator/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not a valid web service key"
+  },
+  {
+    "name": "uwu.ai",
+    "category": "social",
+    "url": "https://{username}.uwu.ai/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, the requested page could not be found."
+  },
+  {
+    "name": "Uwumarket",
+    "category": "business",
+    "url": "https://uwumarket.us/collections/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "Valorant Forums",
+    "category": "Gaming / Streaming",
+    "url": "https://valorantforums.com/u/{username}",
+    "method": "message",
+    "errorMsg": "The page you requested could not be found."
+  },
+  {
+    "name": "vapenews",
+    "category": "hobby",
+    "url": "https://vapenews.ru/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404</title>"
+  },
+  {
+    "name": "Velog",
+    "category": "Blog",
+    "url": "https://velog.io/@{username}/posts",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Venmo",
+    "category": "Financial",
+    "url": "https://account.venmo.com/u/{username}",
+    "method": "message",
+    "errorMsg": "Venmo | Page Not Found",
+    "headers": {
+      "Host": "account.venmo.com"
+    }
+  },
+  {
+    "name": "Vero",
+    "category": "Social Media",
+    "url": "https://vero.co/{username}",
+    "method": "message",
+    "errorMsg": "Not Found"
+  },
+  {
+    "name": "vibilagare",
+    "category": "misc",
+    "url": "https://www.vibilagare.se/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sidan hittades inte |"
+  },
+  {
+    "name": "VIEWBUG",
+    "category": "hobby",
+    "url": "https://www.viewbug.com/member/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "id=\"missing-this\""
+  },
+  {
+    "name": "Vimeo",
+    "category": "Media",
+    "url": "https://vimeo.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Vine",
+    "category": "video",
+    "url": "https://vine.co/api/users/profiles/vanity/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "That record does not exist"
+  },
+  {
+    "name": "VIP-blog",
+    "category": "blog",
+    "url": "http://{username}.vip-blog.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Blog inexistant"
+  },
+  {
+    "name": "VirusTotal",
+    "category": "Security",
+    "url": "https://www.virustotal.com/gui/user/{username}",
+    "urlProbe": "https://www.virustotal.com/ui/users/{username}/avatar",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "visnesscard",
+    "category": "business",
+    "url": "https://my.visnesscard.com/Home/GetCard/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "card_id\": 0"
+  },
+  {
+    "name": "Vivino",
+    "category": "video",
+    "url": "https://www.vivino.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Page not found"
+  },
+  {
+    "name": "VK",
+    "category": "Social Media",
+    "url": "https://vk.com/{username}",
+    "method": "redirect",
+    "errorUrl": "https://vk.com/"
+  },
+  {
+    "name": "Vkl.world (Mastodon Instance)",
+    "category": "social",
+    "url": "https://vkl.world/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "VLR.gg",
+    "category": "Gaming / Streaming",
+    "url": "https://www.vlr.gg/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Vmst.io (Mastodon Instance)",
+    "category": "social",
+    "url": "https://vmst.io/api/v1/accounts/lookup?acct={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Record not found"
+  },
+  {
+    "name": "Voice123",
+    "category": "hobby",
+    "url": "https://voice123.com/api/providers/search/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "[]"
+  },
+  {
+    "name": "Voices.com",
+    "category": "business",
+    "url": "https://www.voices.com/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Try going back to the previous page or see below for more options"
+  },
+  {
+    "name": "VSCO",
+    "category": "Social Media",
+    "url": "https://vsco.co/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "W3Schools",
+    "category": "tech",
+    "url": "https://pathfinder-api.kai.w3spaces.com/public-profile-api/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"message\":\"Profile does not exists or not visible\""
+  },
+  {
+    "name": "Wago.io",
+    "category": "Gaming / Streaming",
+    "url": "https://addons.wago.io/user/{username}",
+    "method": "status_code",
+    "errorCode": 404
+  },
+  {
+    "name": "Wakatime",
+    "category": "Developer",
+    "url": "https://wakatime.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Warmerise",
+    "category": "gaming",
+    "url": "https://warmerise.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<h2>Page Not Found"
+  },
+  {
+    "name": "Warrior Forum",
+    "category": "Forum",
+    "url": "https://www.warriorforum.com/members/{username}.html",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "warriorforum",
+    "category": "hobby",
+    "url": "https://www.warriorforum.com/members/{username}.html",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Oops | Warrior Forum -"
+  },
+  {
+    "name": "watchmemore.com",
+    "category": "xx NSFW xx",
+    "url": "https://api.watchmemore.com/api4/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "notExists"
+  },
+  {
+    "name": "Watchmyfeed",
+    "category": "xx NSFW xx",
+    "url": "https://watchmyfeed.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "SEND ME A TIP"
+  },
+  {
+    "name": "Wattpad",
+    "category": "Social Media",
+    "url": "https://www.wattpad.com/user/{username}",
+    "urlProbe": "https://www.wattpad.com/api/v3/users/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "waytohey",
+    "category": "social",
+    "url": "https://waytohey.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Unfortunately, this page doesn&#039;t exist."
+  },
+  {
+    "name": "Weasyl",
+    "category": "images",
+    "url": "https://www.weasyl.com/~{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This user doesn't seem to be in our database."
+  },
+  {
+    "name": "Weblancer",
+    "category": "social",
+    "url": "https://www.weblancer.net/users/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"page\":\"/404\""
+  },
+  {
+    "name": "Weblate",
+    "category": "Outros",
+    "url": "https://hosted.weblate.org/user/{username}/",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "regexCheck": "^[a-zA-Z0-9@._-]{1,150}$"
+  },
+  {
+    "name": "WebNode",
+    "category": "Outros",
+    "url": "https://{username}.webnode.cz/",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Weebly",
+    "category": "Blog",
+    "url": "https://{username}.weebly.com/",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "regexCheck": "^[a-zA-Z0-9-]{1,63}$"
+  },
+  {
+    "name": "wego",
+    "category": "political",
+    "url": "https://wego.social/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Sorry, page not found!"
+  },
+  {
+    "name": "weheartit",
+    "category": "social",
+    "url": "https://weheartit.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": " (404)</title>"
+  },
+  {
+    "name": "Weibo",
+    "category": "Outros",
+    "url": "https://weibo.com/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "WeTransfer",
+    "category": "misc",
+    "url": "https://{username}.wetransfer.com",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "workspaceName"
+  },
+  {
+    "name": "WICG Forum",
+    "category": "Forum",
+    "url": "https://discourse.wicg.io/u/{username}/summary",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "regexCheck": "^(?![.-])[a-zA-Z0-9_.-]{3,20}$"
+  },
+  {
+    "name": "Wikidot",
+    "category": "Forum",
+    "url": "http://www.wikidot.com/user:info/{username}",
+    "method": "message",
+    "errorMsg": "User does not exist."
+  },
+  {
+    "name": "Wikimapia",
+    "category": "social",
+    "url": "https://wikimapia.org/user/register/?check=username&value={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"ok\":true"
+  },
+  {
+    "name": "Wikipedia",
+    "category": "Forum",
+    "url": "https://en.wikipedia.org/wiki/Special:CentralAuth/{username}?uselang=qqx",
+    "method": "message",
+    "errorMsg": "centralauth-admin-nonexistent:"
+  },
+  {
+    "name": "Wimkin-PublicProfile",
+    "category": "political",
+    "url": "https://wimkin.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": " The page you are looking for cannot be found."
+  },
+  {
+    "name": "Windy",
+    "category": "Outros",
+    "url": "https://community.windy.com/user/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Wire",
+    "category": "Messaging",
+    "url": "https://wire.com/en/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Wireclub",
+    "category": "social",
+    "url": "https://www.wireclub.com/users/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "People - Wireclub"
+  },
+  {
+    "name": "Wishlistr",
+    "category": "shopping",
+    "url": "https://www.wishlistr.com/sign-up/?rs=checkUserName&rsargs[]={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "+:var res = parseInt(0);"
+  },
+  {
+    "name": "Wix",
+    "category": "Blog",
+    "url": "https://{username}.wix.com",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Wolfram Community",
+    "category": "Outros",
+    "url": "https://community.wolfram.com/web/{username}/home",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Wordnik",
+    "category": "Outros",
+    "url": "https://www.wordnik.com/users/{username}",
+    "method": "message",
+    "errorMsg": "Page Not Found",
+    "regexCheck": "^[a-zA-Z0-9_.+-]{1,40}$"
+  },
+  {
+    "name": "WordPress",
+    "category": "Blog",
+    "url": "https://{username}.wordpress.com/",
+    "method": "redirect",
+    "errorUrl": "wordpress.com/typo/?subdomain=",
+    "regexCheck": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+  },
+  {
+    "name": "WordPress.com (Deleted)",
+    "category": "blog",
+    "url": "https://public-api.wordpress.com/rest/v1.1/sites/{username}.wordpress.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"unknown_blog\""
+  },
+  {
+    "name": "WordPress.com (Private)",
+    "category": "blog",
+    "url": "https://public-api.wordpress.com/rest/v1.1/sites/{username}.wordpress.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"unknown_blog\""
+  },
+  {
+    "name": "WordPress.com (Public)",
+    "category": "blog",
+    "url": "https://public-api.wordpress.com/rest/v1.1/sites/{username}.wordpress.com",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"error\":\"unknown_blog\""
+  },
+  {
+    "name": "WordPress.org",
+    "category": "Blog",
+    "url": "https://profiles.wordpress.org/{username}/",
+    "method": "redirect",
+    "errorUrl": "https://wordpress.org"
+  },
+  {
+    "name": "WordPress.org (Forums)",
+    "category": "blog",
+    "url": "https://login.wordpress.org/wp-json/wporg/v1/username-available/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"available\":true"
+  },
+  {
+    "name": "WordPress.org (Profiles)",
+    "category": "blog",
+    "url": "https://login.wordpress.org/wp-json/wporg/v1/username-available/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"available\":true"
+  },
+  {
+    "name": "Wowhead",
+    "category": "Gaming / Streaming",
+    "url": "https://wowhead.com/user={username}",
+    "method": "status_code",
+    "errorCode": 404
+  },
+  {
+    "name": "write.as",
+    "category": "Blog",
+    "url": "https://write.as/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Wykop",
+    "category": "Outros",
+    "url": "https://www.wykop.pl/ludzie/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "X",
+    "category": "social",
+    "url": "https://api.x.com/i/users/username_available.json?username={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"reason\":\"available\""
+  },
+  {
+    "name": "Xakep.ru",
+    "category": "tech",
+    "url": "https://xakep.ru/author/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Страница не найдена"
+  },
+  {
+    "name": "Xanga",
+    "category": "blog",
+    "url": "http://{username}.xanga.com/",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "s Xanga Site | Just"
+  },
+  {
+    "name": "Xbox Gamertag",
+    "category": "Gaming / Streaming",
+    "url": "https://xboxgamertag.com/search/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "xHamster",
+    "category": "NSFW",
+    "url": "https://xhamster.com/users/{username}",
+    "urlProbe": "https://xhamster.com/users/{username}?old_browser=true",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "isNSFW": true
+  },
+  {
+    "name": "Xing",
+    "category": "social",
+    "url": "https://www.xing.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "404 Not Found | XING"
+  },
+  {
+    "name": "XNXX",
+    "category": "xx NSFW xx",
+    "url": "https://www.xnxx.com/mobile/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Bad request"
+  },
+  {
+    "name": "XTube",
+    "category": "NSFW",
+    "url": "https://www.xtube.com/profile/{username}",
+    "method": "status_code",
+    "expectedStatus": 200,
+    "isNSFW": true
+  },
+  {
+    "name": "Xvideos",
+    "category": "NSFW",
+    "url": "https://xvideos.com/profiles/{username}",
+    "method": "message",
+    "errorMsg": "Sorry, this profile does not exist",
+    "isNSFW": true
+  },
+  {
+    "name": "Yahoo! JAPAN Auction",
+    "category": "shopping",
+    "url": "https://auctions.yahoo.co.jp/follow/list/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Yahoo! JAPAN IDが無効です。"
+  },
+  {
+    "name": "yapishu",
+    "category": "hobby",
+    "url": "https://yapishu.net/user/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "Not Found (#404)"
+  },
+  {
+    "name": "Yazawaj",
+    "category": "dating",
+    "url": "https://www.yazawaj.com/profile/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>nodata"
+  },
+  {
+    "name": "YesWeHack",
+    "category": "tech",
+    "url": "https://api.yeswehack.com/hunters/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"code\":404"
+  },
+  {
+    "name": "YouNow",
+    "category": "social",
+    "url": "https://api.younow.com/php/api/broadcast/info/user={username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"errorMsg\":\"No users found\""
+  },
+  {
+    "name": "youpic",
+    "category": "hobby",
+    "url": "https://youpic.com/photographer/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>YouPic — Not Found</title>"
+  },
+  {
+    "name": "YouTube",
+    "category": "Media",
+    "url": "https://www.youtube.com/@{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "YouTube Channel",
+    "category": "video",
+    "url": "https://www.youtube.com/c/{username}/about",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 Not Found"
+  },
+  {
+    "name": "YouTube User",
+    "category": "video",
+    "url": "https://www.youtube.com/user/{username}/about",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 Not Found"
+  },
+  {
+    "name": "YouTube User2",
+    "category": "video",
+    "url": "https://www.youtube.com/@{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>404 Not Found</title>"
+  },
+  {
+    "name": "Zbiornik",
+    "category": "xx NSFW xx",
+    "url": "https://mini.zbiornik.com/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "INFO"
+  },
+  {
+    "name": "Zenn",
+    "category": "coding",
+    "url": "https://zenn.dev/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<div class=\"ErrorContent_status__2Ykoq\">404</div>"
+  },
+  {
+    "name": "Zepeto",
+    "category": "social",
+    "url": "https://gw-napi.zepeto.io/profiles/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "errorCode\":"
+  },
+  {
+    "name": "Zhihu",
+    "category": "Outros",
+    "url": "https://www.zhihu.com/people/{username}",
+    "method": "status_code",
+    "expectedStatus": 200
+  },
+  {
+    "name": "Zillow",
+    "category": "shopping",
+    "url": "https://www.zillow.com/profile/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "expectedMsg": "- Real Estate Agent"
+  },
+  {
+    "name": "zmarsa.com",
+    "category": "xx NSFW xx",
+    "url": "https://zmarsa.com/uzytkownik/{username}",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>Error 404 - zMarsa.com<"
+  },
+  {
+    "name": "Znanija",
+    "category": "misc",
+    "url": "https://znanija.com/graphql/ru?operationName=NickAvailability&query=query%20NickAvailability%28%24nick%3AString%21%29%7BnickAvailability%28nick%3A%24nick%29%7BisAvailable%7D%7D&variables=%7B%22nick%22%3A%22{username}%22%7D",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "\"isAvailable\":true"
+  },
+  {
+    "name": "Zomato",
+    "category": "social",
+    "url": "https://www.zomato.com/{username}/reviews",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "This is a 404 page and we think it's fairly clear"
+  },
+  {
+    "name": "zoomitir",
+    "category": "tech",
+    "url": "https://www.zoomit.ir/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "<title>خطای ۴۰۴ - صفحه یافت نشد</title>"
+  },
+  {
+    "name": "Военное обозрение",
+    "category": "hobby",
+    "url": "https://topwar.ru/user/{username}/",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "class=\"error-container\""
+  },
+  {
+    "name": "Чатовка.net",
+    "category": "social",
+    "url": "https://chatovka.net/search?user_nick=+{username}&user_sex_m=on&user_sex_f=on",
+    "isNSFW": false,
+    "method": "message",
+    "errorMsg": "По Вашему запросу люди не найдены."
+  }
 ]

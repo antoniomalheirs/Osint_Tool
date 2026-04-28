@@ -167,6 +167,9 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
   if (metadataAnalysis.commonAvatars.length > 0) {
     recommendations.push('Realizar busca reversa de imagem no avatar principal para pivoting de identidade.');
   }
+  if (metadataAnalysis.inferredNames.length > 0) {
+    recommendations.push(`DEEP HUNT: Nome real detectado ("${metadataAnalysis.inferredNames[0]}"). Rode a ferramenta novamente com variações deste nome para achar contas desconectadas do username atual.`);
+  }
   if (highConfidenceOnly) {
     recommendations.push('Reexecutar scan com --verbose para validar bloqueios e aumentar cobertura de evidências.');
   }

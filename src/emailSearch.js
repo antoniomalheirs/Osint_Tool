@@ -7,6 +7,7 @@ import { md5, extractDomainFromEmail } from './utils.js';
 import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
 import { analyzeDomain } from './dnsIntel.js';
+import { validateEmailSmtp } from './smtpValidation.js';
 
 const log = getLogger('EMAIL_INTEL');
 
@@ -121,6 +122,66 @@ async function checkHIBP(email) {
 }
 
 /**
+ * Verifica reputação do e-mail no EmailRep.io
+ */
+async function checkEmailRep(email) {
+  const url = `https://emailrep.io/${encodeURIComponent(email)}`;
+  const network = getNetwork();
+  try {
+    const { data, response } = await network.getJSON(url);
+    if (response.status === 429) {
+      log.warn('EmailRep.io rate limited');
+      return normalizeEmailResult({ service: 'EmailRep.io', found: null, url: null, info: 'API Rate Limited', reason: 'RATE_LIMIT' });
+    }
+    
+    if (data && data.details) {
+      let info = `Reputação: ${data.reputation}`;
+      if (data.details.suspicious) info += ' | SUSPEITO';
+      if (data.details.credentials_leaked) info += ' | VAZAMENTO CREDENCIAIS';
+      if (data.details.data_breach) info += ' | ENVOLVIDO EM DATA BREACH';
+      if (data.details.disposable) info += ' | DESCARTÁVEL';
+
+      return normalizeEmailResult({
+        service: 'EmailRep.io',
+        found: true,
+        url: null,
+        info,
+        data,
+        reason: 'REPUTATION_INTEL'
+      });
+    }
+    return normalizeEmailResult({ service: 'EmailRep.io', found: null, url: null, info: 'Sem dados suficientes', reason: 'NO_DATA' });
+  } catch (error) {
+    log.debug('EmailRep.io check failed', { error: error.message });
+    return normalizeEmailResult({ service: 'EmailRep.io', found: false, url: null, info: null, error: error.message, reason: 'REQUEST_ERROR' });
+  }
+}
+
+/**
+ * Verifica se é descartável via Kickbox Open API
+ */
+async function checkKickbox(email) {
+  const url = `https://open.kickbox.com/v1/disposable/${encodeURIComponent(email)}`;
+  const network = getNetwork();
+  try {
+    const { data } = await network.getJSON(url);
+    if (data && typeof data.is_disposable === 'boolean') {
+      return normalizeEmailResult({
+        service: 'Kickbox Disposable Check',
+        found: data.is_disposable,
+        url: null,
+        info: data.is_disposable ? 'E-mail descartável confirmado' : 'Não é e-mail descartável conhecido',
+        reason: 'DISPOSABLE_CHECK'
+      });
+    }
+    return normalizeEmailResult({ service: 'Kickbox Disposable Check', found: null, url: null, info: null, reason: 'NO_DATA' });
+  } catch (error) {
+    log.debug('Kickbox check failed', { error: error.message });
+    return normalizeEmailResult({ service: 'Kickbox Disposable Check', found: false, url: null, info: null, error: error.message, reason: 'REQUEST_ERROR' });
+  }
+}
+
+/**
  * Verifica Holehe (Links úteis para OSINT manual)
  */
 async function generateDorks(email) {
@@ -180,10 +241,16 @@ export async function searchEmail(email, onResult = null) {
     () => checkGravatar(email),
     () => withRetry(() => checkGitHubEmail(email), 2, 1000),
     () => checkHIBP(email),
+    () => checkEmailRep(email),
+    () => checkKickbox(email),
   ];
 
   const rawResults = await Promise.all(checks.map(fn => fn()));
   const results = rawResults.map(normalizeEmailResult);
+
+  // 1.5 Validação SMTP Direta
+  const smtpResult = await validateEmailSmtp(email);
+  results.push(normalizeEmailResult(smtpResult));
 
   // 2. Inteligência de Domínio
   if (domain && !['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com'].includes(domain)) {

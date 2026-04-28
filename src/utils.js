@@ -99,6 +99,41 @@ export function isEmail(input) {
 }
 
 /**
+ * Valida se uma string é um Nome Completo (contém espaços e sem caracteres especiais de email/URL)
+ */
+export function isFullName(input) {
+  // Pelo menos duas palavras, separadas por espaço, não contém @ ou http
+  return /^[a-zA-ZÀ-ÿ]+(?:\s+[a-zA-ZÀ-ÿ]+)+$/.test(input.trim());
+}
+
+/**
+ * Gera variações inteligentes de username a partir de um Nome Completo
+ */
+export function generateNameVariations(fullName) {
+  const cleanName = fullName.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // remove acentos
+  const parts = cleanName.split(/\s+/);
+  if (parts.length < 2) return [cleanName];
+
+  const first = parts[0];
+  const last = parts[parts.length - 1];
+  const variations = new Set();
+
+  variations.add(first + last); // antoniomalheiros
+  variations.add(first + '.' + last); // antonio.malheiros
+  variations.add(first + '_' + last); // antonio_malheiros
+  variations.add(first[0] + last); // amalheiros
+  variations.add(first + last[0]); // antoniom
+
+  if (parts.length > 2) {
+    const middle = parts[1];
+    variations.add(first + middle + last); // antoniocardosomalheiros
+    variations.add(first + middle[0] + last); // antoniocmalheiros
+  }
+
+  return [...variations].filter(v => v && v.length >= 2);
+}
+
+/**
  * Valida se parece ser um domínio
  */
 export function isDomain(input) {
