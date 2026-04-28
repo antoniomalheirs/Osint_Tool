@@ -54,6 +54,7 @@ export function analyzeMetadata(results) {
   const names = {};
   const avatars = {};
   const descriptions = [];
+  const exposedEmails = {};
 
   for (const r of found) {
     const meta = r.metadata;
@@ -72,6 +73,13 @@ export function analyzeMetadata(results) {
     if (meta.description) {
       descriptions.push({ site: r.site, text: meta.description });
     }
+
+    if (Array.isArray(meta.exposedEmails)) {
+      for (const email of meta.exposedEmails) {
+        if (!email) continue;
+        exposedEmails[email] = (exposedEmails[email] || 0) + 1;
+      }
+    }
   }
 
   // Ordena por maior ocorrência
@@ -82,6 +90,7 @@ export function analyzeMetadata(results) {
     inferredNames: topNames,
     commonAvatars: topAvatars,
     bioSnippets: descriptions,
+    exposedEmails: Object.entries(exposedEmails).sort((a, b) => b[1] - a[1]).map(([email]) => email),
   };
 }
 
@@ -137,6 +146,50 @@ export function analyzeBehavioralSignals(username, results, metadataAnalysis) {
       severity: matchedKeywords.length >= 3 ? 'HIGH' : 'MEDIUM',
       message: `Termos sensíveis detectados em bios: ${matchedKeywords.slice(0, 5).join(', ')}`,
       evidence: `${matchedKeywords.length} termos detectados em metadados de perfil`,
+    });
+  }
+
+  const exposedEmails = metadataAnalysis.exposedEmails || [];
+  if (exposedEmails.length > 0) {
+    flags.push({
+      type: 'EXPOSED_EMAIL_PIVOT',
+      severity: 'HIGH',
+      message: `E-mails públicos detectados em perfis: ${exposedEmails.slice(0, 3).join(', ')}`,
+      evidence: `${exposedEmails.length} e-mail(s) extraído(s) para pivoting.`,
+    });
+    recommendations.push('Executar pivoting imediato com os e-mails expostos para confirmar reutilização de identidade.');
+  }
+
+  const dorkHits = found.filter(r =>
+    r.source === 'DuckDuckGo' ||
+    (typeof r.service === 'string' && r.service.toLowerCase().includes('dork'))
+  );
+  const leakHits = dorkHits.filter(r => {
+    const url = String(r.url || '').toLowerCase();
+    const domain = String(r.domain || '').toLowerCase();
+    return (
+      String(r.dorkType || '').toUpperCase() === 'LEAKS' ||
+      domain.includes('pastebin.com') ||
+      domain.includes('ghostbin.co') ||
+      url.includes('.sql') ||
+      url.includes('.csv') ||
+      url.includes('.txt')
+    );
+  });
+
+  if (leakHits.length > 0) {
+    flags.push({
+      type: 'WEB_LEAK_EXPOSURE',
+      severity: 'HIGH',
+      message: 'Achados de dorking indicam possível exposição em leaks/documentos indexados.',
+      evidence: `Total de hits críticos: ${leakHits.length}`,
+    });
+  } else if (dorkHits.length > 0) {
+    flags.push({
+      type: 'WEB_DORK_SURFACE',
+      severity: 'MEDIUM',
+      message: 'Presença confirmada em resultados de dorking web.',
+      evidence: `Total de hits de dorking: ${dorkHits.length}`,
     });
   }
 
@@ -206,6 +259,9 @@ function buildEvidenceTrail(behaviorIntel, metadataAnalysis) {
   }
   if (metadataAnalysis.inferredNames.length > 0) {
     evidence.push(`Nomes inferidos consistentes: ${metadataAnalysis.inferredNames.slice(0, 3).join(', ')}`);
+  }
+  if ((metadataAnalysis.exposedEmails || []).length > 0) {
+    evidence.push(`E-mails expostos para pivoting: ${metadataAnalysis.exposedEmails.slice(0, 3).join(', ')}`);
   }
   if (Object.keys(behaviorIntel.categoryCount || {}).length > 0) {
     evidence.push(`Diversidade de categorias: ${Object.keys(behaviorIntel.categoryCount).length}`);

@@ -8,6 +8,7 @@ import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
 import { analyzeDomain } from './dnsIntel.js';
 import { validateEmailSmtp } from './smtpValidation.js';
+import { executeAdvancedDorks } from './dorkEngine.js';
 
 const log = getLogger('EMAIL_INTEL');
 
@@ -91,12 +92,37 @@ async function checkGitHubEmail(email) {
     }
 
     if (data && data.total_count > 0) {
-      const users = data.items.map(u => ({ login: u.login, profile: u.html_url }));
+      const users = await Promise.all(data.items.slice(0, 5).map(async (u) => {
+        let details = null;
+        try {
+          const { data: profile } = await network.getJSON(u.url, {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+          });
+          details = {
+            name: profile?.name || null,
+            company: profile?.company || null,
+            location: profile?.location || null,
+          };
+        } catch {
+          details = null;
+        }
+        return {
+          login: u.login,
+          profile: u.html_url,
+          ...details,
+        };
+      }));
+      const enriched = users
+        .map((u) => {
+          const extras = [u.name, u.company].filter(Boolean).join(' | ');
+          return extras ? `${u.login} (${extras})` : u.login;
+        })
+        .join(', ');
       return {
         service: 'GitHub',
         found: true,
         url: users[0].profile,
-        info: `Contas encontradas: ${users.map(u => u.login).join(', ')}`,
+        info: `Contas encontradas: ${enriched}`,
         data: users,
         reason: 'MATCH_FOUND',
       };
@@ -185,33 +211,89 @@ async function checkKickbox(email) {
  * Verifica Holehe (Links úteis para OSINT manual)
  */
 async function generateDorks(email) {
-  const enc = encodeURIComponent(`"${email}"`);
-  return [
-    {
-      service: 'Google Dork (Exata)',
+  const scraped = await executeAdvancedDorks(email, 'email');
+  if (!scraped.length) {
+    return [normalizeEmailResult({
+      service: 'Web Dorking (DuckDuckGo)',
       found: null,
-      url: `https://www.google.com/search?q=${enc}`,
-      info: 'Busca pela string exata do e-mail',
-    },
-    {
-      service: 'Google Dork (Vazamentos)',
-      found: null,
-      url: `https://www.google.com/search?q=${enc}+ext:txt+OR+ext:csv+OR+ext:sql`,
-      info: 'Busca e-mail em arquivos de texto, CSV ou SQL expostos',
-    },
-    {
-      service: 'DuckDuckGo Search',
-      found: null,
-      url: `https://duckduckgo.com/?q=${enc}`,
-      info: 'Busca anônima no DuckDuckGo',
-    },
-    {
-      service: 'Skype Resolver (Web)',
-      found: null,
-      url: `https://web.skype.com/`,
-      info: 'Você pode pesquisar este e-mail no Skype Web para revelar o nome real',
+      url: `https://duckduckgo.com/?q=${encodeURIComponent(`"${email}"`)}`,
+      info: 'Nenhum resultado coletado automaticamente (possível bloqueio/rate-limit).',
+      reason: 'NO_SCRAPED_RESULTS',
+    })];
+  }
+
+  return scraped.slice(0, 20).map((result) => normalizeEmailResult({
+    service: `Web Dorking (${result.dorkType})`,
+    found: true,
+    url: result.url,
+    info: `Domínio: ${result.domain} | Confiança: ${result.confidence}`,
+    data: result,
+    confidence: result.confidence,
+    reason: 'DORK_RESULT',
+  }));
+}
+
+function derivePivotTermsFromEmail(email, intelResults) {
+  const pivots = [];
+  const seen = new Set();
+  const addPivot = (term, source, type = 'username') => {
+    const clean = String(term || '').trim();
+    if (clean.length < 3) return;
+    const key = `${type}:${clean.toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    pivots.push({ term: clean, source, type });
+  };
+
+  // 1) Deriva username a partir do local-part do e-mail
+  const localPart = String(email).split('@')[0] || '';
+  addPivot(localPart, 'email_local_part', 'username');
+  localPart
+    .split(/[._\-+]/g)
+    .filter(Boolean)
+    .forEach(token => addPivot(token, 'email_token', 'username'));
+
+  // 2) Deriva termos de perfil GitHub enriquecido
+  const github = intelResults.find(r => r.service === 'GitHub' && Array.isArray(r.data));
+  if (github) {
+    for (const user of github.data.slice(0, 5)) {
+      addPivot(user.login, 'github_login', 'username');
+      if (user.name) addPivot(user.name, 'github_name', 'name');
+      if (user.company) addPivot(user.company, 'github_company', 'company');
     }
-  ].map(normalizeEmailResult);
+  }
+
+  // 3) Deriva nome do Gravatar se disponível
+  const gravatar = intelResults.find(r => r.service === 'Gravatar' && r.found && r.info);
+  if (gravatar && typeof gravatar.info === 'string') {
+    const m = gravatar.info.match(/Nome:\s*([^|]+)/i);
+    if (m && m[1]) {
+      addPivot(m[1], 'gravatar_name', 'name');
+    }
+  }
+
+  return pivots.slice(0, 4);
+}
+
+async function runAutomaticPivoting(pivotTerms) {
+  if (!pivotTerms.length) return [];
+  const aggregated = [];
+
+  for (const pivot of pivotTerms) {
+    const pivotResults = await executeAdvancedDorks(pivot.term, pivot.type);
+    if (!pivotResults.length) continue;
+    aggregated.push(...pivotResults.slice(0, 8).map(result => normalizeEmailResult({
+      service: `Auto Pivot (${pivot.type.toUpperCase()})`,
+      found: true,
+      url: result.url,
+      info: `Pivot: "${pivot.term}" (${pivot.source}) | Domínio: ${result.domain} | Confiança: ${result.confidence}`,
+      data: { ...result, pivotSource: pivot.source, pivotTerm: pivot.term },
+      confidence: result.confidence,
+      reason: 'AUTO_PIVOT_DORK_RESULT',
+    })));
+  }
+
+  return aggregated;
 }
 
 async function withRetry(fn, retries = 2, delayMs = 800) {
@@ -280,9 +362,27 @@ export async function searchEmail(email, onResult = null) {
     }));
   }
 
-  // 3. Dorks
+  // 3. Dorks diretas no e-mail
   const dorks = await generateDorks(email);
-  const allResults = [...results, ...dorks];
+
+  // 4. Pivoting automático: termos derivados de username/nome/empresa
+  const pivotTerms = derivePivotTermsFromEmail(email, results);
+  const autoPivotResults = await runAutomaticPivoting(pivotTerms);
+  if (pivotTerms.length > 0) {
+    results.push(normalizeEmailResult({
+      service: 'Automatic Pivoting',
+      found: autoPivotResults.length > 0,
+      url: null,
+      info: autoPivotResults.length > 0
+        ? `Pivoting automático executado com ${pivotTerms.length} termo(s).`
+        : `Pivoting automático sugerido com ${pivotTerms.length} termo(s), mas sem novos hits.`,
+      data: pivotTerms,
+      reason: autoPivotResults.length > 0 ? 'AUTO_PIVOT_EXECUTED' : 'AUTO_PIVOT_NO_HITS',
+      confidence: autoPivotResults.length > 0 ? 'HIGH' : 'MEDIUM',
+    }));
+  }
+
+  const allResults = [...results, ...dorks, ...autoPivotResults];
 
   if (onResult) {
     for (const r of allResults) {

@@ -79,6 +79,47 @@ function extractMetadata(body, url) {
   const ogTypeMatch = body.match(/<meta[^>]*property=["']og:type["'][^>]*content=["']([^"']+)["']/i);
   if (ogTypeMatch) metadata.ogType = ogTypeMatch[1];
 
+  // Extrai possíveis e-mails públicos em bio/descrição/texto (pivoting username -> email)
+  const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
+  const foundEmails = body.match(emailRegex) || [];
+  if (foundEmails.length > 0) {
+    metadata.exposedEmails = [...new Set(foundEmails.map(e => e.toLowerCase()))].slice(0, 5);
+  }
+
+  // Extrai JSON-LD (SEO structured data)
+  const ldJsonRegex = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/ig;
+  let ldMatch;
+  while ((ldMatch = ldJsonRegex.exec(body)) !== null) {
+    const raw = (ldMatch[1] || '').trim();
+    if (!raw) continue;
+    try {
+      const parsed = JSON.parse(raw);
+      const nodes = Array.isArray(parsed)
+        ? parsed
+        : Array.isArray(parsed['@graph'])
+          ? parsed['@graph']
+          : [parsed];
+
+      for (const node of nodes) {
+        if (!node || typeof node !== 'object') continue;
+        const type = String(node['@type'] || '').toLowerCase();
+        if (!metadata.displayName && (type.includes('person') || type.includes('profilepage')) && node.name) {
+          metadata.displayName = String(node.name).trim();
+        }
+        if (!metadata.description && node.description) {
+          metadata.description = String(node.description).trim();
+        }
+        if (!metadata.avatar && (node.image || node.logo)) {
+          metadata.avatar = typeof node.image === 'string'
+            ? node.image
+            : (typeof node.logo === 'string' ? node.logo : null);
+        }
+      }
+    } catch {
+      // ignora JSON-LD inválido
+    }
+  }
+
   return Object.keys(metadata).length > 0 ? metadata : null;
 }
 

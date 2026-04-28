@@ -1,22 +1,77 @@
 /**
  * OSINT Hunter v3.0 — Dynamic Dork Engine (Search Engine Scraping)
- * Vasculha a internet livre (via DuckDuckGo) por qualquer menção ao username alvo.
+ * Vasculha a internet livre (via DuckDuckGo) por menções a usernames, e-mails e termos livres.
  */
 
 import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
-import { extractDomainFromEmail } from './utils.js'; // Reaproveitando lógica de domínio
 
 const log = getLogger('DORK_ENGINE');
 
-export async function searchDorks(username) {
-  log.info(`Iniciando Search Engine Scraping (Dorking) para: "${username}"`);
+const DOMAIN_RELEVANCE = {
+  'github.com': 3,
+  'pastebin.com': 3,
+  'ghostbin.co': 3,
+  'gitlab.com': 2,
+  'bitbucket.org': 2,
+  'archive.org': 2,
+  'docs.google.com': 2,
+};
+
+function unwrapDuckDuckGoLink(rawHref) {
+  if (!rawHref) return null;
+  if (rawHref.startsWith('//duckduckgo.com/l/?')) {
+    try {
+      const wrapped = new URL(`https:${rawHref}`);
+      const uddg = wrapped.searchParams.get('uddg');
+      return uddg ? decodeURIComponent(uddg) : null;
+    } catch {
+      return null;
+    }
+  }
+  if (rawHref.startsWith('/l/?')) {
+    try {
+      const wrapped = new URL(`https://duckduckgo.com${rawHref}`);
+      const uddg = wrapped.searchParams.get('uddg');
+      return uddg ? decodeURIComponent(uddg) : null;
+    } catch {
+      return null;
+    }
+  }
+  if (rawHref.startsWith('http://') || rawHref.startsWith('https://')) {
+    return rawHref;
+  }
+  return null;
+}
+
+function sanitizeLink(url) {
+  try {
+    const parsed = new URL(url);
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'ref', 'ref_src'].forEach(p => parsed.searchParams.delete(p));
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function classifyRelevance(domain, term, url) {
+  const lowerDomain = (domain || '').toLowerCase();
+  const lowerTerm = (term || '').toLowerCase();
+  const lowerUrl = (url || '').toLowerCase();
+  const score = DOMAIN_RELEVANCE[lowerDomain] || 1;
+  const hasDirectTerm = lowerTerm && lowerUrl.includes(lowerTerm);
+
+  if (score >= 3 || hasDirectTerm) return 'HIGH';
+  if (score === 2) return 'MEDIUM';
+  return 'LOW';
+}
+
+async function executeDuckDuckGoQuery(query, term, dorkType) {
   const network = getNetwork();
-  const query = encodeURIComponent(`"${username}"`);
-  const url = `https://html.duckduckgo.com/html/?q=${query}`;
+  const encodedQuery = encodeURIComponent(query);
+  const url = `https://html.duckduckgo.com/html/?q=${encodedQuery}`;
 
   try {
-    // Faremos o request tentando simular um navegador comum o máximo possível
     const response = await network.get(url, {
       headers: {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -32,69 +87,78 @@ export async function searchDorks(username) {
 
     const html = await response.text();
 
-    // DuckDuckGo HTML Lite usa class="result__url"
-    // <a class="result__url" href="//duckduckgo.com/l/?uddg=https://example.com/malheirosan">
-    const urlRegex = /<a[^>]+class="result__url"[^>]+href="([^"]+)"/ig;
+    const urlRegex = /<a[^>]+class="(?:result__a|result__url)"[^>]+href="([^"]+)"/ig;
     let match;
-    const rawLinks = [];
+    const links = [];
 
     while ((match = urlRegex.exec(html)) !== null) {
-      let extractedUrl = match[1];
-      
-      // DuckDuckGo encapsula o link de destino no parâmetro `uddg`
-      if (extractedUrl.includes('uddg=')) {
-        try {
-          const urlObj = new URL('https:' + extractedUrl);
-          const actualLink = urlObj.searchParams.get('uddg');
-          if (actualLink) {
-            rawLinks.push(decodeURIComponent(actualLink));
-          }
-        } catch {
-          // Ignora falhas de parsing
-        }
-      } else {
-        // Fallback caso não esteja com o wrapper
-        rawLinks.push(extractedUrl);
-      }
+      const unwrapped = unwrapDuckDuckGoLink(match[1]);
+      if (!unwrapped) continue;
+      const clean = sanitizeLink(unwrapped);
+      if (!clean) continue;
+      links.push(clean);
     }
 
-    // Filtra e limpa os links
-    const uniqueLinks = [...new Set(rawLinks)];
-    const validProfiles = [];
+    const uniqueLinks = [...new Set(links)];
+    return uniqueLinks.map((link) => {
+      let domain = 'unknown';
+      try {
+        domain = new URL(link).hostname.replace('www.', '');
+      } catch { /* ignore */ }
 
-    for (const link of uniqueLinks) {
-        // Limpa parâmetros inúteis na URL se existirem para rastreamento
-        let cleanLink = link.split('?')[0];
-
-        // Vamos extrair o domínio para facilitar a leitura
-        let domain = 'Unknown';
-        try {
-            domain = new URL(cleanLink).hostname.replace('www.', '');
-        } catch { }
-
-        // Se o username estiver na URL exata ou o link contiver menções fortes
-        if (cleanLink.toLowerCase().includes(username.toLowerCase())) {
-            validProfiles.push({
-                domain,
-                url: link, // salva o link original
-                source: 'DuckDuckGo',
-                confidence: 'HIGH',
-            });
-        } else {
-             validProfiles.push({
-                domain,
-                url: link,
-                source: 'DuckDuckGo',
-                confidence: 'MEDIUM', // Achou a string dentro do conteúdo da página, mas não na URL
-            });
-        }
-    }
-
-    log.info(`Dork Engine encontrou ${validProfiles.length} resultados dinâmicos no DuckDuckGo.`);
-    return validProfiles;
+      return {
+        domain,
+        url: link,
+        source: 'DuckDuckGo',
+        query,
+        dorkType,
+        confidence: classifyRelevance(domain, term, link),
+      };
+    });
 
   } catch (error) {
     log.error(`Falha no Dork Engine: ${error.message}`);
     return [];
   }
+}
+
+export async function executeAdvancedDorks(term, type = 'username') {
+  if (!term || typeof term !== 'string') return [];
+  const safeTerm = term.trim();
+  if (!safeTerm) return [];
+
+  log.info(`Executando dorks avançadas para termo "${safeTerm}" (tipo: ${type})`);
+
+  const wrapped = `"${safeTerm}"`;
+  const dorks = [
+    { name: 'EXACT', query: wrapped },
+    { name: 'LEAKS', query: `site:pastebin.com OR site:ghostbin.co ${wrapped}` },
+    { name: 'DOCUMENTS', query: `ext:pdf OR ext:txt OR ext:csv OR ext:sql ${wrapped}` },
+  ];
+
+  const allResults = [];
+  for (const dork of dorks) {
+    const partial = await executeDuckDuckGoQuery(dork.query, safeTerm, dork.name);
+    allResults.push(...partial);
+  }
+
+  const unique = [];
+  const seen = new Set();
+  for (const result of allResults) {
+    const key = `${result.dorkType}|${result.url}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push({
+      ...result,
+      term: safeTerm,
+      termType: type,
+    });
+  }
+
+  log.info(`Dork Engine retornou ${unique.length} resultados avançados para "${safeTerm}".`);
+  return unique;
+}
+
+export async function searchDorks(term) {
+  return executeAdvancedDorks(term, 'username');
 }
