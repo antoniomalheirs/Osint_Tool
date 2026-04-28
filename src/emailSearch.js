@@ -383,13 +383,22 @@ export async function searchEmail(email, onResult = null) {
   }
 
   const allResults = [...results, ...dorks, ...autoPivotResults];
+  const hasActionableIntel = allResults.some((r) =>
+    r.reason === 'DORK_RESULT' ||
+    r.reason === 'AUTO_PIVOT_DORK_RESULT' ||
+    r.status === EMAIL_STATUS.CONFIRMED ||
+    r.status === EMAIL_STATUS.INCONCLUSIVE
+  );
+  const filteredResults = hasActionableIntel
+    ? allResults.filter((r) => !['MANUAL_LINK', 'NO_SCRAPED_RESULTS'].includes(r.reason))
+    : allResults;
 
   if (onResult) {
-    for (const r of allResults) {
+    for (const r of filteredResults) {
       onResult(r);
     }
   }
 
-  log.info(`Email Intel finalizado para: ${email}. ${allResults.length} checkpoints verificados.`);
-  return allResults;
+  log.info(`Email Intel finalizado para: ${email}. ${filteredResults.length} checkpoints verificados.`);
+  return filteredResults;
 }

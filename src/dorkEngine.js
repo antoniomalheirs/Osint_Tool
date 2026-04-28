@@ -122,6 +122,65 @@ async function executeDuckDuckGoQuery(query, term, dorkType) {
   }
 }
 
+async function executeBingQuery(query, term, dorkType) {
+  const network = getNetwork();
+  const encodedQuery = encodeURIComponent(query);
+  const url = `https://www.bing.com/search?q=${encodedQuery}&setlang=en-US`;
+
+  try {
+    const response = await network.get(url, {
+      headers: {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Referer': 'https://www.bing.com/',
+      }
+    });
+
+    if (response.status !== 200) {
+      log.warn(`Bing retornou status inesperado: ${response.status}`);
+      return [];
+    }
+
+    const html = await response.text();
+    const urlRegex = /<li[^>]*class="b_algo"[\s\S]*?<h2><a[^>]+href="([^"]+)"/ig;
+    let match;
+    const links = [];
+
+    while ((match = urlRegex.exec(html)) !== null) {
+      const clean = sanitizeLink(match[1]);
+      if (!clean) continue;
+      links.push(clean);
+    }
+
+    const uniqueLinks = [...new Set(links)];
+    return uniqueLinks.map((link) => {
+      let domain = 'unknown';
+      try {
+        domain = new URL(link).hostname.replace('www.', '');
+      } catch { /* ignore */ }
+
+      return {
+        domain,
+        url: link,
+        source: 'Bing',
+        query,
+        dorkType,
+        confidence: classifyRelevance(domain, term, link),
+      };
+    });
+  } catch (error) {
+    log.error(`Falha no fallback Bing: ${error.message}`);
+    return [];
+  }
+}
+
+async function executeSearchProviders(query, term, dorkType) {
+  const duckResults = await executeDuckDuckGoQuery(query, term, dorkType);
+  if (duckResults.length > 0) return duckResults;
+
+  log.info(`Fallback ativado: DuckDuckGo sem resultados para "${query}". Tentando Bing...`);
+  return executeBingQuery(query, term, dorkType);
+}
+
 export async function executeAdvancedDorks(term, type = 'username') {
   if (!term || typeof term !== 'string') return [];
   const safeTerm = term.trim();
@@ -138,7 +197,7 @@ export async function executeAdvancedDorks(term, type = 'username') {
 
   const allResults = [];
   for (const dork of dorks) {
-    const partial = await executeDuckDuckGoQuery(dork.query, safeTerm, dork.name);
+    const partial = await executeSearchProviders(dork.query, safeTerm, dork.name);
     allResults.push(...partial);
   }
 
