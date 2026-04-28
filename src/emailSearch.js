@@ -8,6 +8,7 @@ import { getNetwork } from './network.js';
 import { getLogger } from './logger.js';
 import { analyzeDomain } from './dnsIntel.js';
 import { validateEmailSmtp } from './smtpValidation.js';
+import { executeAdvancedDorks } from './dorkEngine.js';
 
 const log = getLogger('EMAIL_INTEL');
 
@@ -91,12 +92,37 @@ async function checkGitHubEmail(email) {
     }
 
     if (data && data.total_count > 0) {
-      const users = data.items.map(u => ({ login: u.login, profile: u.html_url }));
+      const users = await Promise.all(data.items.slice(0, 5).map(async (u) => {
+        let details = null;
+        try {
+          const { data: profile } = await network.getJSON(u.url, {
+            headers: { 'Accept': 'application/vnd.github.v3+json' },
+          });
+          details = {
+            name: profile?.name || null,
+            company: profile?.company || null,
+            location: profile?.location || null,
+          };
+        } catch {
+          details = null;
+        }
+        return {
+          login: u.login,
+          profile: u.html_url,
+          ...details,
+        };
+      }));
+      const enriched = users
+        .map((u) => {
+          const extras = [u.name, u.company].filter(Boolean).join(' | ');
+          return extras ? `${u.login} (${extras})` : u.login;
+        })
+        .join(', ');
       return {
         service: 'GitHub',
         found: true,
         url: users[0].profile,
-        info: `Contas encontradas: ${users.map(u => u.login).join(', ')}`,
+        info: `Contas encontradas: ${enriched}`,
         data: users,
         reason: 'MATCH_FOUND',
       };
@@ -185,33 +211,26 @@ async function checkKickbox(email) {
  * Verifica Holehe (Links úteis para OSINT manual)
  */
 async function generateDorks(email) {
-  const enc = encodeURIComponent(`"${email}"`);
-  return [
-    {
-      service: 'Google Dork (Exata)',
+  const scraped = await executeAdvancedDorks(email, 'email');
+  if (!scraped.length) {
+    return [normalizeEmailResult({
+      service: 'Web Dorking (DuckDuckGo)',
       found: null,
-      url: `https://www.google.com/search?q=${enc}`,
-      info: 'Busca pela string exata do e-mail',
-    },
-    {
-      service: 'Google Dork (Vazamentos)',
-      found: null,
-      url: `https://www.google.com/search?q=${enc}+ext:txt+OR+ext:csv+OR+ext:sql`,
-      info: 'Busca e-mail em arquivos de texto, CSV ou SQL expostos',
-    },
-    {
-      service: 'DuckDuckGo Search',
-      found: null,
-      url: `https://duckduckgo.com/?q=${enc}`,
-      info: 'Busca anônima no DuckDuckGo',
-    },
-    {
-      service: 'Skype Resolver (Web)',
-      found: null,
-      url: `https://web.skype.com/`,
-      info: 'Você pode pesquisar este e-mail no Skype Web para revelar o nome real',
-    }
-  ].map(normalizeEmailResult);
+      url: `https://duckduckgo.com/?q=${encodeURIComponent(`"${email}"`)}`,
+      info: 'Nenhum resultado coletado automaticamente (possível bloqueio/rate-limit).',
+      reason: 'NO_SCRAPED_RESULTS',
+    })];
+  }
+
+  return scraped.slice(0, 20).map((result) => normalizeEmailResult({
+    service: `Web Dorking (${result.dorkType})`,
+    found: true,
+    url: result.url,
+    info: `Domínio: ${result.domain} | Confiança: ${result.confidence}`,
+    data: result,
+    confidence: result.confidence,
+    reason: 'DORK_RESULT',
+  }));
 }
 
 async function withRetry(fn, retries = 2, delayMs = 800) {
